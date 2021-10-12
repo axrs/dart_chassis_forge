@@ -99,3 +99,19 @@ Future<void> build(IShell shell) async {
     await shell.run('dart run build_runner build --delete-conflicting-outputs');
   });
 }
+
+/// Builds the Dart source files for the current dart project
+///
+/// {@since 0.0.1}
+Future<void> buildChassis(IShell shell) async {
+  if (File('build.chassis.yaml').existsSync()) {
+    logging.section(_log, 'Building Chassis');
+    await shell.run('''
+dart run build_runner build \\
+  --config build.chassis.yaml \\
+  --delete-conflicting-outputs
+''');
+  } else {
+    _log.fine('Skipping Chassis Build. No build.chassis.yaml found.');
+  }
+}
