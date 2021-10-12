@@ -17,20 +17,35 @@ bool hasCli(IShell shell) => hasCommand(shell, 'dart');
 /// {@since 0.0.1}
 bool isMissingCli(IShell shell) => isFalse(hasCli(shell));
 
-String _packageFile = 'pubspec.yaml';
+String _pubspecFile = 'pubspec.yaml';
+String _buildSpecFile = 'pubspec.yaml';
 
-late bool _isDartProject = File(_packageFile).existsSync();
+late bool _hasBuildSpec = File(_buildSpecFile).existsSync();
+late bool _hasPubspec = File(_pubspecFile).existsSync();
 
 /// True if the current folder contains a 'pubspec.yaml' file.
 ///
 /// {@since 0.0.1}
-bool isDartProject(IShell shell) => _isDartProject;
+bool isProject(IShell shell) => _hasPubspec;
+
+/// True if the current folder contains a 'build.yaml' file.
+///
+/// {@since 0.0.1}
+bool isBuildable(IShell shell) => _hasBuildSpec;
 
 _whenDartProject(String action, IShell shell, dynamic f) async {
-  if (isDartProject(shell)) {
+  if (isProject(shell)) {
     await f();
   } else {
-    _log.fine('Skipping $action. No $_packageFile found.');
+    _log.fine('Skipping $action. No $_pubspecFile found.');
+  }
+}
+
+_whenDartBuildable(String action, IShell shell, dynamic f) async {
+  if (isBuildable(shell)) {
+    await f();
+  } else {
+    _log.fine('Skipping $action. No $_buildSpecFile found.');
   }
 }
 
@@ -72,5 +87,15 @@ Future<void> test(IShell shell) async {
     logging.section(_log, 'Unit Testing');
     var extraFlags = shell.supportsColorOutput() ? '--color' : '';
     await shell.run('dart test $extraFlags'.trim());
+  });
+}
+
+/// Builds the Dart source files for the current dart project
+///
+/// {@since 0.0.1}
+Future<void> build(IShell shell) async {
+  _whenDartBuildable('Build', shell, () async {
+    logging.section(_log, 'Building');
+    await shell.run('dart run build_runner build --delete-conflicting-outputs');
   });
 }
