@@ -30,7 +30,7 @@ _whenDartProject(String action, IShell shell, dynamic f) async {
   if (isDartProject(shell)) {
     await f();
   } else {
-    _log.fine('Skipping Dart $action. No $_packageFile found.');
+    _log.fine('Skipping $action. No $_packageFile found.');
   }
 }
 
@@ -39,7 +39,7 @@ _whenDartProject(String action, IShell shell, dynamic f) async {
 /// {@since 0.0.1}
 Future<void> format(IShell shell) async {
   _whenDartProject('Format', shell, () async {
-    logging.section(_log, 'Formatting Dart Source Files');
+    logging.section(_log, 'Formatting Source Files');
     await shell.run('dart format --fix .');
   });
 }
@@ -49,7 +49,7 @@ Future<void> format(IShell shell) async {
 /// {@since 0.0.1}
 Future<void> installDependencies(IShell shell) async {
   _whenDartProject('Install Dependencies', shell, () async {
-    logging.section(_log, 'Installing Dart Dependencies');
+    logging.section(_log, 'Installing Dependencies');
     await shell.run('dart pub get');
   });
 }
@@ -59,7 +59,18 @@ Future<void> installDependencies(IShell shell) async {
 /// {@since 0.0.1}
 Future<void> analyze(IShell shell) async {
   _whenDartProject('Analyze', shell, () async {
-    logging.section(_log, 'Installing Dart Dependencies');
+    logging.section(_log, 'Analyzing');
     await shell.run('dart pub get');
+  });
+}
+
+/// Unit Tests the Dart source files for the current dart project
+///
+/// {@since 0.0.1}
+Future<void> test(IShell shell) async {
+  _whenDartProject('Unit Test', shell, () async {
+    logging.section(_log, 'Unit Testing');
+    var extraFlags = shell.supportsColorOutput() ? '--color' : '';
+    await shell.run('dart test $extraFlags'.trim());
   });
 }
