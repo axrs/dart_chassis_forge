@@ -108,7 +108,7 @@ Future<void> buildChassis(IShell shell) async {
     logging.section(_log, 'Building Chassis');
     await shell.run('''
 dart run build_runner build \\
-  --config build.chassis.yaml \\
+  --config chassis \\
   --delete-conflicting-outputs
 ''');
   } else {
