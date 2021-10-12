@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:dart_chassis_forge/chassis_forge.dart';
 import 'package:dart_chassis_forge/chassis_forge_dart.dart' as dart;
+import 'package:logging/logging.dart';
 
 bool _isDartFile(final FileSystemEntity file) {
   return file.path.endsWith('.dart');
@@ -28,6 +29,10 @@ void _deleteSync(FileSystemEntity e) {
 }
 
 Future<void> main(List<String> args) async {
+  Logger.root.level = Level.INFO;
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
   Directory dir = Directory(args.first);
   var rebuildRequired = false;
   var files = dir.listSync(recursive: false).where(_isDartFile);
