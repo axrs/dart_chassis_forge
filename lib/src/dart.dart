@@ -93,25 +93,12 @@ Future<void> test(IShell shell) async {
 /// Builds the Dart source files for the current dart project
 ///
 /// {@since 0.0.1}
-Future<void> build(IShell shell) async {
+Future<void> build(IShell shell, [String? config]) async {
   _whenDartBuildable('Build', shell, () async {
-    logging.section(_log, 'Building');
-    await shell.run('dart run build_runner build --delete-conflicting-outputs');
+    logging.section(_log, 'Building $config'.trim());
+    final String extra = config != null ? '--config $config' : '';
+    await shell.run(
+        'dart run build_runner build --delete-conflicting-outputs $extra'
+            .trim());
   });
-}
-
-/// Builds the Dart source files for the current dart project
-///
-/// {@since 0.0.1}
-Future<void> buildChassis(IShell shell) async {
-  if (File('build.chassis.yaml').existsSync()) {
-    logging.section(_log, 'Building Chassis');
-    await shell.run('''
-dart run build_runner build \\
-  --config chassis \\
-  --delete-conflicting-outputs
-''');
-  } else {
-    _log.fine('Skipping Chassis Build. No build.chassis.yaml found.');
-  }
 }

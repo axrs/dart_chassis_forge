@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:dart_chassis_forge/chassis_forge.dart';
 import 'package:dart_chassis_forge/chassis_forge_dart.dart' as dart;
+import 'package:glob/glob.dart';
+import 'package:glob/list_local_fs.dart';
 import 'package:logging/logging.dart';
 
 bool _isDartFile(final FileSystemEntity file) {
@@ -24,30 +25,35 @@ bool _isModifiedAfter(
   return left.statSync().modified.isBefore(right.statSync().modified);
 }
 
-void _deleteSync(FileSystemEntity e) {
-  e.deleteSync();
+void _createChassisBuildYaml() {
+  final File config = File('build.chassis.yaml');
+  if (!config.existsSync()) {
+    config.writeAsString('''
+targets:
+  \$default:
+    builders:
+      reflectable:
+        generate_for:
+          - tool/**.dart
+''');
+  }
+}
+
+bool _reflectableNeedsUpdating(final FileSystemEntity file) {
+  print(file.uri);
+  return false;
 }
 
 Future<void> main(List<String> args) async {
-  Logger.root.level = Level.INFO;
-  Logger.root.onRecord.listen((record) {
-    print('${record.level.name}: ${record.time}: ${record.message}');
-  });
-  Directory dir = Directory(args.first);
-  var rebuildRequired = false;
-  var files = dir.listSync(recursive: false).where(_isDartFile);
-  groupBy(files, _rootName).forEach((key, value) {
-    if (value.length != 2 || !_isModifiedAfter(value.first, value.last)) {
-      rebuildRequired = true;
-    }
-  });
-  var shell = ProcessRunShell();
-  //TODO Move into dart
-  if (!File('pubspec.lock').existsSync()) {
-    await dart.installDependencies(shell);
-  }
+  _createChassisBuildYaml();
+  final Glob glob = Glob('${args.first}/**_command.dart');
+  var rebuildRequired = glob.listSync().any(_reflectableNeedsUpdating);
   if (rebuildRequired) {
-    files.where(_isReflectable).forEach(_deleteSync);
-    await dart.buildChassis(shell);
+    Logger.root.level = Level.INFO;
+    Logger.root.onRecord.listen((record) {
+      print('${record.level.name}: ${record.time}: ${record.message}');
+    });
+    var shell = ProcessRunShell();
+    await dart.build(shell, 'chassis');
   }
 }
