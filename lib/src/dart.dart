@@ -75,7 +75,7 @@ Future<void> installDependencies(IShell shell) async {
 Future<void> analyze(IShell shell) async {
   _whenDartProject('Analyze', shell, () async {
     logging.section(_log, 'Analyzing');
-    await shell.run('dart pub get');
+    await shell.run('dart analyze');
   });
 }
 

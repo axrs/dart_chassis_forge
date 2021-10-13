@@ -1,9 +1,8 @@
 import 'package:logging/logging.dart';
 
-void section(Logger logger, String header) {
-  String line = '-' * header.length;
+void section(final Logger logger, final String header) {
+  final String line = '-' * header.length;
   logger.info('''
-  
 $line
 $header
 $line
