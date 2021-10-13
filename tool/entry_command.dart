@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:dart_chassis_forge/chassis_forge.dart';
 import 'package:dart_rucksack/rucksack.dart';
-import 'package:get_it/get_it.dart';
 import 'package:smart_arg/smart_arg.dart';
-
-import 'format_command.dart';
 
 // ignore: unused_import
 import 'entry_command.reflectable.dart';
+import 'format_command.dart';
 
 @SmartArg.reflectable
 @Parser(
@@ -28,9 +26,9 @@ class Args extends SmartArg {
 
   @override
   void beforeCommandExecute(SmartArgCommand command) {
+    configureLogger(verbose);
+    registerDefaultShell(verbose);
     super.beforeCommandExecute(command);
-    GetIt.instance
-        .registerLazySingleton<IShell>(() => ProcessRunShell(verbose: verbose));
   }
 
   @override

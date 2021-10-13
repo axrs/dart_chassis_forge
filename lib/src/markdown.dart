@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:dart_chassis_forge/src/logger.dart' as logging;
 import 'package:dart_chassis_forge/src/node.dart' as node;
 import 'package:dart_chassis_forge/src/shell.dart';
 import 'package:dart_rucksack/rucksack.dart';
 import 'package:logging/logging.dart';
 
-final _log = Logger('chassis_forge:Markdown');
+final _log = Logger('cf:Markdown');
 
 String _remarkConfig = '''
 module.exports = {
@@ -46,7 +45,7 @@ Future<void> format(IShell shell) async {
         'Skipping Formatting Markdown files. `npm` or `npx` not found.');
     return;
   }
-  logging.section(_log, 'Formatting Markdown Files');
+  _log.info('Formatting Markdown Files...');
   await _installRemark(shell);
   var remarkRc = File('.remarkrc.js');
   var remarcConfigIsMissing = isFalse(remarkRc.existsSync());

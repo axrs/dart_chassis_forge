@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:dart_chassis_forge/src/logger.dart' as logging;
 import 'package:dart_chassis_forge/src/shell.dart';
 import 'package:dart_rucksack/rucksack.dart';
 import 'package:logging/logging.dart';
 
-final _log = Logger('chassis_forge:Dart');
+final _log = Logger('cf:Dart');
 
 /// True if the current Shell has a reference to `dart`
 ///
@@ -54,7 +53,7 @@ _whenDartBuildable(String action, IShell shell, dynamic f) async {
 /// {@since 0.0.1}
 Future<void> format(IShell shell) async {
   _whenDartProject('Format', shell, () async {
-    logging.section(_log, 'Formatting Source Files');
+    _log.info('Formatting Source Files...');
     await shell.run('dart format --fix .');
   });
 }
@@ -64,7 +63,7 @@ Future<void> format(IShell shell) async {
 /// {@since 0.0.1}
 Future<void> installDependencies(IShell shell) async {
   _whenDartProject('Install Dependencies', shell, () async {
-    logging.section(_log, 'Installing Dependencies');
+    _log.info('Installing Dependencies...');
     await shell.run('dart pub get');
   });
 }
@@ -74,7 +73,7 @@ Future<void> installDependencies(IShell shell) async {
 /// {@since 0.0.1}
 Future<void> analyze(IShell shell) async {
   _whenDartProject('Analyze', shell, () async {
-    logging.section(_log, 'Analyzing');
+    _log.info('Analyzing...');
     await shell.run('dart analyze');
   });
 }
@@ -84,7 +83,7 @@ Future<void> analyze(IShell shell) async {
 /// {@since 0.0.1}
 Future<void> test(IShell shell) async {
   _whenDartProject('Unit Test', shell, () async {
-    logging.section(_log, 'Unit Testing');
+    _log.info('Unit Testing...');
     var extraFlags = shell.supportsColorOutput() ? '--color' : '';
     await shell.run('dart test $extraFlags'.trim());
   });
@@ -95,7 +94,7 @@ Future<void> test(IShell shell) async {
 /// {@since 0.0.1}
 Future<void> build(IShell shell, [String? config]) async {
   _whenDartBuildable('Build', shell, () async {
-    logging.section(_log, 'Building $config'.trim());
+    _log.info('Building $config'.trim());
     final String extra = config != null ? '--config $config' : '';
     await shell.run(
         'dart run build_runner build --delete-conflicting-outputs $extra'

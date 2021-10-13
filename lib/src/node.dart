@@ -2,7 +2,7 @@ import 'package:dart_chassis_forge/src/shell.dart';
 import 'package:dart_rucksack/rucksack.dart';
 import 'package:logging/logging.dart';
 
-final log = Logger('chassis_forge:Node');
+final log = Logger('cf:Node');
 
 /// True if the current Shell has a reference to `npm`
 ///

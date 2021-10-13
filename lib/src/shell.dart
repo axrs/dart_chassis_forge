@@ -7,7 +7,7 @@ import 'package:process_run/shell.dart' as pr;
 // ignore: implementation_imports
 import 'package:process_run/src/shell_utils.dart' show scriptToCommands;
 
-final log = Logger('chassis_forge:Shell');
+final log = Logger('cf:Shell');
 
 /// A marker interface representing a basic Shell to run and evaluate commands
 ///
