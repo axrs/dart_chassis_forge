@@ -22,3 +22,5 @@ doc/api/
 
 .idea
 *.iml
+
+node_modules

@@ -2,21 +2,10 @@ import 'dart:io';
 
 import 'package:dart_chassis_forge/chassis_forge.dart';
 import 'package:dart_chassis_forge/chassis_forge_dart.dart' as dart;
+import 'package:dart_rucksack/rucksack.dart';
 import 'package:glob/glob.dart';
 import 'package:glob/list_local_fs.dart';
 import 'package:logging/logging.dart';
-
-bool _isDartFile(final FileSystemEntity file) {
-  return file.path.endsWith('.dart');
-}
-
-bool _isReflectable(final FileSystemEntity file) {
-  return file.path.endsWith('reflectable.dart');
-}
-
-String _rootName(final FileSystemEntity file) {
-  return file.path.split(RegExp(r"\.")).first;
-}
 
 bool _isModifiedAfter(
   final FileSystemEntity left,
@@ -40,17 +29,23 @@ targets:
 }
 
 bool _reflectableNeedsUpdating(final FileSystemEntity file) {
-  print(file.uri);
-  return false;
+  final String reflectableFilePath = file.absolute.path.replaceAll(
+    RegExp(r'\.dart$'),
+    '.reflectable.dart',
+  );
+  final File reflectable = File(reflectableFilePath);
+  return isFalse(reflectable.existsSync()) ||
+      _isModifiedAfter(reflectable, file);
 }
 
+/// Builds command reflectances
 Future<void> main(List<String> args) async {
-  final String folder = args.first;
+  final String folder = isNotEmpty(args) ? args.first : 'tool';
   _createChassisBuildYaml(folder);
-  final Glob glob = Glob('$folder/**_command.dart');
-  var rebuildRequired = glob.listSync().any(_reflectableNeedsUpdating);
-  if (rebuildRequired) {
-    Logger.root.level = Level.INFO;
+  var rebuildIsRequired =
+      Glob('$folder/**_command.dart').listSync().any(_reflectableNeedsUpdating);
+  if (rebuildIsRequired) {
+    Logger.root.level = Level.WARNING;
     Logger.root.onRecord.listen((record) {
       print('${record.level.name}: ${record.time}: ${record.message}');
     });
