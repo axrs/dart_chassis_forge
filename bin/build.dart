@@ -25,7 +25,7 @@ bool _isModifiedAfter(
   return left.statSync().modified.isBefore(right.statSync().modified);
 }
 
-void _createChassisBuildYaml() {
+void _createChassisBuildYaml(final String folder) {
   final File config = File('build.chassis.yaml');
   if (!config.existsSync()) {
     config.writeAsString('''
@@ -34,7 +34,7 @@ targets:
     builders:
       reflectable:
         generate_for:
-          - tool/**.dart
+          - $folder/**_command.dart
 ''');
   }
 }
@@ -45,8 +45,9 @@ bool _reflectableNeedsUpdating(final FileSystemEntity file) {
 }
 
 Future<void> main(List<String> args) async {
-  _createChassisBuildYaml();
-  final Glob glob = Glob('${args.first}/**_command.dart');
+  final String folder = args.first;
+  _createChassisBuildYaml(folder);
+  final Glob glob = Glob('$folder/**_command.dart');
   var rebuildRequired = glob.listSync().any(_reflectableNeedsUpdating);
   if (rebuildRequired) {
     Logger.root.level = Level.INFO;
