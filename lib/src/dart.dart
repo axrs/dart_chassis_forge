@@ -102,13 +102,20 @@ Future<void> build(IShell shell, [String? config]) async {
   });
 }
 
-/// Generates HTML documentation for the Dart Project
+/// Generates HTML documentation for the Dart Project into the specified [output]
+/// directory in the given [format]
+///
+/// [format] can be either `md` or `html`
 ///
 /// {@since 0.0.1}
-Future<void> doc(IShell shell) async {
+Future<void> doc(
+  IShell shell, {
+  String output = "docs",
+  String format = "html",
+}) async {
   _whenDartProject('Doc', shell, () async {
     _log.info('Building Documentation...');
     shell.requireCommand('dartdoc');
-    await shell.run('dartdoc');
+    await shell.run('dartdoc --output $output --format $format');
   });
 }

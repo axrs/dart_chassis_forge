@@ -19,14 +19,14 @@ class Args extends SmartArg {
   @BooleanArgument(short: 'v', help: 'Enable Command Verbose Mode')
   late bool verbose = false;
 
-  @Command(help: formatDescription)
-  late FormatCommand format;
-
   @Command(help: analyzeDescription)
   late AnalyzeCommand analyze;
 
   @Command(help: docDescription)
   late DocCommand doc;
+
+  @Command(help: formatDescription)
+  late FormatCommand format;
 
   @HelpArgument()
   late bool help = false;
