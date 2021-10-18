@@ -22,7 +22,7 @@ dependencies:
   smart_arg:
     git:
       url: https://github.com/axrs/smart_arg.git
-      ref: v.2.0.0
+      ref: master
 
 dev_dependencies:
   lints: ^1.0.0

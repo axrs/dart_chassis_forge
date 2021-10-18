@@ -101,3 +101,14 @@ Future<void> build(IShell shell, [String? config]) async {
             .trim());
   });
 }
+
+/// Generates HTML documentation for the Dart Project
+///
+/// {@since 0.0.1}
+Future<void> doc(IShell shell) async {
+  _whenDartProject('Doc', shell, () async {
+    _log.info('Building Documentation...');
+    shell.requireCommand('dartdoc');
+    await shell.run('dartdoc');
+  });
+}

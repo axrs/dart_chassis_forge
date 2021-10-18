@@ -1,21 +1,21 @@
 import 'dart:io';
 
 import 'package:dart_chassis_forge/chassis_forge.dart' as chassis;
+import 'package:dart_chassis_forge/chassis_forge_dart.dart' as chassis_dart;
 import 'package:dart_rucksack/rucksack.dart';
 import 'package:get_it/get_it.dart';
 import 'package:smart_arg/smart_arg.dart';
 
 // ignore: unused_import
-import 'format_command.reflectable.dart';
+import 'analyze_command.reflectable.dart';
 
-const String formatDescription =
-    'Runs the various source code formatting tools';
+const String docDescription = 'Generates HTML documentation for the project';
 
 @SmartArg.reflectable
 @Parser(
-  description: formatDescription,
+  description: docDescription,
 )
-class FormatCommand extends SmartArgCommand {
+class DocCommand extends SmartArgCommand {
   @HelpArgument()
   late bool help = false;
 
@@ -26,6 +26,6 @@ class FormatCommand extends SmartArgCommand {
       print(usage());
       exit(1);
     }
-    await chassis.format(shell);
+    await chassis_dart.doc(shell);
   }
 }

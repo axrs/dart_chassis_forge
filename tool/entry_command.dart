@@ -4,6 +4,9 @@ import 'package:dart_chassis_forge/chassis_forge.dart';
 import 'package:dart_rucksack/rucksack.dart';
 import 'package:smart_arg/smart_arg.dart';
 
+import 'analyze_command.dart';
+import 'doc_command.dart';
+
 // ignore: unused_import
 import 'entry_command.reflectable.dart';
 import 'format_command.dart';
@@ -16,8 +19,14 @@ class Args extends SmartArg {
   @BooleanArgument(short: 'v', help: 'Enable Command Verbose Mode')
   late bool verbose = false;
 
-  @Command(help: 'Formats the codebase, modifying files.')
+  @Command(help: formatDescription)
   late FormatCommand format;
+
+  @Command(help: analyzeDescription)
+  late AnalyzeCommand analyze;
+
+  @Command(help: docDescription)
+  late DocCommand doc;
 
   @HelpArgument()
   late bool help = false;

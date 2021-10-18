@@ -1,3 +1,4 @@
+/// A collection of CLI helpers for assisting with Project focused task automation
 library chassis_forge;
 
 import 'dart:math';

@@ -6,16 +6,16 @@ import 'package:get_it/get_it.dart';
 import 'package:smart_arg/smart_arg.dart';
 
 // ignore: unused_import
-import 'format_command.reflectable.dart';
+import 'analyze_command.reflectable.dart';
 
-const String formatDescription =
-    'Runs the various source code formatting tools';
+const String analyzeDescription =
+    'Runs static code analysis across the code base';
 
 @SmartArg.reflectable
 @Parser(
-  description: formatDescription,
+  description: analyzeDescription,
 )
-class FormatCommand extends SmartArgCommand {
+class AnalyzeCommand extends SmartArgCommand {
   @HelpArgument()
   late bool help = false;
 
@@ -26,6 +26,6 @@ class FormatCommand extends SmartArgCommand {
       print(usage());
       exit(1);
     }
-    await chassis.format(shell);
+    await chassis.analyze(shell);
   }
 }
