@@ -11,34 +11,34 @@ final log = Logger('cf:Shell');
 
 /// A marker interface representing a basic Shell to run and evaluate commands
 ///
-/// {@since 0.0.1}
+/// `since 0.0.1`
 abstract class IShell {
   /// True if the shell implementation supports color output
   ///
-  /// {@since 0.0.1}
+  /// `since 0.0.1`
   bool supportsColorOutput();
 
   /// Runs a command within a IShell environment. Returning the commands
   /// result.
   /// May throw [CommandException]s.
   ///
-  /// {@since 0.0.1}
+  /// `since 0.0.1`
   Future<ProcessResult> run(String command);
 
   /// Returns the full path location (and name) for a supplied command.
   /// Null if the command was not found.
   ///
-  /// {@since 0.0.1}
+  /// `since 0.0.1`
   String? which(String command);
 
   /// Returns true if the external command exists
   ///
-  /// {@since 0.0.1}
+  /// `since 0.0.1`
   bool hasCommand(String command);
 
   /// Throws [CommandNotFoundException] if the provided command is not present in the \$PATH
   ///
-  /// {@since 0.0.1}
+  /// `since 0.0.1`
   void requireCommand(String command);
 }
 
@@ -48,12 +48,12 @@ abstract class IShell {
 /// failure, in running external process commands which can be caught at the
 /// developers discretion. They should contain useful data fields.
 ///
-/// {@since 0.0.1}
+/// `since 0.0.1`
 class CommandException implements Exception {}
 
 /// Exception thrown when a Command is not found within the $PATH
 ///
-/// {@since 0.0.1}
+/// `since 0.0.1`
 class CommandNotFoundException implements CommandException {
   final String command;
 
@@ -67,7 +67,7 @@ class CommandNotFoundException implements CommandException {
 
 /// Exception thrown when multiple commands to be run have been detected
 ///
-/// {@since 0.0.1}
+/// `since 0.0.1`
 class MultipleScriptCommandException implements CommandException {
   final String cause;
   final String command;
@@ -82,7 +82,7 @@ class MultipleScriptCommandException implements CommandException {
 
 /// Exception thrown when no commands to run have been detected
 ///
-/// {@since 0.0.1}
+/// `since 0.0.1`
 class BlankCommandException implements CommandException {
   BlankCommandException();
 
@@ -111,7 +111,7 @@ void _requireSingleCommand(String command) {
 
 /// A Basic implementation of [IShell] using [package:process_run]
 ///
-/// {@since 0.0.1}
+/// `since 0.0.1`
 class ProcessRunShell implements IShell {
   final bool verbose;
   final bool color;
@@ -161,7 +161,7 @@ class ProcessRunShell implements IShell {
 /// True if the command exists.
 /// Logs a Warning if the command is not found
 ///
-/// {@since 0.0.1}
+/// `since 0.0.1`
 bool hasCommand(IShell shell, String command) {
   var hasCommand = shell.hasCommand(command);
   if (isFalse(hasCommand)) {

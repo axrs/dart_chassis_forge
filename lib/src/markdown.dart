@@ -38,7 +38,7 @@ npm install --silent --no-save --no-audit --no-fund \\
 
 /// Formats all Markdown files using Remark
 ///
-/// {@since 0.0.1}
+/// `since 0.0.1`
 Future<void> format(IShell shell) async {
   if (node.isMissingNpm(shell) || node.isMissingNpx(shell)) {
     _log.warning(
