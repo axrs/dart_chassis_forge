@@ -80,7 +80,7 @@ Future<void> analyze(IShell shell) async {
 
 /// Unit Tests the Dart source files for the current dart project
 ///
-/// `@since 0.0.1`
+/// `since 0.0.1`
 Future<void> test(IShell shell) async {
   _whenDartProject('Unit Test', shell, () async {
     _log.info('Unit Testing...');
