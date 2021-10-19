@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:mirrors';
 
 import 'package:dart_chassis_forge/src/shell.dart';
 import 'package:dart_rucksack/rucksack.dart';
@@ -9,11 +8,12 @@ import 'package:smart_arg/smart_arg.dart';
 /// Chassis Command Boilerplate extends [SmartArgCommand] to print usage if
 /// requested. Otherwise, invokes [run] with [IShell] obtained from the global
 /// [GetIt] instance and parent [SmartArg] arguments.
-class ChassisCommand extends SmartArgCommand {
+abstract class ChassisCommand extends SmartArgCommand {
+  late bool help = false;
+
   @override
   Future<void> execute(SmartArg parentArguments) async {
-    final InstanceMirror? instanceMirror = reflect(this).getField(#help);
-    if (isNotNull(instanceMirror) && isTrue(instanceMirror!.reflectee)) {
+    if (isTrue(help)) {
       print(usage());
       exit(1);
     }
@@ -21,5 +21,5 @@ class ChassisCommand extends SmartArgCommand {
     await run(shell, parentArguments);
   }
 
-  Future<void> run(final IShell shell, final SmartArg parentArguments) async {}
+  Future<void> run(final IShell shell, final SmartArg parentArguments);
 }

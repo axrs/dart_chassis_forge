@@ -15,14 +15,14 @@ In a lot of my day-to-day software development, I'm positioned to run multiple c
 across different code bases and frameworks. For example, I may have to:
 
 * Install Dependencies
-    * Which downloads the dependencies
-    * Compiles/Builds any sub-modules
-    * Move packages into a different directory
+  * Which downloads the dependencies
+  * Compiles/Builds any sub-modules
+  * Move packages into a different directory
 * Deploy a new version of a service
-    * Cleans any existing directories
-    * Compiles/Builds any the service
-    * Uploads the package to the necessary build system
-    * Initiates a blue-green deploy cycle
+  * Cleans any existing directories
+  * Compiles/Builds any the service
+  * Uploads the package to the necessary build system
+  * Initiates a blue-green deploy cycle
 * ... And soo much more
 
 These types of commands are laborious, time-consuming, human-error prone, painful to keep up to date, and difficult to
@@ -52,12 +52,12 @@ listed in the [Related Projects](#related-projects). Ultimately looking for must
 * Associates command and flag/argument documentation directly with the command definition
 * Support commands, sub-commands, and scripts
 * Can Invoke other 3rd party executables
-    * Like the `aws` and `azure` CLIs
-        * capturing their `stdout` and `stderr` streams
-        * easily raising trappable and reportable exceptions
+  * Like the `aws` and `azure` CLIs
+    * capturing their `stdout` and `stderr` streams
+    * easily raising trappable and reportable exceptions
 * Support prompting for missing, or more, input
 * Speedy
-    * At least on subsequent runs
+  * At least on subsequent runs
 * Is not a task runner, but allows me to combine commands if I wish
 
 ### Would be Nice to Have
@@ -70,24 +70,24 @@ listed in the [Related Projects](#related-projects). Ultimately looking for must
 ## Usage
 
 1. Make sure Dart is installed
-    1. <https://dart.dev/get-dart>
+   1. <https://dart.dev/get-dart>
 1. Create (or update) the `pubspec.yaml` file and add `dart_chassis_forge` under `dev_dependencies`
 1. Create some commands in a desired location. For example `./tools` or `./bin`
    > Note: Dart used `bin` for distributing tools within packages.
-    1. The [example](example/) directory contains a few commands used for this project including:
-        1. [Analyze](example/analyze\_command.dart)
-        1. [Doc](example/doc\_command.dart)
-        1. [Format](example/format\_command.dart)
-    1. (Optional) Create an [Entry](example/entry\_command.dart) point command.
+   1. The [example](example/) directory contains a few commands used for this project including:
+      1. [Analyze](example/analyze\_command.dart)
+      1. [Doc](example/doc\_command.dart)
+      1. [Format](example/format\_command.dart)
+   1. (Optional) Create an [Entry](example/entry\_command.dart) point command.
 1. Build and run the script:
    > Note: Compilation is only required if the annotations change.
-    1. Either Add a [BASH](dart\_chassis\_forge.sh) or [PowerShell](dart\_chassis\_forge.ps1) script as a proxy to:
-        1. conveniently install the dart dependencies (if not already done so);
-        1. compile the commands on change
-        1. invoke the main entry point
-    1. OR Run:
-        1. `dart run dart_chassis_forge:build` to build the commands
-        1. `dart run tool/entry_command.dart <arg> <arg> <arg>` to run your command
+   1. Either Add a [BASH](dart\_chassis\_forge.sh) or [PowerShell](dart\_chassis\_forge.ps1) script as a proxy to:
+      1. conveniently install the dart dependencies (if not already done so);
+      1. compile the commands on change
+      1. invoke the main entry point
+   1. OR Run:
+      1. `dart run dart_chassis_forge:build` to build the commands
+      1. `dart run tool/entry_command.dart <arg> <arg> <arg>` to run your command
 
 ### Example Output
 
