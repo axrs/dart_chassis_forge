@@ -146,6 +146,44 @@ class DocCommand extends ChassisCommand {
 }
 ```
 
+### Rough Performance Benchmarking
+
+#### Reflectables Not Built or Out of Date
+
+When one of the commands have changed, it's recommended to rebuild all the reflectable files. This ensures the
+documentation, fields, and other properties are up-to-date.
+
+```text
+$ Measure-Command {.\dart_chassis_forge.ps1 --verbose analyze --help}
+
+TotalMilliseconds : 9996.4891
+```
+
+#### Reflectables Built and Valid
+
+If the reflectables are up-to-date, the build process does not need to occur. Reducing the overall run time.
+
+```text
+$ Measure-Command {.\dart_chassis_forge.ps1 --verbose analyze --help}
+
+TotalMilliseconds : 2980.2302
+```
+
+#### Native Executable
+
+If speed is king, then a native executable can be compiled.
+
+```text
+$ dart compile exe .\example\entry_command.dart
+
+Info: Compiling with sound null safety
+Generated: ...\dart_chassis_forge\example\entry_command.exe
+
+$ Measure-Command {.\example\entry_command.exe --verbose analyze --help}
+
+TotalMilliseconds : 78.2293
+```
+
 ## Example within Projects
 
 * [Rucksack](https://github.com/axrs/dart\_rucksack.git)

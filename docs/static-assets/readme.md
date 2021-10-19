@@ -1,11 +1,11 @@
 # highlight.js
 
-Generated from https://highlightjs.org/download/ on 2021-07-13
+Generated from <https://highlightjs.org/download/> on 2021-07-13
 
 **Included languages:**
 
 * bash
-* c  
+* c
 * css
 * dart
 * diff
@@ -16,7 +16,7 @@ Generated from https://highlightjs.org/download/ on 2021-07-13
 * kotlin
 * markdown
 * objective-c
-* plaintext  
+* plaintext
 * shell
 * swift
 * yaml
