@@ -25,3 +25,4 @@ doc/api/
 
 node_modules
 *.reflectable.dart
+*.exe

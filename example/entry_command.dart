@@ -10,6 +10,7 @@ import 'doc_command.dart';
 // ignore: unused_import
 import 'entry_command.reflectable.dart';
 import 'format_command.dart';
+import 'versions_command.dart';
 
 @SmartArg.reflectable
 @Parser(
@@ -27,6 +28,9 @@ class Args extends SmartArg {
 
   @Command(help: formatDescription)
   late FormatCommand format;
+
+  @Command(help: versionsDescription)
+  late VersionsCommand versions;
 
   @HelpArgument()
   late bool help = false;

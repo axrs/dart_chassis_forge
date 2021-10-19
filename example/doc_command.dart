@@ -2,9 +2,6 @@ import 'package:dart_chassis_forge/chassis_forge.dart';
 import 'package:dart_chassis_forge/chassis_forge_dart.dart' as chassis_dart;
 import 'package:smart_arg/smart_arg.dart';
 
-// ignore: unused_import
-import 'analyze_command.reflectable.dart';
-
 const String docDescription = 'Generates HTML documentation for the project';
 
 @SmartArg.reflectable

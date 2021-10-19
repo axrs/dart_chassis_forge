@@ -28,19 +28,17 @@ bool hasNpx(IShell shell) => hasCommand(shell, 'npx');
 /// `since 0.0.1`
 bool isMissingNpx(IShell shell) => isFalse(hasNpx(shell));
 
-late bool _hasPackageJson = File(_packageJson).existsSync();
-
 /// True if the current folder contains a 'package.json' file.
 ///
 /// `since 0.0.1`
-bool isProject(IShell shell) => _hasPackageJson;
+late bool isProject = File(_packageJson).existsSync();
 
 _whenNodeProject(
   String action,
   IShell shell,
   dynamic f,
 ) async {
-  if (isProject(shell)) {
+  if (isProject) {
     await f();
   } else {
     _log.fine('Skipping $action. No $_packageJson found.');
@@ -95,4 +93,51 @@ Future<void> npm(IShell shell, String command) async {
   shell.requireCommand('npm');
   _log.info('Running NPM command...');
   await shell.run('npm $command');
+}
+
+/// Runs the specified npm [command]
+///
+/// Throws [CommandNotFoundException] if `npm` is not found
+///
+/// `since 0.0.1`
+Future<void> node(IShell shell, String command) async {
+  shell.requireCommand('node');
+  _log.info('Running Node command...');
+  await shell.run('node $command');
+}
+
+/// Runs the current npm version
+///
+/// Throws [CommandNotFoundException] if `npm` is not found
+///
+/// `since 0.0.1`
+Future<String?> npmVersion(IShell shell) async {
+  shell.requireCommand('npm');
+  final String? version =
+      cast<String>((await shell.run('npm --version')).stdout);
+  return version?.trim();
+}
+
+/// Runs the current node version
+///
+/// Throws [CommandNotFoundException] if `node` is not found
+///
+/// `since 0.0.1`
+Future<String?> nodeVersion(IShell shell) async {
+  shell.requireCommand('node');
+  final String? version =
+      cast<String>((await shell.run('node --version')).stdout);
+  return version?.trim().replaceAll(RegExp(r"^v"), "");
+}
+
+/// Runs the current npx version
+///
+/// Throws [CommandNotFoundException] if `npx` is not found
+///
+/// `since 0.0.1`
+Future<String?> npxVersion(IShell shell) async {
+  shell.requireCommand('npx');
+  final String? version =
+      cast<String>((await shell.run('npx --version')).stdout);
+  return version?.trim();
 }

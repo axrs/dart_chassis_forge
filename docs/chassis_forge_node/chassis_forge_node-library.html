@@ -58,6 +58,23 @@
 
 
 
+    <section class="summary offset-anchor" id="properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="isProject" class="property">
+  <span class="name"><a href="../chassis_forge_node/isProject.html">isProject</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-core/bool-class.html">bool</a></span> 
+
+</dt>
+<dd>
+  True if the current folder contains a 'package.json' file. <a href="../chassis_forge_node/isProject.html">[...]</a>
+  <div class="features">read / write</div>
+
+</dd>
+
+      </dl>
+    </section>
 
     <section class="summary offset-anchor" id="functions">
       <h2>Functions</h2>
@@ -128,15 +145,28 @@
 
 </dd>
 
-        <dt id="isProject" class="callable">
-  <span class="name"><a href="../chassis_forge_node/isProject.html">isProject</a></span><span class="signature">(<wbr><span class="parameter" id="isProject-param-shell"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span> <span class="parameter-name">shell</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-core/bool-class.html">bool</a></span>
+        <dt id="node" class="callable">
+  <span class="name"><a href="../chassis_forge_node/node.html">node</a></span><span class="signature">(<wbr><span class="parameter" id="node-param-shell"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span> <span class="parameter-name">shell</span>, </span><span class="parameter" id="node-param-command"><span class="type-annotation"><a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">command</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
   </span>
   
 
 </dt>
 <dd>
-  True if the current folder contains a 'package.json' file. <a href="../chassis_forge_node/isProject.html">[...]</a>
+  Runs the specified npm <code>command</code> <a href="../chassis_forge_node/node.html">[...]</a>
+  
+
+</dd>
+
+        <dt id="nodeVersion" class="callable">
+  <span class="name"><a href="../chassis_forge_node/nodeVersion.html">nodeVersion</a></span><span class="signature">(<wbr><span class="parameter" id="nodeVersion-param-shell"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span> <span class="parameter-name">shell</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-core/String-class.html">String</a>?</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Runs the current node version <a href="../chassis_forge_node/nodeVersion.html">[...]</a>
   
 
 </dd>
@@ -154,6 +184,19 @@
 
 </dd>
 
+        <dt id="npmVersion" class="callable">
+  <span class="name"><a href="../chassis_forge_node/npmVersion.html">npmVersion</a></span><span class="signature">(<wbr><span class="parameter" id="npmVersion-param-shell"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span> <span class="parameter-name">shell</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-core/String-class.html">String</a>?</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Runs the current npm version <a href="../chassis_forge_node/npmVersion.html">[...]</a>
+  
+
+</dd>
+
         <dt id="npx" class="callable">
   <span class="name"><a href="../chassis_forge_node/npx.html">npx</a></span><span class="signature">(<wbr><span class="parameter" id="npx-param-shell"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span> <span class="parameter-name">shell</span>, </span><span class="parameter" id="npx-param-command"><span class="type-annotation"><a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">command</span></span>)
     <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
@@ -163,6 +206,19 @@
 </dt>
 <dd>
   Runs the specified npx <code>command</code> <a href="../chassis_forge_node/npx.html">[...]</a>
+  
+
+</dd>
+
+        <dt id="npxVersion" class="callable">
+  <span class="name"><a href="../chassis_forge_node/npxVersion.html">npxVersion</a></span><span class="signature">(<wbr><span class="parameter" id="npxVersion-param-shell"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span> <span class="parameter-name">shell</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-core/String-class.html">String</a>?</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Runs the current npx version <a href="../chassis_forge_node/npxVersion.html">[...]</a>
   
 
 </dd>
@@ -219,6 +275,8 @@
 
 
 
+  <li class="section-title"><a href="../chassis_forge_node/chassis_forge_node-library.html#properties">Properties</a></li>
+  <li><a href="../chassis_forge_node/isProject.html">isProject</a></li>
 
   <li class="section-title"><a href="../chassis_forge_node/chassis_forge_node-library.html#functions">Functions</a></li>
   <li><a href="../chassis_forge_node/hasNpm.html">hasNpm</a></li>
@@ -226,9 +284,12 @@
   <li><a href="../chassis_forge_node/installDependencies.html">installDependencies</a></li>
   <li><a href="../chassis_forge_node/isMissingNpm.html">isMissingNpm</a></li>
   <li><a href="../chassis_forge_node/isMissingNpx.html">isMissingNpx</a></li>
-  <li><a href="../chassis_forge_node/isProject.html">isProject</a></li>
+  <li><a href="../chassis_forge_node/node.html">node</a></li>
+  <li><a href="../chassis_forge_node/nodeVersion.html">nodeVersion</a></li>
   <li><a href="../chassis_forge_node/npm.html">npm</a></li>
+  <li><a href="../chassis_forge_node/npmVersion.html">npmVersion</a></li>
   <li><a href="../chassis_forge_node/npx.html">npx</a></li>
+  <li><a href="../chassis_forge_node/npxVersion.html">npxVersion</a></li>
   <li><a href="../chassis_forge_node/test.html">test</a></li>
 
 
