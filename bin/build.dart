@@ -8,10 +8,10 @@ import 'package:glob/list_local_fs.dart';
 import 'package:logging/logging.dart';
 
 bool _isModifiedAfter(
-  final FileSystemEntity left,
+  final File left,
   final FileSystemEntity right,
 ) {
-  return left.statSync().modified.isBefore(right.statSync().modified);
+  return left.lastModifiedSync().isBefore(right.statSync().modified);
 }
 
 void _createChassisBuildYaml(final String folder) {
