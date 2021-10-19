@@ -18,6 +18,8 @@ across different code bases and frameworks. For example, I may have to:
   * Which downloads the dependencies
   * Compiles/Builds any sub-modules
   * Move packages into a different directory
+* Run unit tests that first need to validate a database version
+* Connect to a 3rd party service to query usage information
 * Deploy a new version of a service
   * Cleans any existing directories
   * Compiles/Builds any the service
@@ -35,6 +37,10 @@ In the past, I have resorted to BASH as my go to... This is all well and good un
 * You need to perform any form of debugging
 * You need to update documentation
 * You need the scripts to be run cross-platform
+  * Many System Commands treat flags and attributes differently.
+    * Such as date between GNU Linux and MacOS Unix
+    * and much more in Alpine
+  * Windows likely requires WSL... Which is another whole story
 * One change in shared code breaks another project months later
 
 As a result of this pain and frustration, I've become passionate about finding a CLI tool/framework that I could use and
@@ -73,7 +79,9 @@ listed in the [Related Projects](#related-projects). Ultimately looking for must
    1. <https://dart.dev/get-dart>
 1. Create (or update) the `pubspec.yaml` file and add `dart_chassis_forge` under `dev_dependencies`
 1. Create some commands in a desired location. For example `./tools` or `./bin`
-   > Note: Dart used `bin` for distributing tools within packages.
+
+   > Note: Dart uses `bin` for distributing tools within packages.
+
    1. The [example](example/) directory contains a few commands used for this project including:
       1. [Analyze](example/analyze\_command.dart)
       1. [Doc](example/doc\_command.dart)
@@ -161,12 +169,28 @@ TotalMilliseconds : 9996.4891
 
 #### Reflectables Built and Valid
 
-If the reflectables are up-to-date, the build process does not need to occur. Reducing the overall run time.
+If the reflectables are up-to-date, the build process does not need to occur. Reducing the overall run time. It's not
+a *bad* result, but there is definitely room for improvement.
+
+* A little over half of the runtime relates to checking for outdated build artifacts.
+  * Approximately 1/3 of the build check time is Dart starting up
 
 ```text
 $ Measure-Command {.\dart_chassis_forge.ps1 --verbose analyze --help}
 
 TotalMilliseconds : 2980.2302
+
+---
+
+$ Measure-Command {dart.exe run .\bin\build.dart example}
+
+TotalMilliseconds : 1554.0501
+
+--
+
+$ Measure-Command {dart.exe run empty.dart example}
+
+TotalMilliseconds : 499.215
 ```
 
 #### Native Executable
@@ -186,7 +210,7 @@ TotalMilliseconds : 78.2293
 
 ## Example within Projects
 
-* [Rucksack](https://github.com/axrs/dart\_rucksack.git)
+* [Rucksack](https://github.com/axrs/dart\_rucksack/tree/master/tool)
 
 ***
 

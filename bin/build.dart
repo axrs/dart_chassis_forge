@@ -17,7 +17,7 @@ bool _isModifiedAfter(
 void _createChassisBuildYaml(final String folder) {
   final File config = File('build.chassis.yaml');
   if (!config.existsSync()) {
-    config.writeAsString('''
+    config.writeAsStringSync('''
 targets:
   \$default:
     builders:
@@ -28,9 +28,11 @@ targets:
   }
 }
 
+final RegExp _dartFileRegex = RegExp(r'\.dart$');
+
 bool _reflectableNeedsUpdating(final FileSystemEntity file) {
   final String reflectableFilePath = file.absolute.path.replaceAll(
-    RegExp(r'\.dart$'),
+    _dartFileRegex,
     '.reflectable.dart',
   );
   final File reflectable = File(reflectableFilePath);

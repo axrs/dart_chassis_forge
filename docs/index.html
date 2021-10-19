@@ -65,6 +65,8 @@ across different code bases and frameworks. For example, I may have to:</p>
 <li>Move packages into a different directory</li>
 </ul>
 </li>
+<li>Run unit tests that first need to validate a database version</li>
+<li>Connect to a 3rd party service to query usage information</li>
 <li>Deploy a new version of a service
 <ul>
 <li>Cleans any existing directories</li>
@@ -83,7 +85,17 @@ systems, and scripting.</p>
 <li>You need to share code across multiple projects</li>
 <li>You need to perform any form of debugging</li>
 <li>You need to update documentation</li>
-<li>You need the scripts to be run cross-platform</li>
+<li>You need the scripts to be run cross-platform
+<ul>
+<li>Many System Commands treat flags and attributes differently.
+<ul>
+<li>Such as date between GNU Linux and MacOS Unix</li>
+<li>and much more in Alpine</li>
+</ul>
+</li>
+<li>Windows likely requires WSL... Which is another whole story</li>
+</ul>
+</li>
 <li>One change in shared code breaks another project months later</li>
 </ul>
 <p>As a result of this pain and frustration, I've become passionate about finding a CLI tool/framework that I could use and
@@ -125,15 +137,19 @@ listed in the <a href="#related-projects">Related Projects</a>. Ultimately looki
 <hr>
 <h2 id="usage">Usage</h2>
 <ol>
-<li>Make sure Dart is installed
+<li>
+<p>Make sure Dart is installed</p>
 <ol>
 <li><a href="https://dart.dev/get-dart">dart.dev/get-dart</a></li>
 </ol>
 </li>
-<li>Create (or update) the <code>pubspec.yaml</code> file and add <code>dart_chassis_forge</code> under <code>dev_dependencies</code></li>
-<li>Create some commands in a desired location. For example <code>./tools</code> or <code>./bin</code>
+<li>
+<p>Create (or update) the <code>pubspec.yaml</code> file and add <code>dart_chassis_forge</code> under <code>dev_dependencies</code></p>
+</li>
+<li>
+<p>Create some commands in a desired location. For example <code>./tools</code> or <code>./bin</code></p>
 <blockquote>
-<p>Note: Dart used <code>bin</code> for distributing tools within packages.</p>
+<p>Note: Dart uses <code>bin</code> for distributing tools within packages.</p>
 </blockquote>
 <ol>
 <li>The <a href="example/">example</a> directory contains a few commands used for this project including:
@@ -146,7 +162,8 @@ listed in the <a href="#related-projects">Related Projects</a>. Ultimately looki
 <li>(Optional) Create an <a href="example/entry_command.dart">Entry</a> point command.</li>
 </ol>
 </li>
-<li>Build and run the script:
+<li>
+<p>Build and run the script:</p>
 <blockquote>
 <p>Note: Compilation is only required if the annotations change.</p>
 </blockquote>
@@ -214,9 +231,54 @@ class DocCommand extends ChassisCommand {
   }
 }
 </code></pre>
+<h3 id="rough-performance-benchmarking">Rough Performance Benchmarking</h3>
+<h4 id="reflectables-not-built-or-out-of-date">Reflectables Not Built or Out of Date</h4>
+<p>When one of the commands have changed, it's recommended to rebuild all the reflectable files. This ensures the
+documentation, fields, and other properties are up-to-date.</p>
+<pre class="language-text"><code class="language-text">$ Measure-Command {.\dart_chassis_forge.ps1 --verbose analyze --help}
+
+TotalMilliseconds : 9996.4891
+</code></pre>
+<h4 id="reflectables-built-and-valid">Reflectables Built and Valid</h4>
+<p>If the reflectables are up-to-date, the build process does not need to occur. Reducing the overall run time. It's not
+a <em>bad</em> result, but there is definitely room for improvement.</p>
+<ul>
+<li>A little over half of the runtime relates to checking for outdated build artifacts.
+<ul>
+<li>Approximately 1/3 of the build check time is Dart starting up</li>
+</ul>
+</li>
+</ul>
+<pre class="language-text"><code class="language-text">$ Measure-Command {.\dart_chassis_forge.ps1 --verbose analyze --help}
+
+TotalMilliseconds : 2980.2302
+
+---
+
+$ Measure-Command {dart.exe run .\bin\build.dart example}
+
+TotalMilliseconds : 1554.0501
+
+--
+
+$ Measure-Command {dart.exe run empty.dart example}
+
+TotalMilliseconds : 499.215
+</code></pre>
+<h4 id="native-executable">Native Executable</h4>
+<p>If speed is king, then a native executable can be compiled.</p>
+<pre class="language-text"><code class="language-text">$ dart compile exe .\example\entry_command.dart
+
+Info: Compiling with sound null safety
+Generated: ...\dart_chassis_forge\example\entry_command.exe
+
+$ Measure-Command {.\example\entry_command.exe --verbose analyze --help}
+
+TotalMilliseconds : 78.2293
+</code></pre>
 <h2 id="example-within-projects">Example within Projects</h2>
 <ul>
-<li><a href="https://github.com/axrs/dart_rucksack.git">Rucksack</a></li>
+<li><a href="https://github.com/axrs/dart_rucksack/tree/master/tool">Rucksack</a></li>
 </ul>
 <hr>
 <h2 id="recommend-reading">Recommend Reading</h2>
