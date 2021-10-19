@@ -45,13 +45,170 @@
       
 <section class="desc markdown">
   <h1 id="chassis-forge">Chassis Forge</h1>
+<p>Chassis Forge is a foundation for building modern CLI apps and tools to help with project automation and other various
+tasks.</p>
 <blockquote>
-<p>Chassis: is the load-bearing framework of an artificial object, which structurally supports the object in its construction and function.
-Forge: create (something) strong, enduring, or successful.</p>
+<p>Chassis: is the load-bearing framework of an artificial object, which structurally supports the object in its construction and function.</p>
 </blockquote>
+<blockquote>
+<p>Forge: create (something) strong, enduring, or successful.</p>
+</blockquote>
+<hr>
 <h2 id="about">About</h2>
+<p>In a lot of my day-to-day software development, I'm positioned to run multiple command line utilities in succession
+across different code bases and frameworks. For example, I may have to:</p>
+<ul>
+<li>Install Dependencies
+<ul>
+<li>Which downloads the dependencies</li>
+<li>Compiles/Builds any sub-modules</li>
+<li>Move packages into a different directory</li>
+</ul>
+</li>
+<li>Deploy a new version of a service
+<ul>
+<li>Cleans any existing directories</li>
+<li>Compiles/Builds any the service</li>
+<li>Uploads the package to the necessary build system</li>
+<li>Initiates a blue-green deploy cycle</li>
+</ul>
+</li>
+<li>... And soo much more</li>
+</ul>
+<p>These types of commands are laborious, time-consuming, human-error prone, painful to keep up to date, and difficult to
+share with other team members. Once the process becomes too complex, developers will often look into automation, build
+systems, and scripting.</p>
+<p>In the past, I have resorted to BASH as my go to... This is all well and good until:</p>
+<ul>
+<li>You need to share code across multiple projects</li>
+<li>You need to perform any form of debugging</li>
+<li>You need to update documentation</li>
+<li>You need the scripts to be run cross-platform</li>
+<li>One change in shared code breaks another project months later</li>
+</ul>
+<p>As a result of this pain and frustration, I've become passionate about finding a CLI tool/framework that I could use and
+adopt across all my projects with minimal frustration and effort. I spent a lot of time playing with each framework
+listed in the <a href="#related-projects">Related Projects</a>. Ultimately looking for must, and would be nice to haves.</p>
+<h3 id="must-have">Must Have</h3>
+<ul>
+<li>Is easy to read and understand</li>
+<li>Cross Platform support with minimal setup and configuration</li>
+<li>Allows quickly scripting without long compilation times</li>
+<li>Share code/libraries in a Semantically Versioned Way</li>
+<li>Provides a consistent logging/output framework with varying levels of verbosity</li>
+<li>Offer finer control over thrown exceptions and errors</li>
+<li>Associates command and flag/argument documentation directly with the command definition</li>
+<li>Support commands, sub-commands, and scripts</li>
+<li>Can Invoke other 3rd party executables
+<ul>
+<li>Like the <code>aws</code> and <code>azure</code> CLIs
+<ul>
+<li>capturing their <code>stdout</code> and <code>stderr</code> streams</li>
+<li>easily raising trappable and reportable exceptions</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Support prompting for missing, or more, input</li>
+<li>Speedy
+<ul>
+<li>At least on subsequent runs</li>
+</ul>
+</li>
+<li>Is not a task runner, but allows me to combine commands if I wish</li>
+</ul>
+<h3 id="would-be-nice-to-have">Would be Nice to Have</h3>
+<ul>
+<li>Decoupled with Dependency Injection Support</li>
+<li>Unit Testable</li>
+</ul>
+<hr>
 <h2 id="usage">Usage</h2>
-<h2 id="reasoning">Reasoning</h2>
+<ol>
+<li>Make sure Dart is installed
+<ol>
+<li><a href="https://dart.dev/get-dart">dart.dev/get-dart</a></li>
+</ol>
+</li>
+<li>Create (or update) the <code>pubspec.yaml</code> file and add <code>dart_chassis_forge</code> under <code>dev_dependencies</code></li>
+<li>Create some commands in a desired location. For example <code>./tools</code> or <code>./bin</code>
+<blockquote>
+<p>Note: Dart used <code>bin</code> for distributing tools within packages.</p>
+</blockquote>
+<ol>
+<li>The <a href="example/">example</a> directory contains a few commands used for this project including:
+<ol>
+<li><a href="example/analyze_command.dart">Analyze</a></li>
+<li><a href="example/doc_command.dart">Doc</a></li>
+<li><a href="example/format_command.dart">Format</a></li>
+</ol>
+</li>
+<li>(Optional) Create an <a href="example/entry_command.dart">Entry</a> point command.</li>
+</ol>
+</li>
+<li>Build and run the script:
+<blockquote>
+<p>Note: Compilation is only required if the annotations change.</p>
+</blockquote>
+<ol>
+<li>Either Add a <a href="dart_chassis_forge.sh">BASH</a> or <a href="dart_chassis_forge.ps1">PowerShell</a> script as a proxy to:
+<ol>
+<li>conveniently install the dart dependencies (if not already done so);</li>
+<li>compile the commands on change</li>
+<li>invoke the main entry point</li>
+</ol>
+</li>
+<li>OR Run:
+<ol>
+<li><code>dart run dart_chassis_forge:build</code> to build the commands</li>
+<li><code>dart run tool/entry_command.dart &lt;arg&gt; &lt;arg&gt; &lt;arg&gt;</code> to run your command</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="example-output">Example Output</h3>
+<pre class="language-text"><code class="language-text">$ ./dart_chassis_forge.ps1
+Dart Chassis Forge Project Helper Tools
+
+
+  -v, --verbose  Enable Command Verbose Mode
+  -h, --help, -? Show help
+
+COMMANDS
+  analyze Runs static code analysis across the code base
+  doc Generates HTML documentation for the project
+  format Runs the various source code formatting tools
+</code></pre>
+<pre class="language-text"><code class="language-text">$ ./dart_chassis_forge.ps1 analyze
+2021-10-19 20:11:58.965568 | INFO    | cf:Dart        : Analyzing...
+</code></pre>
+<pre class="language-text"><code class="language-text">$ ./dart_chassis_forge.ps1 --verbose analyze
+2021-10-19 20:13:14.090159 | INFO    | cf:Dart        : Analyzing...
+2021-10-19 20:13:14.099159 | FINE    | cf:Shell       : Running: dart analyze
+$ dart analyze
+Analyzing dart_chassis_forge...
+No issues found!
+</code></pre>
+<h2 id="example-within-projects">Example within Projects</h2>
+<ul>
+<li><a href="https://github.com/axrs/dart_rucksack.git">Rucksack</a></li>
+</ul>
+<hr>
+<h2 id="recommend-reading">Recommend Reading</h2>
+<ul>
+<li><a href="https://blog.developer.atlassian.com/10-design-principles-for-delightful-clis/">10 Design Principles for Delightful CLIs - Atlassian</a></li>
+<li><a href="https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46">12 Factor CLI Apps - @jdxcode</a></li>
+</ul>
+<h2 id="related-projects">Related Projects</h2>
+<p>There are soo many great framework tools out there:</p>
+<ul>
+<li><a href="https://github.com/jcowgar/smart_arg">Smart Arg</a></li>
+<li><a href="https://oclif.io">oclif</a></li>
+<li><a href="https://picocli.info">picocli</a></li>
+<li><a href="https://commanddotnet.bilal-fazlani.com">CommandDotNet</a></li>
+<li><a href="https://github.com/Tyrrrz/CliFx">CliFx</a></li>
+</ul>
 </section>
 
 

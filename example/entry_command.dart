@@ -13,7 +13,7 @@ import 'format_command.dart';
 
 @SmartArg.reflectable
 @Parser(
-  description: 'dart_rucksack Project Helper Tools',
+  description: 'Dart Chassis Forge Project Helper Tools',
 )
 class Args extends SmartArg {
   @BooleanArgument(short: 'v', help: 'Enable Command Verbose Mode')

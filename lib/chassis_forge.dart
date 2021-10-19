@@ -11,6 +11,7 @@ import 'src/dart.dart' as dart;
 import 'src/markdown.dart' as markdown;
 import 'src/shell.dart';
 
+export 'src/chassis_command.dart';
 export 'src/shell.dart';
 
 /// Formats various source code files

@@ -124,7 +124,7 @@ class ProcessRunShell implements IShell {
   @override
   Future<ProcessResult> run(String script) async {
     _requireSingleCommand(script);
-    log.finest('Running: $script');
+    log.fine('Running: $script');
     var result = await pr.run(
       script,
       verbose: verbose,
