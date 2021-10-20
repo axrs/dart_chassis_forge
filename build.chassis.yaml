@@ -3,5 +3,4 @@ targets:
     builders:
       reflectable:
         generate_for:
-          - bin/build.dart
           - example/**_command.dart

@@ -1,14 +1,12 @@
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:dart_chassis_forge/chassis_forge.dart';
 import 'package:dart_chassis_forge/chassis_forge_dart.dart' as dart;
 import 'package:dart_rucksack/rucksack.dart';
 import 'package:glob/glob.dart';
 import 'package:glob/list_local_fs.dart';
 import 'package:logging/logging.dart';
-import 'package:smart_arg/smart_arg.dart';
-
-import 'build.reflectable.dart';
 
 final _log = Logger('cf:build');
 
@@ -48,39 +46,6 @@ bool _reflectableNeedsUpdating(final FileSystemEntity file) {
       _isModifiedAfter(reflectable, file);
 }
 
-@SmartArg.reflectable
-@Parser(description: 'Dart Chassis Forge Builder')
-class Args extends SmartArg {
-  @StringArgument(
-    help: 'Command Source File Directory',
-    isRequired: true,
-  )
-  String directory = 'tool';
-
-  @StringArgument(
-    help: 'Compile the entry command into the specified executable target',
-    mustBeOneOf: ['kernel', 'native'],
-  )
-  String? executableTarget; // Default to Hello
-
-  @StringArgument(
-    help: 'Compile the entry command into the specified executable target',
-  )
-  String? main = null;
-
-  @HelpArgument()
-  bool help = false;
-
-  @BooleanArgument(
-    short: 'v',
-    help: 'Enable Command Verbose Mode',
-  )
-  late bool verbose = false;
-
-  @BooleanArgument(help: 'Force executable compilation')
-  late bool force = false;
-}
-
 _requireDirectoryExist(String directory) {
   _log.info('Checking for existence of directory $directory');
   if (isFalse(Directory(directory).existsSync())) {
@@ -104,9 +69,9 @@ _configureLogger(bool verbose) {
   });
 }
 
-void _compile(Args args, IShell shell) {
-  String? executableTarget = args.executableTarget;
-  String? mainScript = args.main;
+void _compile(ArgResults args, IShell shell) {
+  String? executableTarget = args['executable-target'];
+  String? mainScript = args['main'];
   if (isNotBlank(executableTarget) && isNotBlank(mainScript)) {
     _requireFileExist(mainScript!);
     dart.compile(shell, mainScript, executableTarget!);
@@ -114,22 +79,54 @@ void _compile(Args args, IShell shell) {
 }
 
 void main(List<String> arguments) {
-  initializeReflectable();
-  var args = Args()..parse(arguments);
-  if (args.help) {
-    print(args.usage());
+  var parser = ArgParser()
+    ..addFlag(
+      'force',
+      defaultsTo: false,
+      negatable: false,
+      help: 'Force a recompilation',
+    )
+    ..addFlag(
+      'verbose',
+      defaultsTo: false,
+      negatable: false,
+      help: 'Enable Verbose Output',
+    )
+    ..addFlag(
+      'help',
+      help: 'Show Help',
+      negatable: false,
+    )
+    ..addOption(
+      'main',
+      help: 'Optional Main Command Entry File to Compile',
+    )
+    ..addOption(
+      'executable-target',
+      allowed: ['kernel', 'exe'],
+      help: 'Optional Compilation Target',
+    )
+    ..addOption(
+      'directory',
+      defaultsTo: 'tool',
+      help: 'Directory Command Source codes to check for re-compilation',
+    );
+
+  var args = parser.parse(arguments);
+  if (args['help']) {
+    print(parser.usage);
     exit(0);
   }
-  _configureLogger(args.verbose);
-  final String chassisDir = args.directory;
+  _configureLogger(args['verbose']);
+  final String chassisDir = args['directory'];
   _requireDirectoryExist(chassisDir);
   _createChassisBuildYaml(chassisDir);
   var rebuildIsRequired = Glob('$chassisDir/**_command.dart')
       .listSync()
       .any(_reflectableNeedsUpdating);
-  if (isFalse(rebuildIsRequired) && isFalse(args.force)) {
+  if (isFalse(rebuildIsRequired) && isFalse(args['force'])) {
     return;
   }
-  var shell = ProcessRunShell(verbose: args.verbose);
+  var shell = ProcessRunShell(verbose: args['verbose']);
   dart.build(shell, 'chassis').then((value) => _compile(args, shell));
 }

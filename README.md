@@ -94,7 +94,7 @@ listed in the [Related Projects](#related-projects). Ultimately looking for must
       1. compile the commands on change
       1. invoke the main entry point
    1. OR Run:
-      1. `dart run dart_chassis_forge:build.dill` to build the commands
+      1. `dart run dart_chassis_forge:build` to build the commands
       1. `dart run tool/entry_command.dart <arg> <arg> <arg>` to run your command
 
 ### Example Output
@@ -170,7 +170,7 @@ If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType L
 {
     & dart.exe pub get
 }
-& dart.exe dart_chassis_forge:build.dill --directory example | Out-Null
+& dart.exe dart_chassis_forge:build --directory example | Out-Null
 & dart.exe example/entry_command.dart @args
 ```
 
@@ -186,7 +186,7 @@ If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType L
 {
     & dart.exe pub get
 }
-& dart.exe dart_chassis_forge:build.dill --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
+& dart.exe dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
 & dart.exe example/entry_command.dill @args
 ```
 
@@ -205,7 +205,7 @@ set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
   dart pub get >/dev/null
 fi
-dart dart_chassis_forge:build.dill --directory example >/dev/null
+dart dart_chassis_forge:build --directory example >/dev/null
 # shellcheck disable=SC2068
 dart run tool/entry_command.dart $@
 ```
@@ -223,7 +223,7 @@ set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
   dart pub get >/dev/null
 fi
-dart dart_chassis_forge:build.dill --directory example --main example/entry_command.dart --executable-target kernel >/dev/null
+dart dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel >/dev/null
 # shellcheck disable=SC2068
 dart example/entry_command.dill $@
 ```

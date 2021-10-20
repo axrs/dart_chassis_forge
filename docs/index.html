@@ -177,7 +177,7 @@ listed in the <a href="#related-projects">Related Projects</a>. Ultimately looki
 </li>
 <li>OR Run:
 <ol>
-<li><code>dart run dart_chassis_forge:build.dill</code> to build the commands</li>
+<li><code>dart run dart_chassis_forge:build</code> to build the commands</li>
 <li><code>dart run tool/entry_command.dart &lt;arg&gt; &lt;arg&gt; &lt;arg&gt;</code> to run your command</li>
 </ol>
 </li>
@@ -241,7 +241,7 @@ source code change.</p>
 {
     &amp; dart.exe pub get
 }
-&amp; dart.exe dart_chassis_forge:build.dill --directory example | Out-Null
+&amp; dart.exe dart_chassis_forge:build --directory example | Out-Null
 &amp; dart.exe example/entry_command.dart @args
 </code></pre><p></p>
 </details><details>
@@ -251,7 +251,7 @@ source code change.</p>
 {
     &amp; dart.exe pub get
 }
-&amp; dart.exe dart_chassis_forge:build.dill --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
+&amp; dart.exe dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
 &amp; dart.exe example/entry_command.dill @args
 </code></pre><p></p>
 </details>
@@ -263,7 +263,7 @@ set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
   dart pub get &gt;/dev/null
 fi
-dart dart_chassis_forge:build.dill --directory example &gt;/dev/null
+dart dart_chassis_forge:build --directory example &gt;/dev/null
 # shellcheck disable=SC2068
 dart run tool/entry_command.dart $@
 </code></pre><p></p>
@@ -275,7 +275,7 @@ set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
   dart pub get &gt;/dev/null
 fi
-dart dart_chassis_forge:build.dill --directory example --main example/entry_command.dart --executable-target kernel &gt;/dev/null
+dart dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel &gt;/dev/null
 # shellcheck disable=SC2068
 dart example/entry_command.dill $@
 </code></pre><p></p>
