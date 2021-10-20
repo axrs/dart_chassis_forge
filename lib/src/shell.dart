@@ -122,13 +122,14 @@ class ProcessRunShell implements IShell {
   });
 
   @override
-  Future<ProcessResult> run(String script) async {
+  Future<ProcessResult> run(
+    String script, {
+    Map<String, String>? environment = null,
+  }) async {
     _requireSingleCommand(script);
     log.fine('Running: $script');
-    var result = await pr.run(
-      script,
-      verbose: verbose,
-    );
+    var result =
+        await pr.run(script, verbose: verbose, environment: environment);
     return result.first;
   }
 

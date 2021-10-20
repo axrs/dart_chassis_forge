@@ -71,10 +71,13 @@
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; build(IShell shell, [String? config]) async {
   _whenDartBuildable(&#39;Build&#39;, shell, () async {
     _log.info(&#39;Building $config&#39;.trim());
-    final String extra = config != null ? &#39;--config $config&#39; : &#39;&#39;;
-    await shell.run(
-        &#39;dart run build_runner build --delete-conflicting-outputs $extra&#39;
-            .trim());
+    final String configFlag = config != null ? &#39;--config $config&#39; : &#39;&#39;;
+    await shell.run(&#39;&#39;&#39;
+        dart run build_runner build \\
+          --delete-conflicting-outputs \\
+          $configFlag
+        &#39;&#39;&#39;
+        .trim());
   });
 }</code></pre>
 </section>
@@ -106,6 +109,7 @@
   <li class="section-title"><a href="../chassis_forge_dart/chassis_forge_dart-library.html#functions">Functions</a></li>
   <li><a href="../chassis_forge_dart/analyze.html">analyze</a></li>
   <li><a href="../chassis_forge_dart/build.html">build</a></li>
+  <li><a href="../chassis_forge_dart/compile.html">compile</a></li>
   <li><a href="../chassis_forge_dart/doc.html">doc</a></li>
   <li><a href="../chassis_forge_dart/format.html">format</a></li>
   <li><a href="../chassis_forge_dart/hasCli.html">hasCli</a></li>

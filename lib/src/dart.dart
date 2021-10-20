@@ -95,10 +95,27 @@ Future<void> test(IShell shell) async {
 Future<void> build(IShell shell, [String? config]) async {
   _whenDartBuildable('Build', shell, () async {
     _log.info('Building $config'.trim());
-    final String extra = config != null ? '--config $config' : '';
-    await shell.run(
-        'dart run build_runner build --delete-conflicting-outputs $extra'
-            .trim());
+    final String configFlag = config != null ? '--config $config' : '';
+    await shell.run('''
+        dart run build_runner build \\
+          --delete-conflicting-outputs \\
+          $configFlag
+        '''
+        .trim());
+  });
+}
+
+/// Compiles the specified [dartFile] into the target [executableType]
+///
+/// `since 0.0.1`
+Future<void> compile(
+  IShell shell,
+  String dartFile, [
+  String executableType = 'kernel',
+]) async {
+  _whenDartBuildable('Compile', shell, () async {
+    _log.info('Compiling $dartFile to $executableType');
+    await shell.run('dart compile $executableType $dartFile');
   });
 }
 

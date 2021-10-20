@@ -154,6 +154,82 @@ class DocCommand extends ChassisCommand {
 }
 ```
 
+### Helper Scripts
+
+The following scripts can be used as a guide for
+
+#### Windows
+
+<details>
+<summary>Dart Run Script</summary>
+<p>
+
+```powershell
+If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
+{
+    & 'dart.exe' 'pub' 'get'
+}
+& 'dart.exe' 'dart_chassis_forge:build.dill' '--directory' 'example' | Out-Null
+& 'dart.exe' 'example/entry_command.dart' @args
+```
+
+</p>
+</details>
+
+<details>
+<summary>Dart Kernel Compile</summary>
+<p>
+
+```powershell
+If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
+{
+    & 'dart.exe' 'pub' 'get'
+}
+& 'dart.exe' 'dart_chassis_forge:build.dill' '--directory' 'example' '--main' 'example/entry_command.dart' '--executable-target' 'kernel' | Out-Null
+& 'dart.exe' 'example/entry_command.dill' @args
+```
+
+</p>
+</details>
+
+#### Unix Based OS
+
+<details>
+<summary>Dart Run Script</summary>
+<p>
+
+```shell
+#!/usr/bin/env bash
+set -euo pipefail
+if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
+  dart pub get >/dev/null
+fi
+dart dart_chassis_forge:build.dill --directory example >/dev/null
+# shellcheck disable=SC2068
+dart run tool/entry_command.dart $@
+```
+
+</p>
+</details>
+
+<details>
+<summary>Dart Kernel Compile</summary>
+<p>
+
+```shell
+#!/usr/bin/env bash
+set -euo pipefail
+if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
+  dart pub get >/dev/null
+fi
+dart dart_chassis_forge:build.dill --directory example --main example/entry_command.dart --executable-target kernel >/dev/null
+# shellcheck disable=SC2068
+dart example/entry_command.dill $@
+```
+
+</p>
+</details>
+
 ### Rough Performance Benchmarking
 
 #### Reflectables Not Built or Out of Date

@@ -17,7 +17,10 @@ import 'versions_command.dart';
   description: 'Dart Chassis Forge Project Helper Tools',
 )
 class Args extends SmartArg {
-  @BooleanArgument(short: 'v', help: 'Enable Command Verbose Mode')
+  @BooleanArgument(
+    short: 'v',
+    help: 'Enable Command Verbose Mode',
+  )
   late bool verbose = false;
 
   @Command(help: analyzeDescription)

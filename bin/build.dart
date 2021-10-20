@@ -6,6 +6,11 @@ import 'package:dart_rucksack/rucksack.dart';
 import 'package:glob/glob.dart';
 import 'package:glob/list_local_fs.dart';
 import 'package:logging/logging.dart';
+import 'package:smart_arg/smart_arg.dart';
+
+import 'build.reflectable.dart';
+
+final _log = Logger('cf:build');
 
 bool _isModifiedAfter(
   final File left,
@@ -17,6 +22,7 @@ bool _isModifiedAfter(
 void _createChassisBuildYaml(final String folder) {
   final File config = File('build.chassis.yaml');
   if (!config.existsSync()) {
+    _log.info('Creating $config for build');
     config.writeAsStringSync('''
 targets:
   \$default:
@@ -25,6 +31,8 @@ targets:
         generate_for:
           - $folder/**_command.dart
 ''');
+  } else {
+    _log.info('Using existing $config for build');
   }
 }
 
@@ -40,18 +48,85 @@ bool _reflectableNeedsUpdating(final FileSystemEntity file) {
       _isModifiedAfter(reflectable, file);
 }
 
-/// Builds command reflectances
-Future<void> main(List<String> args) async {
-  final String folder = isNotEmpty(args) ? args.first : 'tool';
-  _createChassisBuildYaml(folder);
-  var rebuildIsRequired =
-      Glob('$folder/**_command.dart').listSync().any(_reflectableNeedsUpdating);
-  if (rebuildIsRequired) {
-    Logger.root.level = Level.WARNING;
-    Logger.root.onRecord.listen((record) {
-      print('${record.level.name}: ${record.time}: ${record.message}');
-    });
-    var shell = ProcessRunShell();
-    await dart.build(shell, 'chassis');
+@SmartArg.reflectable
+@Parser(description: 'Dart Chassis Forge Builder')
+class Args extends SmartArg {
+  @StringArgument(
+    help: 'Command Source File Directory',
+    isRequired: true,
+  )
+  late String directory = 'tool';
+
+  @StringArgument(
+    help: 'Compile the entry command into the specified executable target',
+    mustBeOneOf: ['kernel', 'native'],
+  )
+  String? executableTarget; // Default to Hello
+
+  @StringArgument(
+    help: 'Compile the entry command into the specified executable target',
+  )
+  late String main;
+
+  @HelpArgument()
+  bool help = false;
+
+  @BooleanArgument(
+    short: 'v',
+    help: 'Enable Command Verbose Mode',
+  )
+  late bool verbose = false;
+
+  @BooleanArgument(help: 'Force executable compilation')
+  late bool force = false;
+}
+
+_requireDirectoryExist(String directory) {
+  _log.info('Checking for existence of directory $directory');
+  if (isFalse(Directory(directory).existsSync())) {
+    print('Directory $directory does not exist');
+    exit(1);
+  }
+}
+
+_requireFileExist(String file) {
+  _log.info('Checking for existence of file $file');
+  if (isFalse(File(file).existsSync())) {
+    print('File $file does not exist');
+    exit(1);
+  }
+}
+
+_configureLogger(bool verbose) {
+  Logger.root.level = verbose ? Level.FINE : Level.WARNING;
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+}
+
+Future<void> main(List<String> arguments) async {
+  initializeReflectable();
+  var args = Args()..parse(arguments);
+  if (args.help) {
+    print(args.usage());
+    exit(0);
+  }
+  _configureLogger(args.verbose);
+  final String chassisDir = args.directory;
+  _requireDirectoryExist(chassisDir);
+  _createChassisBuildYaml(chassisDir);
+  var rebuildIsRequired = Glob('$chassisDir/**_command.dart')
+      .listSync()
+      .any(_reflectableNeedsUpdating);
+  if (isFalse(rebuildIsRequired) && isFalse(args.force)) {
+    return;
+  }
+  var shell = ProcessRunShell(verbose: args.verbose);
+  await dart.build(shell, 'chassis');
+  String? executableTarget = args.executableTarget;
+  var mainScript = args.main;
+  if (isNotBlank(executableTarget) && isNotBlank(mainScript)) {
+    _requireFileExist(mainScript);
+    await dart.compile(shell, mainScript, executableTarget!);
   }
 }
