@@ -55,7 +55,7 @@ class Args extends SmartArg {
     help: 'Command Source File Directory',
     isRequired: true,
   )
-  late String directory = 'tool';
+  String directory = 'tool';
 
   @StringArgument(
     help: 'Compile the entry command into the specified executable target',
@@ -66,7 +66,7 @@ class Args extends SmartArg {
   @StringArgument(
     help: 'Compile the entry command into the specified executable target',
   )
-  late String main;
+  String? main = null;
 
   @HelpArgument()
   bool help = false;
@@ -104,7 +104,16 @@ _configureLogger(bool verbose) {
   });
 }
 
-Future<void> main(List<String> arguments) async {
+void _compile(Args args, IShell shell) {
+  String? executableTarget = args.executableTarget;
+  String? mainScript = args.main;
+  if (isNotBlank(executableTarget) && isNotBlank(mainScript)) {
+    _requireFileExist(mainScript!);
+    dart.compile(shell, mainScript, executableTarget!);
+  }
+}
+
+void main(List<String> arguments) {
   initializeReflectable();
   var args = Args()..parse(arguments);
   if (args.help) {
@@ -122,11 +131,5 @@ Future<void> main(List<String> arguments) async {
     return;
   }
   var shell = ProcessRunShell(verbose: args.verbose);
-  await dart.build(shell, 'chassis');
-  String? executableTarget = args.executableTarget;
-  var mainScript = args.main;
-  if (isNotBlank(executableTarget) && isNotBlank(mainScript)) {
-    _requireFileExist(mainScript);
-    await dart.compile(shell, mainScript, executableTarget!);
-  }
+  dart.build(shell, 'chassis').then((value) => _compile(args, shell));
 }

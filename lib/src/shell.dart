@@ -128,8 +128,11 @@ class ProcessRunShell implements IShell {
   }) async {
     _requireSingleCommand(script);
     log.fine('Running: $script');
-    var result =
-        await pr.run(script, verbose: verbose, environment: environment);
+    var result = await pr.run(
+      script,
+      verbose: verbose,
+      environment: environment,
+    );
     return result.first;
   }
 

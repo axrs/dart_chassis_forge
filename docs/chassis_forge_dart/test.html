@@ -68,7 +68,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; test(IShell shell) async {
-  _whenDartProject(&#39;Unit Test&#39;, shell, () async {
+  await _whenDartProject(&#39;Unit Test&#39;, shell, () async {
     _log.info(&#39;Unit Testing...&#39;);
     var extraFlags = shell.supportsColorOutput() ? &#39;--color&#39; : &#39;&#39;;
     await shell.run(&#39;dart test $extraFlags&#39;.trim());

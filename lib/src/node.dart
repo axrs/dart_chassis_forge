@@ -49,7 +49,7 @@ _whenNodeProject(
 ///
 /// `since 0.0.1`
 Future<void> test(IShell shell) async {
-  _whenNodeProject('Unit Test', shell, () async {
+  await _whenNodeProject('Unit Test', shell, () async {
     _log.info('Unit Testing...');
     await shell.run('npm test');
   });
@@ -62,7 +62,7 @@ Future<void> installDependencies(
   IShell shell, {
   bool installForCi = false,
 }) async {
-  _whenNodeProject('Install Dependencies', shell, () async {
+  await _whenNodeProject('Install Dependencies', shell, () async {
     if (installForCi) {
       _log.info('Installing CI Dependencies...');
       await shell.run('npm ci');

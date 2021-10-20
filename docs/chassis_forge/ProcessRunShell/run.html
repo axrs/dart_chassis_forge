@@ -80,14 +80,14 @@ May throw <a href="../../chassis_forge/CommandException-class.html">CommandExcep
   <pre class="language-dart"><code class="language-dart">@override
 Future&lt;ProcessResult&gt; run(
   String script, {
-  Map&lt;String, String&gt;? environment: null,
+  Map&lt;String, String&gt;? environment = null,
 }) async {
   _requireSingleCommand(script);
   log.fine(&#39;Running: $script&#39;);
   var result = await pr.run(
     script,
     verbose: verbose,
-    environment: environment
+    environment: environment,
   );
   return result.first;
 }</code></pre>

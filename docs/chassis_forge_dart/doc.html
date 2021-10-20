@@ -76,7 +76,7 @@ directory in the given <code>format</code></p>
   String output = &quot;docs&quot;,
   String format = &quot;html&quot;,
 }) async {
-  _whenDartProject(&#39;Doc&#39;, shell, () async {
+  await _whenDartProject(&#39;Doc&#39;, shell, () async {
     _log.info(&#39;Building Documentation...&#39;);
     shell.requireCommand(&#39;dartdoc&#39;);
     await shell.run(&#39;dartdoc --output $output --format $format&#39;);

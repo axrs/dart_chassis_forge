@@ -68,7 +68,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; test(IShell shell) async {
-  _whenNodeProject(&#39;Unit Test&#39;, shell, () async {
+  await _whenNodeProject(&#39;Unit Test&#39;, shell, () async {
     _log.info(&#39;Unit Testing...&#39;);
     await shell.run(&#39;npm test&#39;);
   });

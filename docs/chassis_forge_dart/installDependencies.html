@@ -68,7 +68,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; installDependencies(IShell shell) async {
-  _whenDartProject(&#39;Install Dependencies&#39;, shell, () async {
+  await _whenDartProject(&#39;Install Dependencies&#39;, shell, () async {
     _log.info(&#39;Installing Dependencies...&#39;);
     await shell.run(&#39;dart pub get&#39;);
   });

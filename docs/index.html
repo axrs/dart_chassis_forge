@@ -177,7 +177,7 @@ listed in the <a href="#related-projects">Related Projects</a>. Ultimately looki
 </li>
 <li>OR Run:
 <ol>
-<li><code>dart run dart_chassis_forge:build</code> to build the commands</li>
+<li><code>dart run dart_chassis_forge:build.dill</code> to build the commands</li>
 <li><code>dart run tool/entry_command.dart &lt;arg&gt; &lt;arg&gt; &lt;arg&gt;</code> to run your command</li>
 </ol>
 </li>
@@ -231,51 +231,71 @@ class DocCommand extends ChassisCommand {
   }
 }
 </code></pre>
+<h3 id="helper-scripts">Helper Scripts</h3>
+<p>The following scripts can be used as an entry point template for re-building, and executing, your commands after a
+source code change.</p>
+<h4 id="windows">Windows</h4><details>
+<summary>Run Script</summary>
+<p>
+</p><pre class="language-powershell"><code class="language-powershell">If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
+{
+    &amp; dart.exe pub get
+}
+&amp; dart.exe dart_chassis_forge:build.dill --directory example | Out-Null
+&amp; dart.exe example/entry_command.dart @args
+</code></pre><p></p>
+</details><details>
+<summary>Kernel Compile</summary>
+<p>
+</p><pre class="language-powershell"><code class="language-powershell">If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
+{
+    &amp; dart.exe pub get
+}
+&amp; dart.exe dart_chassis_forge:build.dill --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
+&amp; dart.exe example/entry_command.dill @args
+</code></pre><p></p>
+</details>
+<h4 id="unix-based-os">Unix Based OS</h4><details>
+<summary>Run Script</summary>
+<p>
+</p><pre class="language-shell"><code class="language-shell">#!/usr/bin/env bash
+set -euo pipefail
+if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
+  dart pub get &gt;/dev/null
+fi
+dart dart_chassis_forge:build.dill --directory example &gt;/dev/null
+# shellcheck disable=SC2068
+dart run tool/entry_command.dart $@
+</code></pre><p></p>
+</details><details>
+<summary>Kernel Compile</summary>
+<p>
+</p><pre class="language-shell"><code class="language-shell">#!/usr/bin/env bash
+set -euo pipefail
+if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
+  dart pub get &gt;/dev/null
+fi
+dart dart_chassis_forge:build.dill --directory example --main example/entry_command.dart --executable-target kernel &gt;/dev/null
+# shellcheck disable=SC2068
+dart example/entry_command.dill $@
+</code></pre><p></p>
+</details>
 <h3 id="rough-performance-benchmarking">Rough Performance Benchmarking</h3>
-<h4 id="reflectables-not-built-or-out-of-date">Reflectables Not Built or Out of Date</h4>
-<p>When one of the commands have changed, it's recommended to rebuild all the reflectable files. This ensures the
-documentation, fields, and other properties are up-to-date.</p>
-<pre class="language-text"><code class="language-text">$ Measure-Command {.\dart_chassis_forge.ps1 --verbose analyze --help}
-
-TotalMilliseconds : 9996.4891
-</code></pre>
-<h4 id="reflectables-built-and-valid">Reflectables Built and Valid</h4>
+<p>When using the convenience scripts defined above, when one of the commands source files has changed, a rebuild of the
+reflectables is initiated before invocation. This ensures the documentation, fields, and other properties are
+up-to-date.</p>
+<table><thead><tr><th></th><th>Build Sources and Run</th><th>Run as Script</th></tr></thead><tbody><tr><td>Run Script</td><td>9,923.14ms</td><td>1,937.93ms</td></tr><tr><td>Kernel Compile</td><td>10,242.65ms</td><td>884.42ms</td></tr><tr><td>Native Executable</td><td>N/A</td><td>78.13ms</td></tr></tbody></table>
 <p>If the reflectables are up-to-date, the build process does not need to occur. Reducing the overall run time. It's not
-a <em>bad</em> result, but there is definitely room for improvement.</p>
+a <em>bad</em> result, but there is definitely room for improvement. If speed is king, then a native executable can be
+compiled.</p>
+<p>Notes:</p>
 <ul>
 <li>A little over half of the runtime relates to checking for outdated build artifacts.
 <ul>
-<li>Approximately 1/3 of the build check time is Dart starting up</li>
+<li>Approximately 1/3 of the build check time is Dart starting up. Which can take ~500ms on an empty dart script</li>
 </ul>
 </li>
 </ul>
-<pre class="language-text"><code class="language-text">$ Measure-Command {.\dart_chassis_forge.ps1 --verbose analyze --help}
-
-TotalMilliseconds : 2980.2302
-
----
-
-$ Measure-Command {dart.exe run .\bin\build.dart example}
-
-TotalMilliseconds : 1554.0501
-
---
-
-$ Measure-Command {dart.exe run empty.dart example}
-
-TotalMilliseconds : 499.215
-</code></pre>
-<h4 id="native-executable">Native Executable</h4>
-<p>If speed is king, then a native executable can be compiled.</p>
-<pre class="language-text"><code class="language-text">$ dart compile exe .\example\entry_command.dart
-
-Info: Compiling with sound null safety
-Generated: ...\dart_chassis_forge\example\entry_command.exe
-
-$ Measure-Command {.\example\entry_command.exe --verbose analyze --help}
-
-TotalMilliseconds : 78.2293
-</code></pre>
 <h2 id="example-within-projects">Example within Projects</h2>
 <ul>
 <li><a href="https://github.com/axrs/dart_rucksack/tree/master/tool">Rucksack</a></li>

@@ -52,7 +52,7 @@ _whenDartBuildable(String action, IShell shell, dynamic f) async {
 ///
 /// `since 0.0.1`
 Future<void> format(IShell shell) async {
-  _whenDartProject('Format', shell, () async {
+  await _whenDartProject('Format', shell, () async {
     _log.info('Formatting Source Files...');
     await shell.run('dart format --fix .');
   });
@@ -62,7 +62,7 @@ Future<void> format(IShell shell) async {
 ///
 /// `since 0.0.1`
 Future<void> installDependencies(IShell shell) async {
-  _whenDartProject('Install Dependencies', shell, () async {
+  await _whenDartProject('Install Dependencies', shell, () async {
     _log.info('Installing Dependencies...');
     await shell.run('dart pub get');
   });
@@ -72,7 +72,7 @@ Future<void> installDependencies(IShell shell) async {
 ///
 /// `since 0.0.1`
 Future<void> analyze(IShell shell) async {
-  _whenDartProject('Analyze', shell, () async {
+  await _whenDartProject('Analyze', shell, () async {
     _log.info('Analyzing...');
     await shell.run('dart analyze');
   });
@@ -82,7 +82,7 @@ Future<void> analyze(IShell shell) async {
 ///
 /// `since 0.0.1`
 Future<void> test(IShell shell) async {
-  _whenDartProject('Unit Test', shell, () async {
+  await _whenDartProject('Unit Test', shell, () async {
     _log.info('Unit Testing...');
     var extraFlags = shell.supportsColorOutput() ? '--color' : '';
     await shell.run('dart test $extraFlags'.trim());
@@ -93,7 +93,7 @@ Future<void> test(IShell shell) async {
 ///
 /// `since 0.0.1`
 Future<void> build(IShell shell, [String? config]) async {
-  _whenDartBuildable('Build', shell, () async {
+  await _whenDartBuildable('Build', shell, () async {
     _log.info('Building $config'.trim());
     final String configFlag = config != null ? '--config $config' : '';
     await shell.run('''
@@ -113,7 +113,7 @@ Future<void> compile(
   String dartFile, [
   String executableType = 'kernel',
 ]) async {
-  _whenDartBuildable('Compile', shell, () async {
+  await _whenDartBuildable('Compile', shell, () async {
     _log.info('Compiling $dartFile to $executableType');
     await shell.run('dart compile $executableType $dartFile');
   });
@@ -130,7 +130,7 @@ Future<void> doc(
   String output = "docs",
   String format = "html",
 }) async {
-  _whenDartProject('Doc', shell, () async {
+  await _whenDartProject('Doc', shell, () async {
     _log.info('Building Documentation...');
     shell.requireCommand('dartdoc');
     await shell.run('dartdoc --output $output --format $format');

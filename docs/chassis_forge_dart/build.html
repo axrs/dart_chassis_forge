@@ -69,7 +69,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; build(IShell shell, [String? config]) async {
-  _whenDartBuildable(&#39;Build&#39;, shell, () async {
+  await _whenDartBuildable(&#39;Build&#39;, shell, () async {
     _log.info(&#39;Building $config&#39;.trim());
     final String configFlag = config != null ? &#39;--config $config&#39; : &#39;&#39;;
     await shell.run(&#39;&#39;&#39;

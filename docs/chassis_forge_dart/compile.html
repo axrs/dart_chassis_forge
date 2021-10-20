@@ -74,7 +74,7 @@
   String dartFile, [
   String executableType = &#39;kernel&#39;,
 ]) async {
-  _whenDartBuildable(&#39;Compile&#39;, shell, () async {
+  await _whenDartBuildable(&#39;Compile&#39;, shell, () async {
     _log.info(&#39;Compiling $dartFile to $executableType&#39;);
     await shell.run(&#39;dart compile $executableType $dartFile&#39;);
   });

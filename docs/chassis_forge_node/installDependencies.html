@@ -72,7 +72,7 @@
   IShell shell, {
   bool installForCi = false,
 }) async {
-  _whenNodeProject(&#39;Install Dependencies&#39;, shell, () async {
+  await _whenNodeProject(&#39;Install Dependencies&#39;, shell, () async {
     if (installForCi) {
       _log.info(&#39;Installing CI Dependencies...&#39;);
       await shell.run(&#39;npm ci&#39;);
