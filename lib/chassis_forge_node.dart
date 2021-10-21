@@ -23,8 +23,8 @@ extension ChassisNode on IShell {
   /// Throws [CommandNotFoundException] if `npm` is not found
   ///
   /// `since 0.0.1`
-  Future<IShell> npmInstallDependencies({bool forCi = false}) async {
-    await n.npm(this, forCi ? 'ci' : 'install');
+  Future<IShell> npmInstallDependencies({bool upgrade = false}) async {
+    await n.npm(this, upgrade ? 'install' : 'ci');
     return this;
   }
 
@@ -74,9 +74,9 @@ extension ChassisNodeFutureShell on Future<IShell> {
   /// Throws [CommandNotFoundException] if `npm` is not found
   ///
   /// `since 0.0.1`
-  Future<IShell> npmInstallDependencies({bool forCi = false}) async {
+  Future<IShell> npmInstallDependencies({bool upgrade = false}) async {
     return this.then(
-        (shell) async => await shell.npmInstallDependencies(forCi: forCi));
+        (shell) async => await shell.npmInstallDependencies(upgrade: upgrade));
   }
 
   /// Runs the specified npx [command]
