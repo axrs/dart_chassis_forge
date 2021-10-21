@@ -64,11 +64,7 @@ Future<void> format(IShell shell) async {
 Future<void> installDependencies(IShell shell, {bool upgrade = false}) async {
   await _whenDartProject('Install Dependencies', shell, () async {
     _log.info('Installing Dependencies...');
-    if (upgrade) {
-      await shell.run('dart pub get');
-    } else {
-      await shell.run('dart pub upgrade');
-    }
+    await shell.run(upgrade ? 'dart pub upgrade' : 'dart pub get');
   });
 }
 

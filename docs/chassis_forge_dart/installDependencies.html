@@ -52,9 +52,9 @@
     <section class="multi-line-signature">
         
 
-<span class="returntype"><a href="https://api.dart.dev/stable/2.14.4/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/2.14.3/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">installDependencies</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="installDependencies-param-shell"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span> <span class="parameter-name">shell</span>, </span></li>
-<li><span class="parameter" id="installDependencies-param-upgrade">{<span class="type-annotation"><a href="https://api.dart.dev/stable/2.14.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">upgrade</span> = <span class="default-value">false</span>}</span></li>
+<li><span class="parameter" id="installDependencies-param-upgrade">{<span class="type-annotation"><a href="https://api.dart.dev/stable/2.14.3/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">upgrade</span> = <span class="default-value">false</span>}</span></li>
 </ol>)
 
     </section>
@@ -71,11 +71,7 @@
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; installDependencies(IShell shell, {bool upgrade = false}) async {
   await _whenDartProject(&#39;Install Dependencies&#39;, shell, () async {
     _log.info(&#39;Installing Dependencies...&#39;);
-    if (upgrade) {
-      await shell.run(&#39;dart pub get&#39;);
-    } else {
-      await shell.run(&#39;dart pub upgrade&#39;);
-    }
+    await shell.run(upgrade ? &#39;dart pub upgrade&#39; : &#39;dart pub get&#39;);
   });
 }</code></pre>
 </section>
