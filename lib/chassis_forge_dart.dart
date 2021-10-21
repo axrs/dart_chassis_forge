@@ -28,7 +28,7 @@ extension ChassisDart on IShell {
   ///
   /// `since 0.0.1`
   Future<IShell> dartDoc({
-    String output = "docs",
+    String output = "doc",
     String format = "html",
   }) async {
     await d.doc(
