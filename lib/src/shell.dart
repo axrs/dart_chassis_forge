@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dart_rucksack/rucksack.dart';
+import 'package:rucksack/rucksack.dart';
 import 'package:logging/logging.dart';
 import 'package:process_run/shell.dart' as pr;
 

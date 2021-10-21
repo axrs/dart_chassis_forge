@@ -1,16 +1,16 @@
 import 'dart:io';
 
-import 'package:dart_chassis_forge/chassis_forge.dart';
-import 'package:dart_rucksack/rucksack.dart';
+import 'package:chassis_forge/chassis_forge.dart';
+import 'package:rucksack/rucksack.dart';
 import 'package:smart_arg/smart_arg.dart';
 
-import 'analyze_command.dart';
-import 'doc_command.dart';
+import 'analyze.dart';
+import 'docs.dart';
 
 // ignore: unused_import
 import 'entry_command.reflectable.dart';
-import 'format_command.dart';
-import 'versions_command.dart';
+import 'format.dart';
+import 'versions.dart';
 
 @SmartArg.reflectable
 @Parser(
@@ -26,8 +26,8 @@ class Args extends SmartArg {
   @Command(help: analyzeDescription)
   late AnalyzeCommand analyze;
 
-  @Command(help: docDescription)
-  late DocCommand doc;
+  @Command(help: docsDescription)
+  late DocsCommand doc;
 
   @Command(help: formatDescription)
   late FormatCommand format;

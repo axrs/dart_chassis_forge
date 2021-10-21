@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dart_chassis_forge/src/shell.dart';
-import 'package:dart_rucksack/rucksack.dart';
+import 'package:chassis_forge/src/shell.dart';
+import 'package:rucksack/rucksack.dart';
 import 'package:logging/logging.dart';
 
 final _log = Logger('cf:Dart');
@@ -127,7 +127,7 @@ Future<void> compile(
 /// `since 0.0.1`
 Future<void> doc(
   IShell shell, {
-  String output = "docs",
+  String output = "doc",
   String format = "html",
 }) async {
   await _whenDartProject('Doc', shell, () async {
