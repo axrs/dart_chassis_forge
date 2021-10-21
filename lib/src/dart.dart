@@ -61,10 +61,10 @@ Future<void> format(IShell shell) async {
 /// Installs dependencies for the current dart project
 ///
 /// `since 0.0.1`
-Future<void> installDependencies(IShell shell) async {
+Future<void> installDependencies(IShell shell, {bool upgrade = false}) async {
   await _whenDartProject('Install Dependencies', shell, () async {
     _log.info('Installing Dependencies...');
-    await shell.run('dart pub get');
+    await shell.run(upgrade ? 'dart pub upgrade' : 'dart pub get');
   });
 }
 
