@@ -3,18 +3,18 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:chassis_forge/chassis_forge.dart';
 import 'package:chassis_forge/chassis_forge_dart.dart' as dart;
-import 'package:rucksack/rucksack.dart';
 import 'package:glob/glob.dart';
 import 'package:glob/list_local_fs.dart';
 import 'package:logging/logging.dart';
+import 'package:rucksack/rucksack.dart';
 
 final _log = Logger('cf:build');
 
 bool _isModifiedAfter(
-  final File left,
+  final FileSystemEntity left,
   final FileSystemEntity right,
 ) {
-  return left.lastModifiedSync().isBefore(right.statSync().modified);
+  return left.statSync().modified.isBefore(right.statSync().modified);
 }
 
 void _createChassisBuildYaml(final String folder) {
@@ -32,18 +32,6 @@ targets:
   } else {
     _log.info('Using existing $config for build');
   }
-}
-
-final RegExp _dartFileRegex = RegExp(r'\.dart$');
-
-bool _reflectableNeedsUpdating(final FileSystemEntity file) {
-  final String reflectableFilePath = file.absolute.path.replaceAll(
-    _dartFileRegex,
-    '.reflectable.dart',
-  );
-  final File reflectable = File(reflectableFilePath);
-  return isFalse(reflectable.existsSync()) ||
-      _isModifiedAfter(reflectable, file);
 }
 
 _requireDirectoryExist(String directory) {
@@ -78,7 +66,24 @@ void _compile(ArgResults args, IShell shell) {
   }
 }
 
-void main(List<String> arguments) {
+FileSystemEntity? _oldestReflectableFile(String chassisDir) {
+  var reflectables = Glob('$chassisDir/**.reflectable.dart').listSync();
+  reflectables.sort((left, right) =>
+      right.statSync().modified.compareTo(left.statSync().modified));
+  return reflectables.isEmpty ? null : reflectables.last;
+}
+
+bool _isReflectable(final FileSystemEntity fileSystemEntity) {
+  return fileSystemEntity.path.endsWith("reflectable.dart");
+}
+
+List<FileSystemEntity> _dartSourceFiles(String chassisDir) {
+  var dartFiles = Glob('$chassisDir/**.dart').listSync();
+  dartFiles.removeWhere(_isReflectable);
+  return dartFiles;
+}
+
+ArgParser _buildParser() {
   var parser = ArgParser()
     ..addFlag(
       'force',
@@ -111,7 +116,11 @@ void main(List<String> arguments) {
       defaultsTo: 'tool',
       help: 'Directory Command Source codes to check for re-compilation',
     );
+  return parser;
+}
 
+void main(List<String> arguments) {
+  var parser = _buildParser();
   var args = parser.parse(arguments);
   if (args['help']) {
     print(parser.usage);
@@ -121,9 +130,13 @@ void main(List<String> arguments) {
   final String chassisDir = args['directory'];
   _requireDirectoryExist(chassisDir);
   _createChassisBuildYaml(chassisDir);
-  var rebuildIsRequired = Glob('$chassisDir/**_command.dart')
-      .listSync()
-      .any(_reflectableNeedsUpdating);
+  final FileSystemEntity? oldestReflectable =
+      _oldestReflectableFile(chassisDir);
+  bool rebuildIsRequired = isNull(oldestReflectable);
+  if (isFalse(rebuildIsRequired)) {
+    rebuildIsRequired = _dartSourceFiles(chassisDir)
+        .any((element) => _isModifiedAfter(oldestReflectable!, element));
+  }
   if (isFalse(rebuildIsRequired) && isFalse(args['force'])) {
     return;
   }
