@@ -89,9 +89,12 @@ Future<void> npx(IShell shell, String command) async {
 /// Throws [CommandNotFoundException] if `npm` is not found
 ///
 /// `since 0.0.1`
-Future<void> npm(IShell shell, String command) async {
+Future<void> npm(
+  IShell shell,
+  String command,
+) async {
   shell.requireCommand('npm');
-  _log.info('Running NPM command...');
+  _log.fine('Running npm $command...');
   await shell.run('npm $command');
 }
 

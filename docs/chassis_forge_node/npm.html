@@ -52,9 +52,9 @@
     <section class="multi-line-signature">
         
 
-<span class="returntype"><a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/2.14.3/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">npm</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="npm-param-shell"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span> <span class="parameter-name">shell</span>, </span></li>
-<li><span class="parameter" id="npm-param-command"><span class="type-annotation"><a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">command</span></span></li>
+<li><span class="parameter" id="npm-param-command"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.14.3/dart-core/String-class.html">String</a></span> <span class="parameter-name">command</span></span></li>
 </ol>)
 
     </section>
@@ -69,9 +69,12 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; npm(IShell shell, String command) async {
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; npm(
+  IShell shell,
+  String command,
+) async {
   shell.requireCommand(&#39;npm&#39;);
-  _log.info(&#39;Running NPM command...&#39;);
+  _log.fine(&#39;Running npm $command...&#39;);
   await shell.run(&#39;npm $command&#39;);
 }</code></pre>
 </section>

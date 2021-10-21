@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the configureLogger function from the chassis_forge library, for the Dart programming language.">
-  <title>configureLogger function - chassis_forge library - Dart API</title>
+  <meta name="description" content="API docs for the ShellFn property from the chassis_forge library, for the Dart programming language.">
+  <title>ShellFn typedef - chassis_forge library - Dart API</title>
 
 
   
@@ -31,9 +31,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">dart_chassis_forge</a></li>
     <li><a href="../chassis_forge/chassis_forge-library.html">chassis_forge</a></li>
-    <li class="self-crumb">configureLogger function</li>
+    <li class="self-crumb">ShellFn&lt;<wbr><span class="type-parameter">IShell</span>&gt; typedef</li>
   </ol>
-  <div class="self-name">configureLogger</div>
+  <div class="self-name">ShellFn</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -44,45 +44,23 @@
 
   <div id="dartdoc-main-content" class="main-content">
       <div>
-<h1><span class="kind-function">configureLogger</span> function 
+<h1><span class="kind-typedef">ShellFn&lt;<wbr><span class="type-parameter">IShell</span>&gt;</span> typedef 
     <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
  
 </h1></div>
 
     <section class="multi-line-signature">
-        
-
-<span class="returntype">void</span>
-<span class="name ">configureLogger</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="configureLogger-param-level"><span class="type-annotation">dynamic</span> <span class="parameter-name">level</span></span></li>
-</ol>)
+        <span class="name ">ShellFn</span>&lt;<wbr><span class="type-parameter">IShell</span>&gt; =
+     <span class="returntype">void Function<span class="signature">(<span class="parameter" id="param-a"><span class="type-annotation">IShell</span> <span class="parameter-name">a</span></span>)</span></span>
 
     </section>
-    
-<section class="desc markdown">
-  <p>Configures Logging to the specified <code>level</code></p>
-</section>
 
+    
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void configureLogger(dynamic level) {
-  Level? l = cast&lt;Level&gt;(level);
-  if (isNull(l)) {
-    final bool? verbose = cast&lt;bool&gt;(level);
-    if (isTrue(verbose)) {
-      l = Level.ALL;
-    }
-  }
-  Logger.root.level = l ?? Level.INFO;
-  Logger.root.onRecord.listen((rec) {
-    var level = rec.level.toString();
-    level = level.padRight(7);
-    var logger = rec.loggerName;
-    logger = logger.substring(0, min(15, logger.length));
-    print(&quot;${rec.time} | ${level} | ${logger.padRight(15)}: ${rec.message}&quot;);
-  });
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">typedef ShellFn&lt;IShell&gt; = void Function(IShell a);</code></pre>
 </section>
 
 
@@ -98,7 +76,7 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
   <li><a href="../index.html">dart_chassis_forge</a></li>
   <li><a href="../chassis_forge/chassis_forge-library.html">chassis_forge</a></li>
-  <li class="self-crumb">configureLogger function</li>
+  <li class="self-crumb">ShellFn&lt;<wbr><span class="type-parameter">IShell</span>&gt; typedef</li>
 </ol>
 
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="generator" content="made with love by dartdoc 3.1.0">
+  <meta name="generator" content="made with love by dartdoc 2.0.0">
   <meta name="description" content="dart_chassis_forge API docs, for the Dart programming language.">
   <title>dart_chassis_forge - Dart API docs</title>
 
@@ -241,8 +241,8 @@ source code change.</p>
 {
     &amp; dart.exe pub get
 }
-&amp; dart.exe dart_chassis_forge:build --directory example | Out-Null
-&amp; dart.exe example/entry_command.dart @args
+&amp; dart.exe run dart_chassis_forge:build --directory example | Out-Null
+&amp; dart.exe run example/entry_command.dart @args
 </code></pre><p></p>
 </details><details>
 <summary>Kernel Compile</summary>
@@ -251,8 +251,8 @@ source code change.</p>
 {
     &amp; dart.exe pub get
 }
-&amp; dart.exe dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
-&amp; dart.exe example/entry_command.dill @args
+&amp; dart.exe run dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
+&amp; dart.exe run example/entry_command.dill @args
 </code></pre><p></p>
 </details>
 <h4 id="unix-based-os">Unix Based OS</h4><details>
@@ -263,7 +263,7 @@ set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
   dart pub get &gt;/dev/null
 fi
-dart dart_chassis_forge:build --directory example &gt;/dev/null
+dart run dart_chassis_forge:build --directory example &gt;/dev/null
 # shellcheck disable=SC2068
 dart run tool/entry_command.dart $@
 </code></pre><p></p>
@@ -275,9 +275,9 @@ set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
   dart pub get &gt;/dev/null
 fi
-dart dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel &gt;/dev/null
+dart run dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel &gt;/dev/null
 # shellcheck disable=SC2068
-dart example/entry_command.dill $@
+dart run example/entry_command.dill $@
 </code></pre><p></p>
 </details>
 <h3 id="rough-performance-benchmarking">Rough Performance Benchmarking</h3>

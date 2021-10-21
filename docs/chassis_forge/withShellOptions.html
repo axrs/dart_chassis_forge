@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the configureLogger function from the chassis_forge library, for the Dart programming language.">
-  <title>configureLogger function - chassis_forge library - Dart API</title>
+  <meta name="description" content="API docs for the withShellOptions function from the chassis_forge library, for the Dart programming language.">
+  <title>withShellOptions function - chassis_forge library - Dart API</title>
 
 
   
@@ -31,9 +31,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">dart_chassis_forge</a></li>
     <li><a href="../chassis_forge/chassis_forge-library.html">chassis_forge</a></li>
-    <li class="self-crumb">configureLogger function</li>
+    <li class="self-crumb">withShellOptions function</li>
   </ol>
-  <div class="self-name">configureLogger</div>
+  <div class="self-name">withShellOptions</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -44,7 +44,7 @@
 
   <div id="dartdoc-main-content" class="main-content">
       <div>
-<h1><span class="kind-function">configureLogger</span> function 
+<h1><span class="kind-function">withShellOptions</span> function 
     <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
  
 </h1></div>
@@ -52,36 +52,35 @@
     <section class="multi-line-signature">
         
 
-<span class="returntype">void</span>
-<span class="name ">configureLogger</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="configureLogger-param-level"><span class="type-annotation">dynamic</span> <span class="parameter-name">level</span></span></li>
+<span class="returntype">dynamic</span>
+<span class="name ">withShellOptions</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="withShellOptions-param-shell"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span> <span class="parameter-name">shell</span>, </span></li>
+<li><span class="parameter" id="withShellOptions-param-func"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.14.3/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span> <span class="parameter-name">func</span>(<ol class="parameter-list"><li><span class="parameter" id="param-"><span class="type-annotation"><a href="../chassis_forge/IShell-class.html">IShell</a></span></span></li>
+</ol>
+), </span></li>
+<li><span class="parameter" id="withShellOptions-param-verbose">{<span class="type-annotation"><a href="https://api.dart.dev/stable/2.14.3/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">verbose</span> = <span class="default-value">false</span>, </span></li>
+<li><span class="parameter" id="withShellOptions-param-color"><span class="type-annotation"><a href="https://api.dart.dev/stable/2.14.3/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">color</span> = <span class="default-value">false</span>}</span></li>
 </ol>)
 
     </section>
     
 <section class="desc markdown">
-  <p>Configures Logging to the specified <code>level</code></p>
+  <p>Takes a <a href="../chassis_forge/IShell-class.html">IShell</a>, and produces a copy with the specified configuration.
+Then invokes the <code>func</code> with the <a href="../chassis_forge/IShell-class.html">IShell</a> copy</p>
+<p><code>since 0.0.1</code></p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void configureLogger(dynamic level) {
-  Level? l = cast&lt;Level&gt;(level);
-  if (isNull(l)) {
-    final bool? verbose = cast&lt;bool&gt;(level);
-    if (isTrue(verbose)) {
-      l = Level.ALL;
-    }
-  }
-  Logger.root.level = l ?? Level.INFO;
-  Logger.root.onRecord.listen((rec) {
-    var level = rec.level.toString();
-    level = level.padRight(7);
-    var logger = rec.loggerName;
-    logger = logger.substring(0, min(15, logger.length));
-    print(&quot;${rec.time} | ${level} | ${logger.padRight(15)}: ${rec.message}&quot;);
-  });
+  <pre class="language-dart"><code class="language-dart">withShellOptions(
+  IShell shell,
+  Future&lt;void&gt; Function(IShell) func, {
+  bool? verbose = false,
+  bool? color = false,
+}) async {
+  final IShell clone = shell.copyWith(verbose: verbose, color: color);
+  await func(clone);
 }</code></pre>
 </section>
 
@@ -98,7 +97,7 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
   <li><a href="../index.html">dart_chassis_forge</a></li>
   <li><a href="../chassis_forge/chassis_forge-library.html">chassis_forge</a></li>
-  <li class="self-crumb">configureLogger function</li>
+  <li class="self-crumb">withShellOptions function</li>
 </ol>
 
 

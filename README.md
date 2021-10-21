@@ -170,8 +170,8 @@ If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType L
 {
     & dart.exe pub get
 }
-& dart.exe dart_chassis_forge:build --directory example | Out-Null
-& dart.exe example/entry_command.dart @args
+& dart.exe run dart_chassis_forge:build --directory example | Out-Null
+& dart.exe run example/entry_command.dart @args
 ```
 
 </p>
@@ -186,8 +186,8 @@ If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType L
 {
     & dart.exe pub get
 }
-& dart.exe dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
-& dart.exe example/entry_command.dill @args
+& dart.exe run dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
+& dart.exe run example/entry_command.dill @args
 ```
 
 </p>
@@ -205,7 +205,7 @@ set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
   dart pub get >/dev/null
 fi
-dart dart_chassis_forge:build --directory example >/dev/null
+dart run dart_chassis_forge:build --directory example >/dev/null
 # shellcheck disable=SC2068
 dart run tool/entry_command.dart $@
 ```
@@ -223,9 +223,9 @@ set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
   dart pub get >/dev/null
 fi
-dart dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel >/dev/null
+dart run dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel >/dev/null
 # shellcheck disable=SC2068
-dart example/entry_command.dill $@
+dart run example/entry_command.dill $@
 ```
 
 </p>

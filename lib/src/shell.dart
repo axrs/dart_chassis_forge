@@ -23,7 +23,10 @@ abstract class IShell {
   /// May throw [CommandException]s.
   ///
   /// `since 0.0.1`
-  Future<ProcessResult> run(String command);
+  Future<ProcessResult> run(
+    String command, {
+    Map<String, String>? environment,
+  });
 
   /// Returns the full path location (and name) for a supplied command.
   /// Null if the command was not found.
@@ -40,6 +43,11 @@ abstract class IShell {
   ///
   /// `since 0.0.1`
   void requireCommand(String command);
+
+  /// Clones the current [IShell] instance, overriding properties as specified
+  ///
+  /// `since 0.0.1`
+  IShell copyWith({bool? verbose, bool? color});
 }
 
 /// A marker interface implemented by all Command Execution exceptions
@@ -109,6 +117,22 @@ void _requireSingleCommand(String command) {
   }
 }
 
+typedef ShellFn<IShell> = void Function(IShell a);
+
+/// Takes a [IShell], and produces a copy with the specified configuration.
+/// Then invokes the [func] with the [IShell] copy
+///
+/// `since 0.0.1`
+withShellOptions(
+  IShell shell,
+  Future<void> Function(IShell) func, {
+  bool? verbose = false,
+  bool? color = false,
+}) async {
+  final IShell clone = shell.copyWith(verbose: verbose, color: color);
+  await func(clone);
+}
+
 /// A Basic implementation of [IShell] using [package:process_run]
 ///
 /// `since 0.0.1`
@@ -127,7 +151,7 @@ class ProcessRunShell implements IShell {
     Map<String, String>? environment = null,
   }) async {
     _requireSingleCommand(script);
-    log.fine('Running: $script');
+    log.info('Running: $script');
     var result = await pr.run(
       script,
       verbose: verbose,
@@ -159,6 +183,14 @@ class ProcessRunShell implements IShell {
     if (isFalse(hasCommand(command))) {
       throw CommandNotFoundException(command);
     }
+  }
+
+  @override
+  IShell copyWith({bool? verbose, bool? color}) {
+    return ProcessRunShell(
+      verbose: verbose ?? this.verbose,
+      color: color ?? this.color,
+    );
   }
 }
 
