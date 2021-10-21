@@ -5,6 +5,7 @@ import 'package:rucksack/rucksack.dart';
 import 'package:smart_arg/smart_arg.dart';
 
 import 'analyze.dart';
+import 'deps.dart';
 import 'docs.dart';
 
 // ignore: unused_import
@@ -27,7 +28,10 @@ class Args extends SmartArg {
   late AnalyzeCommand analyze;
 
   @Command(help: docsDescription)
-  late DocsCommand doc;
+  late DocsCommand docs;
+
+  @Command(help: depsDescription)
+  late DepsCommand deps;
 
   @Command(help: formatDescription)
   late FormatCommand format;

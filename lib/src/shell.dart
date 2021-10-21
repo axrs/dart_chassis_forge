@@ -117,22 +117,6 @@ void _requireSingleCommand(String command) {
   }
 }
 
-typedef ShellFn<IShell> = void Function(IShell a);
-
-/// Takes a [IShell], and produces a copy with the specified configuration.
-/// Then invokes the [func] with the [IShell] copy
-///
-/// `since 0.0.1`
-withShellOptions(
-  IShell shell,
-  Future<void> Function(IShell) func, {
-  bool? verbose = false,
-  bool? color = false,
-}) async {
-  final IShell clone = shell.copyWith(verbose: verbose, color: color);
-  await func(clone);
-}
-
 /// A Basic implementation of [IShell] using [package:process_run]
 ///
 /// `since 0.0.1`

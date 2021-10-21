@@ -46,6 +46,12 @@ Future<void> format(IShell shell) async {
     return;
   }
   _log.info('Formatting Markdown Files...');
+  var packageJson = File('package.json');
+  var packageJsonExists = isTrue(packageJson.existsSync());
+  if (packageJsonExists) {
+    _log.fine('Renaming ${packageJson.path} for performance reasons');
+    packageJson.renameSync('package.json.tmp');
+  }
   await _installRemark(shell);
   var remarkRc = File('.remarkrc.js');
   var remarcConfigIsMissing = isFalse(remarkRc.existsSync());
@@ -60,6 +66,10 @@ Future<void> format(IShell shell) async {
     _log.info('Running Remark');
     await shell.run('npx remark . --output');
   } finally {
+    if (packageJsonExists) {
+      _log.fine('Reverting ${packageJson.path} rename');
+      File('package.json.tmp').renameSync('package.json');
+    }
     if (remarcConfigIsMissing) {
       _log.fine('Cleaning Up ${remarkRc.path}');
       remarkRc.deleteSync();

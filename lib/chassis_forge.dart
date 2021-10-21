@@ -7,28 +7,10 @@ import 'package:rucksack/rucksack.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
-import 'src/dart.dart' as dart;
-import 'src/markdown.dart' as markdown;
 import 'src/shell.dart';
 
 export 'src/chassis_command.dart';
 export 'src/shell.dart';
-
-/// Formats various source code files
-Future<void> format(IShell shell) async {
-  await dart.format(shell);
-  await markdown.format(shell);
-}
-
-/// Analyzes various source code files
-Future<void> analyze(IShell shell) async {
-  await dart.analyze(shell);
-}
-
-/// Runs various Source Code Unit Tests
-Future<void> test(IShell shell) async {
-  await dart.test(shell);
-}
 
 /// Configures Logging to the specified [level]
 void configureLogger(dynamic level) {
@@ -53,4 +35,20 @@ void configureLogger(dynamic level) {
 void registerDefaultShell(bool verbose) {
   GetIt.instance
       .registerLazySingleton<IShell>(() => ProcessRunShell(verbose: verbose));
+}
+
+extension ChassisShell on IShell {
+  /// Clones the current [IShell] instance, setting the verbosity as required
+  ///
+  /// `since 0.0.1`
+  IShell verbose({bool verbose = true}) {
+    return this.copyWith(verbose: verbose);
+  }
+
+  /// Clones the current [IShell] instance, setting the color output as required
+  ///
+  /// `since 0.0.1`
+  IShell colored({bool color = true}) {
+    return this.copyWith(color: color);
+  }
 }

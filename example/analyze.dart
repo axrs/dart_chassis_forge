@@ -1,4 +1,5 @@
 import 'package:chassis_forge/chassis_forge.dart';
+import 'package:chassis_forge/chassis_forge_dart.dart';
 import 'package:smart_arg/smart_arg.dart';
 
 const String analyzeDescription =
@@ -14,6 +15,6 @@ class AnalyzeCommand extends ChassisCommand {
 
   @override
   Future<void> run(final IShell shell, final SmartArg parentArguments) async {
-    await analyze(shell);
+    await shell.verbose().dartAnalyze();
   }
 }
