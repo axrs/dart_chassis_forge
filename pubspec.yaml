@@ -1,20 +1,17 @@
-name: dart_chassis_forge
+name: chassis_forge
 description: Chassis Forge is a foundation for building modern CLI apps and tools to help with project automation and other various tasks.
 version: 0.0.1
 homepage: https://github.com/axrs/dart_chassis_forge
 repository: https://github.com/axrs/dart_chassis_forge.git
 issue_tracker: https://github.com/axrs/dart_chassis_forge/issues
-publish_to: none
+documentation: https://github.com/axrs/dart_chassis_forge/issues
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   args: ^2.3.0
-  dart_rucksack:
-    git:
-      url: https://github.com/axrs/dart_rucksack.git
-      ref: 0.0.1
+  rucksack: ^0.0.1
   get_it: ^7.2.0
   glob: ^2.0.2
   logging: ^1.0.2
@@ -24,7 +21,7 @@ dependencies:
   smart_arg:
     git:
       url: https://github.com/axrs/smart_arg.git
-      ref: master
+      ref: 2.0.0
 
 dev_dependencies:
   lints: ^1.0.0

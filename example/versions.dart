@@ -1,5 +1,5 @@
-import 'package:dart_chassis_forge/chassis_forge.dart';
-import 'package:dart_chassis_forge/chassis_forge_node.dart' as chassis_node;
+import 'package:chassis_forge/chassis_forge.dart';
+import 'package:chassis_forge/chassis_forge_node.dart' as chassis_node;
 import 'package:smart_arg/smart_arg.dart';
 
 const String versionsDescription = 'Prints various CLI Versions';

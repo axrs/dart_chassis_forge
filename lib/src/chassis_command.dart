@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dart_chassis_forge/src/shell.dart';
-import 'package:dart_rucksack/rucksack.dart';
+import 'package:chassis_forge/src/shell.dart';
+import 'package:rucksack/rucksack.dart';
 import 'package:get_it/get_it.dart';
 import 'package:smart_arg/smart_arg.dart';
 

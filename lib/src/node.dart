@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:dart_chassis_forge/src/shell.dart';
-import 'package:dart_rucksack/rucksack.dart';
+import 'package:chassis_forge/src/shell.dart';
+import 'package:rucksack/rucksack.dart';
 import 'package:logging/logging.dart';
 
 final _log = Logger('cf:node');
