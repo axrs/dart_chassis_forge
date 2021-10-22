@@ -66,7 +66,7 @@ extension ChassisNodeFutureShell on Future<IShell> {
   ///
   /// `since 0.0.1`
   Future<IShell> npm(String command) async {
-    return this.then((shell) async => await shell.npm(command));
+    return then((shell) async => await shell.npm(command));
   }
 
   /// Installs the npm dependencies
@@ -75,8 +75,8 @@ extension ChassisNodeFutureShell on Future<IShell> {
   ///
   /// `since 0.0.1`
   Future<IShell> npmInstallDependencies({bool upgrade = false}) async {
-    return this.then(
-        (shell) async => await shell.npmInstallDependencies(upgrade: upgrade));
+    return then((shell) async => //
+        await shell.npmInstallDependencies(upgrade: upgrade));
   }
 
   /// Runs the specified npx [command]
@@ -85,7 +85,7 @@ extension ChassisNodeFutureShell on Future<IShell> {
   ///
   /// `since 0.0.1`
   Future<IShell> npx(String command) async {
-    return this.then((shell) async => await shell.npx(command));
+    return then((shell) async => await shell.npx(command));
   }
 
   /// Runs the specified node [command]
@@ -94,7 +94,7 @@ extension ChassisNodeFutureShell on Future<IShell> {
   ///
   /// `since 0.0.1`
   Future<IShell> node(String command) async {
-    return this.then((shell) async => await shell.node(command));
+    return then((shell) async => await shell.node(command));
   }
 
   /// Runs `npm test`
@@ -103,6 +103,6 @@ extension ChassisNodeFutureShell on Future<IShell> {
   ///
   /// `since 0.0.1`
   Future<IShell> npmTest([String command = 'test']) async {
-    return this.then((shell) async => await shell.npm('$command'));
+    return then((shell) async => await shell.npm(command));
   }
 }

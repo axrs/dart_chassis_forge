@@ -9,7 +9,8 @@ const String analyzeDescription =
 @Parser(
   description: analyzeDescription,
 )
-class AnalyzeCommand extends ChassisCommand {
+class AnalyzeCommand extends ChassisCommand implements CommandHelp {
+  @override
   @HelpArgument()
   late bool help = false;
 

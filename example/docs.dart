@@ -8,7 +8,8 @@ const String docsDescription = 'Generates HTML documentation for the project';
 @Parser(
   description: docsDescription,
 )
-class DocsCommand extends ChassisCommand {
+class DocsCommand extends ChassisCommand implements CommandHelp {
+  @override
   @HelpArgument()
   late bool help = false;
 

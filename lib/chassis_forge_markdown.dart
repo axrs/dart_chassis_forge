@@ -21,6 +21,6 @@ extension ChassisMarkdownFutureShell on Future<IShell> {
   ///
   /// `since 0.0.1`
   Future<IShell> markdownFormat() async {
-    return this.then((shell) async => await shell.markdownFormat());
+    return then((shell) async => await shell.markdownFormat());
   }
 }

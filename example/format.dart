@@ -10,7 +10,8 @@ const String formatDescription =
 @Parser(
   description: formatDescription,
 )
-class FormatCommand extends ChassisCommand {
+class FormatCommand extends ChassisCommand implements CommandHelp {
+  @override
   @HelpArgument()
   late bool help = false;
 

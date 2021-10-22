@@ -83,7 +83,7 @@ extension ChassisDartFutureShell on Future<IShell> {
     String output = "docs",
     String format = "html",
   }) async {
-    return this.then((shell) async => await shell.dartDoc(
+    return then((shell) async => await shell.dartDoc(
           output: output,
           format: format,
         ));
@@ -93,35 +93,35 @@ extension ChassisDartFutureShell on Future<IShell> {
   ///
   /// `since 0.0.1`
   Future<IShell> dartAnalyze() async {
-    return this.then((shell) async => await shell.dartAnalyze());
+    return then((shell) async => await shell.dartAnalyze());
   }
 
   /// Runs the Dart formatter
   ///
   /// `since 0.0.1`
   Future<IShell> dartFormat() async {
-    return this.then((shell) async => await shell.dartFormat());
+    return then((shell) async => await shell.dartFormat());
   }
 
   /// Unit Tests the Dart source files for the current dart project
   ///
   /// `since 0.0.1`
   Future<IShell> dartTest() async {
-    return this.then((shell) async => await shell.dartTest());
+    return then((shell) async => await shell.dartTest());
   }
 
   /// Installs dependencies for the current dart project
   ///
   /// `since 0.0.1`
   Future<IShell> dartInstallDependencies({bool upgrade = false}) async {
-    return this.then((shell) async => await shell.dartInstallDependencies());
+    return then((shell) async => await shell.dartInstallDependencies());
   }
 
   /// Builds the Dart source files for the current dart project
   ///
   /// `since 0.0.1`
   Future<IShell> dartBuild([String? config]) async {
-    return this.then((shell) async => await shell.dartBuild(config));
+    return then((shell) async => await shell.dartBuild(config));
   }
 
   /// Compiles the specified [dartFile] into the target [executableType]
@@ -132,7 +132,7 @@ extension ChassisDartFutureShell on Future<IShell> {
     String dartFile, [
     String executableType = 'kernel',
   ]) async {
-    return this.then(
-        (shell) async => await shell.dartCompile(dartFile, executableType));
+    return then((shell) async => //
+        await shell.dartCompile(dartFile, executableType));
   }
 }

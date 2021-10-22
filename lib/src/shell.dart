@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:logging/logging.dart';
 import 'package:process_run/shell.dart' as pr;
+
 // ignore: implementation_imports
 import 'package:process_run/src/shell_utils.dart' show scriptToCommands;
 import 'package:rucksack/rucksack.dart';
@@ -137,12 +138,12 @@ extension ChassisMap<K, V> on Map<K, V?> {
   ///
   /// `since 0.0.1`
   V? computeIfAbsent(K key, MapComputer<K, V?> compute) {
-    if (this.containsKey(key)) {
-      return this.get(key);
+    if (containsKey(key)) {
+      return get(key);
     } else {
       var value = compute(key);
       if (isNotNull(value)) {
-        this.put(key, value);
+        put(key, value);
       }
       return value;
     }
@@ -152,11 +153,11 @@ extension ChassisMap<K, V> on Map<K, V?> {
   ///
   /// `since 0.0.1`
   V? computeIfNull(K key, MapComputer<K, V?> compute) {
-    var value = this.get(key);
+    var value = get(key);
     if (isNotNull(value)) {
       return value;
     } else {
-      return this.computeIfAbsent(key, compute);
+      return computeIfAbsent(key, compute);
     }
   }
 }
@@ -176,7 +177,7 @@ class ProcessRunShell implements IShell {
   @override
   Future<ProcessResult> run(
     String script, {
-    Map<String, String>? environment = null,
+    Map<String, String>? environment,
   }) async {
     _requireSingleCommand(script);
     _log.info('Running: $script');
@@ -188,7 +189,7 @@ class ProcessRunShell implements IShell {
     return result.first;
   }
 
-  static final Map<String, String?> _whichCache = Map<String, String?>();
+  static final Map<String, String?> _whichCache = <String, String?>{};
 
   @override
   String? which(String cmd) {
