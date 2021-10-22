@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 3.1.0">
+  <meta name="description" content="chassis_forge API docs, for the Dart programming language.">
+  <title>chassis_forge - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href=""
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="https://github.com/axrs/dart_chassis_forge">chassis_forge package</a></li>
+  </ol>
+  <div class="self-name">chassis_forge</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="chassis-forge">Chassis Forge</h1>
+<p>Chassis Forge is a foundation for building modern CLI apps and tools to help with project automation and other various
+tasks.</p>
+<blockquote>
+<p>Chassis: is the load-bearing framework of an artificial object, which structurally supports the object in its construction and function.</p>
+</blockquote>
+<blockquote>
+<p>Forge: create (something) strong, enduring, or successful.</p>
+</blockquote>
+<hr>
+<h2 id="about">About</h2>
+<p>In a lot of my day-to-day software development, I'm positioned to run multiple command line utilities in succession
+across different code bases and frameworks. For example, I may have to:</p>
+<ul>
+<li>Install Dependencies
+<ul>
+<li>Which downloads the dependencies</li>
+<li>Compiles/Builds any sub-modules</li>
+<li>Move packages into a different directory</li>
+</ul>
+</li>
+<li>Run unit tests that first need to validate a database version</li>
+<li>Connect to a 3rd party service to query usage information</li>
+<li>Deploy a new version of a service
+<ul>
+<li>Cleans any existing directories</li>
+<li>Compiles/Builds any the service</li>
+<li>Uploads the package to the necessary build system</li>
+<li>Initiates a blue-green deploy cycle</li>
+</ul>
+</li>
+<li>... And soo much more</li>
+</ul>
+<p>These types of commands are laborious, time-consuming, human-error prone, painful to keep up to date, and difficult to
+share with other team members. Once the process becomes too complex, developers will often look into automation, build
+systems, and scripting.</p>
+<p>In the past, I have resorted to BASH as my go to... This is all well and good until:</p>
+<ul>
+<li>You need to share code across multiple projects</li>
+<li>You need to perform any form of debugging</li>
+<li>You need to update documentation</li>
+<li>You need the scripts to be run cross-platform
+<ul>
+<li>Many System Commands treat flags and attributes differently.
+<ul>
+<li>Such as date between GNU Linux and MacOS Unix</li>
+<li>and much more in Alpine</li>
+</ul>
+</li>
+<li>Windows likely requires WSL... Which is another whole story</li>
+</ul>
+</li>
+<li>One change in shared code breaks another project months later</li>
+</ul>
+<p>As a result of this pain and frustration, I've become passionate about finding a CLI tool/framework that I could use and
+adopt across all my projects with minimal frustration and effort. I spent a lot of time playing with each framework
+listed in the <a href="#related-projects">Related Projects</a>. Ultimately looking for must, and would be nice to haves.</p>
+<h3 id="must-have">Must Have</h3>
+<ul>
+<li>Is easy to read and understand</li>
+<li>Cross Platform support with minimal setup and configuration</li>
+<li>Allows quickly scripting without long compilation times</li>
+<li>Share code/libraries in a Semantically Versioned Way</li>
+<li>Provides a consistent logging/output framework with varying levels of verbosity</li>
+<li>Offer finer control over thrown exceptions and errors</li>
+<li>Associates command and flag/argument documentation directly with the command definition</li>
+<li>Support commands, sub-commands, and scripts</li>
+<li>Can Invoke other 3rd party executables
+<ul>
+<li>Like the <code>aws</code> and <code>azure</code> CLIs
+<ul>
+<li>capturing their <code>stdout</code> and <code>stderr</code> streams</li>
+<li>easily raising trappable and reportable exceptions</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Support prompting for missing, or more, input</li>
+<li>Speedy
+<ul>
+<li>At least on subsequent runs</li>
+</ul>
+</li>
+<li>Is not a task runner, but allows me to combine commands if I wish</li>
+</ul>
+<h3 id="would-be-nice-to-have">Would be Nice to Have</h3>
+<ul>
+<li>Decoupled with Dependency Injection Support</li>
+<li>Unit Testable</li>
+</ul>
+<hr>
+<h2 id="usage">Usage</h2>
+<ol>
+<li>
+<p>Make sure Dart is installed</p>
+<ol>
+<li><a href="https://dart.dev/get-dart">dart.dev/get-dart</a></li>
+</ol>
+</li>
+<li>
+<p>Create (or update) the <code>pubspec.yaml</code> file and add <code>dart_chassis_forge</code> under <code>dev_dependencies</code></p>
+</li>
+<li>
+<p>Create some commands in a desired location. For example <code>./tools</code> or <code>./bin</code></p>
+<blockquote>
+<p>Note: Dart uses <code>bin</code> for distributing tools within packages.</p>
+</blockquote>
+<ol>
+<li>The <a href="example/">example</a> directory contains a few commands used for this project including:
+<ol>
+<li><a href="example/analyze_command.dart">Analyze</a></li>
+<li><a href="example/doc_command.dart">Doc</a></li>
+<li><a href="example/format_command.dart">Format</a></li>
+</ol>
+</li>
+<li>(Optional) Create an <a href="example/entry_command.dart">Entry</a> point command.</li>
+</ol>
+</li>
+<li>
+<p>Build and run the script:</p>
+<blockquote>
+<p>Note: Compilation is only required if the annotations change.</p>
+</blockquote>
+<ol>
+<li>Either Add a <a href="dart_chassis_forge.sh">BASH</a> or <a href="dart_chassis_forge.ps1">PowerShell</a> script as a proxy to:
+<ol>
+<li>conveniently install the dart dependencies (if not already done so);</li>
+<li>compile the commands on change</li>
+<li>invoke the main entry point</li>
+</ol>
+</li>
+<li>OR Run:
+<ol>
+<li><code>dart run dart_chassis_forge:build</code> to build the commands</li>
+<li><code>dart run tool/entry_command.dart &lt;arg&gt; &lt;arg&gt; &lt;arg&gt;</code> to run your command</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="example-output">Example Output</h3>
+<pre class="language-text"><code class="language-text">$ ./dart_chassis_forge.ps1
+Dart Chassis Forge Project Helper Tools
+
+
+  -v, --verbose  Enable Command Verbose Mode
+  -h, --help, -? Show help
+
+COMMANDS
+  analyze Runs static code analysis across the code base
+  doc Generates HTML documentation for the project
+  format Runs the various source code formatting tools
+</code></pre>
+<pre class="language-text"><code class="language-text">$ ./dart_chassis_forge.ps1 analyze
+2021-10-19 20:11:58.965568 | INFO    | cf:Dart        : Analyzing...
+</code></pre>
+<pre class="language-text"><code class="language-text">$ ./dart_chassis_forge.ps1 --verbose analyze
+2021-10-19 20:13:14.090159 | INFO    | cf:Dart        : Analyzing...
+2021-10-19 20:13:14.099159 | FINE    | cf:Shell       : Running: dart analyze
+$ dart analyze
+Analyzing dart_chassis_forge...
+No issues found!
+</code></pre>
+<h3 id="example-command">Example Command</h3>
+<pre class="language-dart"><code class="language-dart">import 'package:dart_chassis_forge/chassis_forge.dart';
+import 'package:dart_chassis_forge/chassis_forge_dart.dart' as chassis_dart;
+import 'package:smart_arg/smart_arg.dart';
+
+// ignore: unused_import
+import 'analyze_command.reflectable.dart';
+
+const String docDescription = 'Generates HTML documentation for the project';
+
+@SmartArg.reflectable
+@Parser(
+  description: docDescription,
+)
+class DocCommand extends ChassisCommand {
+  @HelpArgument()
+  late bool help = false;
+
+  @override
+  Future&lt;void&gt; run(final IShell shell, final SmartArg parentArguments) async {
+    await chassis_dart.doc(shell);
+  }
+}
+</code></pre>
+<h3 id="helper-scripts">Helper Scripts</h3>
+<p>The following scripts can be used as an entry point template for re-building, and executing, your commands after a
+source code change.</p>
+<h4 id="windows">Windows</h4><details>
+<summary>Run Script</summary>
+<p>
+</p><pre class="language-powershell"><code class="language-powershell">If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
+{
+    &amp; dart.exe pub get
+}
+&amp; dart.exe run dart_chassis_forge:build --directory example | Out-Null
+&amp; dart.exe run example/entry_command.dart @args
+</code></pre><p></p>
+</details><details>
+<summary>Kernel Compile</summary>
+<p>
+</p><pre class="language-powershell"><code class="language-powershell">If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
+{
+    &amp; dart.exe pub get
+}
+&amp; dart.exe run dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
+&amp; dart.exe run example/entry_command.dill @args
+</code></pre><p></p>
+</details>
+<h4 id="unix-based-os">Unix Based OS</h4><details>
+<summary>Run Script</summary>
+<p>
+</p><pre class="language-shell"><code class="language-shell">#!/usr/bin/env bash
+set -euo pipefail
+if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
+  dart pub get &gt;/dev/null
+fi
+dart run dart_chassis_forge:build --directory example &gt;/dev/null
+# shellcheck disable=SC2068
+dart run tool/entry_command.dart $@
+</code></pre><p></p>
+</details><details>
+<summary>Kernel Compile</summary>
+<p>
+</p><pre class="language-shell"><code class="language-shell">#!/usr/bin/env bash
+set -euo pipefail
+if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
+  dart pub get &gt;/dev/null
+fi
+dart run dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel &gt;/dev/null
+# shellcheck disable=SC2068
+dart run example/entry_command.dill $@
+</code></pre><p></p>
+</details>
+<h3 id="rough-performance-benchmarking">Rough Performance Benchmarking</h3>
+<p>When using the convenience scripts defined above, when one of the commands source files has changed, a rebuild of the
+reflectables is initiated before invocation. This ensures the documentation, fields, and other properties are
+up-to-date.</p>
+<table><thead><tr><th></th><th>Build Sources and Run</th><th>Run as Script</th></tr></thead><tbody><tr><td>Run Script</td><td>9,923.14ms</td><td>1,937.93ms</td></tr><tr><td>Kernel Compile</td><td>10,242.65ms</td><td>884.42ms</td></tr><tr><td>Native Executable</td><td>N/A</td><td>78.13ms</td></tr></tbody></table>
+<p>If the reflectables are up-to-date, the build process does not need to occur. Reducing the overall run time. It's not
+a <em>bad</em> result, but there is definitely room for improvement. If speed is king, then a native executable can be
+compiled.</p>
+<p>Notes:</p>
+<ul>
+<li>A little over half of the runtime relates to checking for outdated build artifacts.
+<ul>
+<li>Approximately 1/3 of the build check time is Dart starting up. Which can take ~500ms on an empty dart script</li>
+</ul>
+</li>
+</ul>
+<h2 id="example-within-projects">Example within Projects</h2>
+<ul>
+<li><a href="https://github.com/axrs/dart_rucksack/tree/master/tool">Rucksack</a></li>
+</ul>
+<hr>
+<h2 id="recommend-reading">Recommend Reading</h2>
+<ul>
+<li><a href="https://blog.developer.atlassian.com/10-design-principles-for-delightful-clis/">10 Design Principles for Delightful CLIs - Atlassian</a></li>
+<li><a href="https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46">12 Factor CLI Apps - @jdxcode</a></li>
+</ul>
+<h2 id="related-projects">Related Projects</h2>
+<p>There are soo many great framework tools out there:</p>
+<ul>
+<li><a href="https://github.com/jcowgar/smart_arg">Smart Arg</a></li>
+<li><a href="https://oclif.io">oclif</a></li>
+<li><a href="https://picocli.info">picocli</a></li>
+<li><a href="https://commanddotnet.bilal-fazlani.com">CommandDotNet</a></li>
+<li><a href="https://github.com/Tyrrrz/CliFx">CliFx</a></li>
+</ul>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="chassis_forge">
+  <span class="name"><a href="chassis_forge/chassis_forge-library.html">chassis_forge</a></span> 
+
+</dt>
+<dd>A collection of CLI helpers for assisting with Project focused task automation 
+</dd>
+
+          <dt id="chassis_forge_dart">
+  <span class="name"><a href="chassis_forge_dart/chassis_forge_dart-library.html">chassis_forge_dart</a></span> 
+
+</dt>
+<dd>CLI helpers for working with Dart based projects 
+</dd>
+
+          <dt id="chassis_forge_markdown">
+  <span class="name"><a href="chassis_forge_markdown/chassis_forge_markdown-library.html">chassis_forge_markdown</a></span> 
+
+</dt>
+<dd>CLI Helpers for working with Markdown files 
+</dd>
+
+          <dt id="chassis_forge_node">
+  <span class="name"><a href="chassis_forge_node/chassis_forge_node-library.html">chassis_forge_node</a></span> 
+
+</dt>
+<dd>CLI Helpers for working with Node.js, NPM, and NPX 
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="https://github.com/axrs/dart_chassis_forge">chassis_forge package</a></li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">chassis_forge</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="chassis_forge/chassis_forge-library.html">chassis_forge</a></li>
+      <li><a href="chassis_forge_dart/chassis_forge_dart-library.html">chassis_forge_dart</a></li>
+      <li><a href="chassis_forge_markdown/chassis_forge_markdown-library.html">chassis_forge_markdown</a></li>
+      <li><a href="chassis_forge_node/chassis_forge_node-library.html">chassis_forge_node</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    chassis_forge
+      0.0.1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+
