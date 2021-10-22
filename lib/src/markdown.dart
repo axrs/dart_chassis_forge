@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:chassis_forge/src/node.dart' as node;
 import 'package:chassis_forge/src/shell.dart';
-import 'package:rucksack/rucksack.dart';
 import 'package:logging/logging.dart';
+import 'package:rucksack/rucksack.dart';
 
 final _log = Logger('cf:Markdown');
 

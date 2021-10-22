@@ -3,9 +3,9 @@ library chassis_forge;
 
 import 'dart:math';
 
-import 'package:rucksack/rucksack.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
+import 'package:rucksack/rucksack.dart';
 
 import 'src/shell.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:chassis_forge/src/shell.dart';
-import 'package:rucksack/rucksack.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rucksack/rucksack.dart';
 import 'package:smart_arg/smart_arg.dart';
 
 /// Chassis Command Boilerplate extends [SmartArgCommand] to print usage if
