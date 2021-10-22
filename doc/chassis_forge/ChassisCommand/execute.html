@@ -76,7 +76,7 @@ Future&lt;void&gt; execute(SmartArg parentArguments) async {
     print(usage());
     exit(1);
   }
-  var shell = GetIt.instance&lt;IShell&gt;();
+  final IShell shell = GetIt.instance&lt;IShell&gt;();
   await run(shell, parentArguments);
 }</code></pre>
 </section>
