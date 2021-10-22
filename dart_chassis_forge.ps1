@@ -2,5 +2,5 @@ If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType L
 {
     & dart.exe pub get | Out-Null
 }
-& dart.exe run bin/build.dart --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
-& dart.exe run ./example/entry_command.dill @args
+& dart.exe run bin/build.dart --directory example --main example/main.dart --executable-target kernel | Out-Null
+& dart.exe run example/main.dill @args

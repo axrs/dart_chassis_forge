@@ -9,7 +9,7 @@ import 'deps.dart';
 import 'docs.dart';
 
 // ignore: unused_import
-import 'entry_command.reflectable.dart';
+import 'main.reflectable.dart';
 import 'format.dart';
 import 'versions.dart';
 

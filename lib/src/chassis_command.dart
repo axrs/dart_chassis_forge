@@ -17,7 +17,7 @@ abstract class ChassisCommand extends SmartArgCommand {
       print(usage());
       exit(1);
     }
-    var shell = GetIt.instance<IShell>();
+    final IShell shell = GetIt.instance<IShell>();
     await run(shell, parentArguments);
   }
 
