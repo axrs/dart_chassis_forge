@@ -8,7 +8,7 @@ import 'package:glob/list_local_fs.dart';
 import 'package:logging/logging.dart';
 import 'package:rucksack/rucksack.dart';
 
-final _log = Logger('cf:build');
+final Logger _log = Logger('cf:build');
 
 bool _isModifiedAfter(
   final FileSystemEntity left,
@@ -17,17 +17,18 @@ bool _isModifiedAfter(
   return left.statSync().modified.isBefore(right.statSync().modified);
 }
 
-void _createChassisBuildYaml(final String folder) {
+void _createChassisBuildYaml(final String folder, [final String? main]) {
   final File config = File('build.chassis.yaml');
   if (!config.existsSync()) {
     _log.info('Creating $config for build');
+    final String mainCommandOrWildard = main ?? '$folder/**_command.dart';
     config.writeAsStringSync('''
 targets:
   \$default:
     builders:
       reflectable:
         generate_for:
-          - $folder/**_command.dart
+          - $mainCommandOrWildard
 ''');
   } else {
     _log.info('Using existing $config for build');
@@ -58,8 +59,8 @@ _configureLogger(bool verbose) {
 }
 
 void _compile(ArgResults args, IShell shell) {
-  String? executableTarget = args['executable-target'];
-  String? mainScript = args['main'];
+  final String? executableTarget = args['executable-target'];
+  final String? mainScript = args['main'];
   if (isNotBlank(executableTarget) && isNotBlank(mainScript)) {
     _requireFileExist(mainScript!);
     dart.compile(shell, mainScript, executableTarget!);
@@ -67,7 +68,8 @@ void _compile(ArgResults args, IShell shell) {
 }
 
 FileSystemEntity? _oldestReflectableFile(String chassisDir) {
-  var reflectables = Glob('$chassisDir/**.reflectable.dart').listSync();
+  final List<FileSystemEntity> reflectables =
+      Glob('$chassisDir/**.reflectable.dart').listSync();
   reflectables.sort((left, right) =>
       right.statSync().modified.compareTo(left.statSync().modified));
   return reflectables.isEmpty ? null : reflectables.last;
@@ -78,7 +80,8 @@ bool _isReflectable(final FileSystemEntity fileSystemEntity) {
 }
 
 List<FileSystemEntity> _dartSourceFiles(String chassisDir) {
-  var dartFiles = Glob('$chassisDir/**.dart').listSync();
+  final List<FileSystemEntity> dartFiles =
+      Glob('$chassisDir/**.dart').listSync();
   dartFiles.removeWhere(_isReflectable);
   return dartFiles;
 }
@@ -120,8 +123,8 @@ ArgParser _buildParser() {
 }
 
 void main(List<String> arguments) {
-  var parser = _buildParser();
-  var args = parser.parse(arguments);
+  final ArgParser parser = _buildParser();
+  final ArgResults args = parser.parse(arguments);
   if (args['help']) {
     print(parser.usage);
     exit(0);
@@ -129,7 +132,7 @@ void main(List<String> arguments) {
   _configureLogger(args['verbose']);
   final String chassisDir = args['directory'];
   _requireDirectoryExist(chassisDir);
-  _createChassisBuildYaml(chassisDir);
+  _createChassisBuildYaml(chassisDir, args['main']);
   final FileSystemEntity? oldestReflectable =
       _oldestReflectableFile(chassisDir);
   bool rebuildIsRequired = isNull(oldestReflectable);
@@ -140,6 +143,6 @@ void main(List<String> arguments) {
   if (isFalse(rebuildIsRequired) && isFalse(args['force'])) {
     return;
   }
-  var shell = ProcessRunShell(verbose: args['verbose']);
+  final IShell shell = ProcessRunShell(verbose: args['verbose']);
   dart.build(shell, 'chassis').then((value) => _compile(args, shell));
 }
