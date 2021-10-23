@@ -38,8 +38,12 @@ void registerDefaultShell(bool verbose) {
       .registerLazySingleton<IShell>(() => ProcessRunShell(verbose: verbose));
 }
 
-abstract class CommandHelp {
+abstract class HelpOption {
   abstract bool help;
+}
+
+abstract class VerboseOption {
+  abstract bool verbose;
 }
 
 /// Chassis Command Boilerplate extends [SmartArgCommand] to print usage if
@@ -48,7 +52,7 @@ abstract class CommandHelp {
 abstract class ChassisCommand extends SmartArgCommand {
   @override
   Future<void> execute(SmartArg parentArguments) async {
-    final bool? showHelp = cast<CommandHelp>(this)?.help;
+    final bool? showHelp = cast<HelpOption>(this)?.help;
     if (isTrue(showHelp)) {
       print(usage());
       exit(1);
@@ -73,5 +77,33 @@ extension ChassisShell on IShell {
   /// `since 0.0.1`
   IShell colored({bool color = true}) {
     return copyWith(color: color);
+  }
+}
+
+class ChassisForge extends SmartArg {
+  late bool commandRun = false;
+
+  @override
+  void beforeCommandExecute(SmartArgCommand command) {
+    final bool verbose = cast<VerboseOption>(this)?.verbose ?? false;
+    configureLogger(verbose);
+    registerDefaultShell(verbose);
+    super.beforeCommandExecute(command);
+  }
+
+  @override
+  void afterCommandExecute(SmartArgCommand command) {
+    super.afterCommandExecute(command);
+    commandRun = true;
+  }
+
+  void runWith(List<String> arguments) {
+    parse(arguments);
+
+    final bool? help = cast<HelpOption>(this)?.help;
+    if (isTrue(help) || isFalse(commandRun)) {
+      print(usage());
+      exit(1);
+    }
   }
 }
