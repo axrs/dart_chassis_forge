@@ -26,7 +26,7 @@ environment:
 dev_dependencies:
   chassis_forge:
     git:
-      url: https://github.com/axrs/smart_arg.git
+      url: https://github.com/axrs/dart_chassis_forge.git
       ref: <set the ref to the latest tag release. Or master if you wish to be on the bleeding edge>
 ```
 
