@@ -17,18 +17,22 @@ bool _isModifiedAfter(
   return left.statSync().modified.isBefore(right.statSync().modified);
 }
 
-void _createChassisBuildYaml(final String folder, [final String? main]) {
+void createChassisBuildYaml(final String folder, [final String? main]) {
   final File config = File('build.chassis.yaml');
   if (!config.existsSync()) {
     _log.info('Creating $config for build');
-    final String mainCommandOrWildard = main ?? '$folder/**_command.dart';
+    final String mainCommandOrWildcard = main ?? '$folder/**_command.dart';
     config.writeAsStringSync('''
 targets:
   \$default:
+    sources:
+      - $folder/**
+      - \$package\$
+      - lib/\$lib\$
     builders:
       reflectable:
         generate_for:
-          - $mainCommandOrWildard
+          - $mainCommandOrWildcard
 ''');
   } else {
     _log.info('Using existing $config for build');
@@ -61,7 +65,9 @@ _configureLogger(bool verbose) {
 void _compile(ArgResults args, IShell shell) {
   final String? executableTarget = args['executable-target'];
   final String? mainScript = args['main'];
-  if (isNotBlank(executableTarget) && isNotBlank(mainScript)) {
+  if (isNotBlank(executableTarget) &&
+      isNotBlank(mainScript) &&
+      executableTarget != 'dart') {
     _requireFileExist(mainScript!);
     dart.compile(shell, mainScript, executableTarget!);
   }
@@ -111,7 +117,7 @@ ArgParser _buildParser() {
     )
     ..addOption(
       'executable-target',
-      allowed: ['kernel', 'exe'],
+      allowed: ['kernel', 'exe', 'dart'],
       help: 'Optional Compilation Target',
     )
     ..addOption(
@@ -132,7 +138,7 @@ void main(List<String> arguments) {
   _configureLogger(args['verbose']);
   final String chassisDir = args['directory'];
   _requireDirectoryExist(chassisDir);
-  _createChassisBuildYaml(chassisDir, args['main']);
+  createChassisBuildYaml(chassisDir, args['main']);
   final FileSystemEntity? oldestReflectable =
       _oldestReflectableFile(chassisDir);
   bool rebuildIsRequired = isNull(oldestReflectable);

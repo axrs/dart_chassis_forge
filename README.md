@@ -1,13 +1,116 @@
 # Chassis Forge
 
 Chassis Forge is a foundation for building modern CLI apps and tools to help with project automation and other various
-tasks.
+tasks. Built on the wonderful [Smart Arg](https://github.com/jcowgar/smart\_arg) package.
 
 > Chassis: is the load-bearing framework of an artificial object, which structurally supports the object in its construction and function.
 
 > Forge: create (something) strong, enduring, or successful.
 
 ***
+
+## Getting Started
+
+1. Make sure Dart is installed
+1. <https://dart.dev/get-dart>
+1. Create (or update) the `pubspec.yaml` file and add `dart_chassis_forge` under `dev_dependencies`
+
+```yaml
+name: my_forge
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dev_dependencies:
+  chassis_forge:
+    git:
+      url: https://github.com/axrs/smart_arg.git
+      ref: <set the ref to the latest tag release. Or master if you wish to be on the bleeding edge>
+```
+
+1. Run `dart pub get` to download the dependency
+1. Run `dart run chassis_forge:kindle` to bootstrap your setup
+
+```text
+Laying down kindling for Chassis Forge
+Where should the Chassis Forge tools be placed <forge>:
+What will the name of the entry command <main.dart>:
+How would you like the Forge to be welded? <kernel>:
+
+Do you wish to proceed laying kindling?
+        with a base directory of: forge
+        and a main tool path of: forge/main.dart
+        and an execution target of: kernel
+Continue Y/N? Y
+```
+
+1. Run `./<dir_name>.ps1` (for PowerShell) or `./<dir_name>.sh` (for Bash) to invoke your CLI
+1. Modify you commands within the specified directory (defaults to `forge`)
+
+### Example Output
+
+```text
+$ ./dart_chassis_forge.ps1
+Dart Chassis Forge Project Helper Tools
+
+
+  -v, --verbose  Enable Command Verbose Mode
+  -h, --help, -? Show help
+
+COMMANDS
+  analyze Runs static code analysis across the code base
+  doc Generates HTML documentation for the project
+  format Runs the various source code formatting tools
+```
+
+```text
+$ ./dart_chassis_forge.ps1 analyze
+2021-10-19 20:11:58.965568 | INFO    | cf:Dart        : Analyzing...
+```
+
+```text
+$ ./dart_chassis_forge.ps1 --verbose analyze
+2021-10-19 20:13:14.090159 | INFO    | cf:Dart        : Analyzing...
+2021-10-19 20:13:14.099159 | FINE    | cf:Shell       : Running: dart analyze
+$ dart analyze
+Analyzing dart_chassis_forge...
+No issues found!
+```
+
+### Example Command
+
+```dart
+import 'package:dart_chassis_forge/chassis_forge.dart';
+import 'package:dart_chassis_forge/chassis_forge_dart.dart' as chassis_dart;
+import 'package:smart_arg/smart_arg.dart';
+
+// ignore: unused_import
+import 'analyze_command.reflectable.dart';
+
+const String docDescription = 'Generates HTML documentation for the project';
+
+@SmartArg.reflectable
+@Parser(
+  description: docDescription,
+)
+class DocCommand extends ChassisCommand with HelpOption {
+  @override
+  @HelpArgument()
+  late bool help = false;
+
+  @override
+  Future<void> run(final IShell shell, final SmartArg parentArguments) async {
+    await chassis_dart.doc(shell);
+  }
+}
+```
+
+### More Examples
+
+* [Chassis Forge Tools](https://github.com/axrs/dart\_chassis\_forge/tree/master/example)
+* [Rucksack](https://github.com/axrs/dart\_rucksack/tree/master/tool)
 
 ## About
 
@@ -73,164 +176,6 @@ listed in the [Related Projects](#related-projects). Ultimately looking for must
 
 ***
 
-## Usage
-
-1. Make sure Dart is installed
-   1. <https://dart.dev/get-dart>
-1. Create (or update) the `pubspec.yaml` file and add `dart_chassis_forge` under `dev_dependencies`
-1. Create some commands in a desired location. For example `./tools` or `./bin`
-
-   > Note: Dart uses `bin` for distributing tools within packages.
-
-   1. The [example](example/) directory contains a few commands used for this project including:
-      1. [Analyze](example/analyze\_command.dart)
-      1. [Doc](example/doc\_command.dart)
-      1. [Format](example/format\_command.dart)
-   1. (Optional) Create an [Entry](example/entry\_command.dart) point command.
-1. Build and run the script:
-   > Note: Compilation is only required if the annotations change.
-   1. Either Add a [BASH](dart\_chassis\_forge.sh) or [PowerShell](dart\_chassis\_forge.ps1) script as a proxy to:
-      1. conveniently install the dart dependencies (if not already done so);
-      1. compile the commands on change
-      1. invoke the main entry point
-   1. OR Run:
-      1. `dart run dart_chassis_forge:build` to build the commands
-      1. `dart run tool/entry_command.dart <arg> <arg> <arg>` to run your command
-
-### Example Output
-
-```text
-$ ./dart_chassis_forge.ps1
-Dart Chassis Forge Project Helper Tools
-
-
-  -v, --verbose  Enable Command Verbose Mode
-  -h, --help, -? Show help
-
-COMMANDS
-  analyze Runs static code analysis across the code base
-  doc Generates HTML documentation for the project
-  format Runs the various source code formatting tools
-```
-
-```text
-$ ./dart_chassis_forge.ps1 analyze
-2021-10-19 20:11:58.965568 | INFO    | cf:Dart        : Analyzing...
-```
-
-```text
-$ ./dart_chassis_forge.ps1 --verbose analyze
-2021-10-19 20:13:14.090159 | INFO    | cf:Dart        : Analyzing...
-2021-10-19 20:13:14.099159 | FINE    | cf:Shell       : Running: dart analyze
-$ dart analyze
-Analyzing dart_chassis_forge...
-No issues found!
-```
-
-### Example Command
-
-```dart
-import 'package:dart_chassis_forge/chassis_forge.dart';
-import 'package:dart_chassis_forge/chassis_forge_dart.dart' as chassis_dart;
-import 'package:smart_arg/smart_arg.dart';
-
-// ignore: unused_import
-import 'analyze_command.reflectable.dart';
-
-const String docDescription = 'Generates HTML documentation for the project';
-
-@SmartArg.reflectable
-@Parser(
-  description: docDescription,
-)
-class DocCommand extends ChassisCommand {
-  @HelpArgument()
-  late bool help = false;
-
-  @override
-  Future<void> run(final IShell shell, final SmartArg parentArguments) async {
-    await chassis_dart.doc(shell);
-  }
-}
-```
-
-### Helper Scripts
-
-The following scripts can be used as an entry point template for re-building, and executing, your commands after a
-source code change.
-
-#### Windows
-
-<details>
-<summary>Run Script</summary>
-<p>
-
-```powershell
-If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
-{
-    & dart.exe pub get
-}
-& dart.exe run dart_chassis_forge:build --directory example | Out-Null
-& dart.exe run example/entry_command.dart @args
-```
-
-</p>
-</details>
-
-<details>
-<summary>Kernel Compile</summary>
-<p>
-
-```powershell
-If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
-{
-    & dart.exe pub get
-}
-& dart.exe run dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel | Out-Null
-& dart.exe run example/entry_command.dill @args
-```
-
-</p>
-</details>
-
-#### Unix Based OS
-
-<details>
-<summary>Run Script</summary>
-<p>
-
-```shell
-#!/usr/bin/env bash
-set -euo pipefail
-if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
-  dart pub get >/dev/null
-fi
-dart run dart_chassis_forge:build --directory example >/dev/null
-# shellcheck disable=SC2068
-dart run tool/entry_command.dart $@
-```
-
-</p>
-</details>
-
-<details>
-<summary>Kernel Compile</summary>
-<p>
-
-```shell
-#!/usr/bin/env bash
-set -euo pipefail
-if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
-  dart pub get >/dev/null
-fi
-dart run dart_chassis_forge:build --directory example --main example/entry_command.dart --executable-target kernel >/dev/null
-# shellcheck disable=SC2068
-dart run example/entry_command.dill $@
-```
-
-</p>
-</details>
-
 ### Rough Performance Benchmarking
 
 When using the convenience scripts defined above, when one of the commands source files has changed, a rebuild of the
@@ -251,10 +196,6 @@ Notes:
 
 * A little over half of the runtime relates to checking for outdated build artifacts.
   * Approximately 1/3 of the build check time is Dart starting up. Which can take \~500ms on an empty dart script
-
-## Example within Projects
-
-* [Rucksack](https://github.com/axrs/dart\_rucksack/tree/master/tool)
 
 ***
 
