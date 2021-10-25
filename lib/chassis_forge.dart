@@ -68,7 +68,7 @@ extension ChassisShell on IShell {
   /// Clones the current [IShell] instance, setting the verbosity as required
   ///
   /// `since 0.0.1`
-  IShell verbose({bool verbose = true}) {
+  IShell verbose([bool verbose = true]) {
     return copyWith(verbose: verbose);
   }
 
