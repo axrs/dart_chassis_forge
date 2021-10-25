@@ -4,3 +4,4 @@
 *.reflectable.dart
 *.sh
 node_modules
+.chassis

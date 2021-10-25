@@ -27,3 +27,4 @@ node_modules
 *.reflectable.dart
 *.exe
 *.dill
+.chassis
