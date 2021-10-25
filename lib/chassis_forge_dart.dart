@@ -1,7 +1,7 @@
 /// CLI helpers for working with Dart based projects
 library chassis_forge_dart;
 
-import 'package:chassis_forge/src/shell.dart';
+import 'package:chassis_forge/chassis_forge.dart';
 
 import 'src/dart.dart' as d;
 
@@ -43,7 +43,7 @@ extension ChassisDart on IShell {
   ///
   /// `since 0.0.1`
   Future<IShell> dartTest() async {
-    await d.test(this);
+    await d.test(verbose());
     return this;
   }
 
