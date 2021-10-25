@@ -78,6 +78,13 @@ extension ChassisShell on IShell {
   IShell colored([bool color = true]) {
     return copyWith(color: color);
   }
+
+  /// Clones the current [IShell] instance, setting the [IShell.workingDirectory]
+  ///
+  /// `since 0.0.1`
+  IShell withWorkingDirectory(String newWorkingDirectory) {
+    return copyWith(workingDirectory: newWorkingDirectory);
+  }
 }
 
 class ChassisForge extends SmartArg {

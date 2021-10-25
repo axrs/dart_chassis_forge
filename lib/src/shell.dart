@@ -47,7 +47,12 @@ abstract class IShell {
   /// Clones the current [IShell] instance, overriding properties as specified
   ///
   /// `since 0.0.1`
-  IShell copyWith({bool? verbose, bool? color});
+  IShell copyWith({bool? verbose, bool? color, String? workingDirectory});
+
+  /// Returns the current working directory
+  ///
+  /// `since 0.0.1`
+  abstract String workingDirectory;
 }
 
 /// A marker interface implemented by all Command Execution exceptions
@@ -166,13 +171,16 @@ extension ChassisMap<K, V> on Map<K, V?> {
 ///
 /// `since 0.0.1`
 class ProcessRunShell implements IShell {
-  final bool verbose;
-  final bool color;
+  bool verbose;
+  bool color;
+  @override
+  String workingDirectory;
 
   ProcessRunShell({
     this.verbose = false,
     this.color = false,
-  });
+    String? workingDirectory,
+  }) : workingDirectory = workingDirectory ?? Directory.current.path;
 
   @override
   Future<ProcessResult> run(
@@ -185,6 +193,7 @@ class ProcessRunShell implements IShell {
       script,
       verbose: verbose,
       environment: environment,
+      workingDirectory: workingDirectory,
     );
     return result.first;
   }
@@ -217,10 +226,11 @@ class ProcessRunShell implements IShell {
   }
 
   @override
-  IShell copyWith({bool? verbose, bool? color}) {
+  IShell copyWith({bool? verbose, bool? color, String? workingDirectory}) {
     return ProcessRunShell(
       verbose: verbose ?? this.verbose,
       color: color ?? this.color,
+      workingDirectory: workingDirectory ?? this.workingDirectory,
     );
   }
 }
