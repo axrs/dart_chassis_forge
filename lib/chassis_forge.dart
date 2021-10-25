@@ -75,7 +75,7 @@ extension ChassisShell on IShell {
   /// Clones the current [IShell] instance, setting the color output as required
   ///
   /// `since 0.0.1`
-  IShell colored({bool color = true}) {
+  IShell colored([bool color = true]) {
     return copyWith(color: color);
   }
 }
