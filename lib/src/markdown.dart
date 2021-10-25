@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chassis_forge/src/node.dart' as node;
 import 'package:chassis_forge/src/shell.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart' as p;
 import 'package:rucksack/rucksack.dart';
 
 final _log = Logger('cf:Markdown');
@@ -46,16 +47,15 @@ Future<void> format(IShell shell) async {
     return;
   }
   _log.info('Formatting Markdown Files...');
-  var packageJson = File('package.json');
-  var packageJsonExists = isTrue(packageJson.existsSync());
-  if (packageJsonExists) {
-    _log.fine('Renaming ${packageJson.path} for performance reasons');
-    packageJson.renameSync('package.json.tmp');
-  }
-  await _installRemark(shell);
+  final String workingDirectory = shell.workingDirectory();
+  final String remarkPath =
+      p.absolute(workingDirectory, ".chassis", "markdown");
+  Directory(remarkPath).createSync(recursive: true);
+  final remarkShell = shell.copyWith(workingDirectory: remarkPath);
+  await _installRemark(remarkShell);
   var remarkRc = File('.remarkrc.js');
-  var remarcConfigIsMissing = isFalse(remarkRc.existsSync());
-  if (remarcConfigIsMissing) {
+  var remarkConfigIsMissing = isFalse(remarkRc.existsSync());
+  if (remarkConfigIsMissing) {
     _log.fine('Creating ${remarkRc.path} configuration');
     remarkRc.createSync();
     remarkRc.writeAsString(_remarkConfig);
@@ -64,13 +64,10 @@ Future<void> format(IShell shell) async {
   }
   try {
     _log.info('Running Remark');
-    await shell.run('npx remark . --output');
+    final String projectPath = shell.workingDirectory() + p.separator;
+    await remarkShell.run('npx remark $projectPath --output');
   } finally {
-    if (packageJsonExists) {
-      _log.fine('Reverting ${packageJson.path} rename');
-      File('package.json.tmp').renameSync('package.json');
-    }
-    if (remarcConfigIsMissing) {
+    if (remarkConfigIsMissing) {
       _log.fine('Cleaning Up ${remarkRc.path}');
       remarkRc.deleteSync();
     }
