@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the dartTest method from the ChassisDart extension, for the Dart programming language.">
-  <title>dartTest method - ChassisDart extension - chassis_forge_dart library - Dart API</title>
+  <meta name="description" content="API docs for the withWorkingDirectory method from the ChassisShell extension, for the Dart programming language.">
+  <title>withWorkingDirectory method - ChassisShell extension - chassis_forge library - Dart API</title>
 
 
   
@@ -30,11 +30,11 @@
   <button id="sidenav-left-toggle" type="button">&nbsp;</button>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">chassis_forge</a></li>
-    <li><a href="../../chassis_forge_dart/chassis_forge_dart-library.html">chassis_forge_dart</a></li>
-    <li><a href="../../chassis_forge_dart/ChassisDart.html">ChassisDart</a></li>
-    <li class="self-crumb">dartTest method</li>
+    <li><a href="../../chassis_forge/chassis_forge-library.html">chassis_forge</a></li>
+    <li><a href="../../chassis_forge/ChassisShell.html">ChassisShell</a></li>
+    <li class="self-crumb">withWorkingDirectory method</li>
   </ol>
-  <div class="self-name">dartTest</div>
+  <div class="self-name">withWorkingDirectory</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -45,22 +45,23 @@
 
   <div id="dartdoc-main-content" class="main-content">
       <div>
-<h1><span class="kind-method">dartTest</span> method 
+<h1><span class="kind-method">withWorkingDirectory</span> method 
     <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
 </h1></div>
 
     <section class="multi-line-signature">
       
 
-<span class="returntype"><a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../chassis_forge/IShell-class.html">IShell</a></span>&gt;</span></span>
-<span class="name ">dartTest</span>(<wbr>)
+<span class="returntype"><a href="../../chassis_forge/IShell-class.html">IShell</a></span>
+<span class="name ">withWorkingDirectory</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="withWorkingDirectory-param-newWorkingDirectory"><span class="type-annotation"><a href="https://api.dart.dev/dev/2.15.0-150.0.dev/dart-core/String-class.html">String</a></span> <span class="parameter-name">newWorkingDirectory</span></span></li>
+</ol>)
 
       
 
     </section>
     
 <section class="desc markdown">
-  <p>Unit Tests the Dart source files for the current dart project</p>
+  <p>Clones the current <a href="../../chassis_forge/IShell-class.html">IShell</a> instance, setting the <a href="../../chassis_forge/IShell/workingDirectory.html">IShell.workingDirectory</a></p>
 <p><code>since 0.0.1</code></p>
 </section>
 
@@ -68,9 +69,8 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;IShell&gt; dartTest() async {
-  await d.test(verbose());
-  return this;
+  <pre class="language-dart"><code class="language-dart">IShell withWorkingDirectory(String newWorkingDirectory) {
+  return copyWith(workingDirectory: newWorkingDirectory);
 }</code></pre>
 </section>
 
@@ -86,27 +86,23 @@
 
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
   <li><a href="../../index.html">chassis_forge</a></li>
-  <li><a href="../../chassis_forge_dart/chassis_forge_dart-library.html">chassis_forge_dart</a></li>
-  <li><a href="../../chassis_forge_dart/ChassisDart.html">ChassisDart</a></li>
-  <li class="self-crumb">dartTest method</li>
+  <li><a href="../../chassis_forge/chassis_forge-library.html">chassis_forge</a></li>
+  <li><a href="../../chassis_forge/ChassisShell.html">ChassisShell</a></li>
+  <li class="self-crumb">withWorkingDirectory method</li>
 </ol>
 
 
-    <h5>ChassisDart extension</h5>
+    <h5>ChassisShell extension</h5>
     <ol>
 
 
 
 
 
-    <li class="section-title"><a href="../../chassis_forge_dart/ChassisDart.html#instance-methods">Methods</a></li>
-    <li><a href="../../chassis_forge_dart/ChassisDart/dartAnalyze.html">dartAnalyze</a></li>
-    <li><a href="../../chassis_forge_dart/ChassisDart/dartBuild.html">dartBuild</a></li>
-    <li><a href="../../chassis_forge_dart/ChassisDart/dartCompile.html">dartCompile</a></li>
-    <li><a href="../../chassis_forge_dart/ChassisDart/dartDoc.html">dartDoc</a></li>
-    <li><a href="../../chassis_forge_dart/ChassisDart/dartFormat.html">dartFormat</a></li>
-    <li><a href="../../chassis_forge_dart/ChassisDart/dartInstallDependencies.html">dartInstallDependencies</a></li>
-    <li><a href="../../chassis_forge_dart/ChassisDart/dartTest.html">dartTest</a></li>
+    <li class="section-title"><a href="../../chassis_forge/ChassisShell.html#instance-methods">Methods</a></li>
+    <li><a href="../../chassis_forge/ChassisShell/colored.html">colored</a></li>
+    <li><a href="../../chassis_forge/ChassisShell/verbose.html">verbose</a></li>
+    <li><a href="../../chassis_forge/ChassisShell/withWorkingDirectory.html">withWorkingDirectory</a></li>
 
 
 

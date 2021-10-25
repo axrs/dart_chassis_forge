@@ -74,16 +74,15 @@
     return;
   }
   _log.info(&#39;Formatting Markdown Files...&#39;);
-  var packageJson = File(&#39;package.json&#39;);
-  var packageJsonExists = isTrue(packageJson.existsSync());
-  if (packageJsonExists) {
-    _log.fine(&#39;Renaming ${packageJson.path} for performance reasons&#39;);
-    packageJson.renameSync(&#39;package.json.tmp&#39;);
-  }
-  await _installRemark(shell);
+  final String workingDirectory = shell.workingDirectory();
+  final String remarkPath =
+      p.absolute(workingDirectory, &quot;.chassis&quot;, &quot;markdown&quot;);
+  Directory(remarkPath).createSync(recursive: true);
+  final remarkShell = shell.copyWith(workingDirectory: remarkPath);
+  await _installRemark(remarkShell);
   var remarkRc = File(&#39;.remarkrc.js&#39;);
-  var remarcConfigIsMissing = isFalse(remarkRc.existsSync());
-  if (remarcConfigIsMissing) {
+  var remarkConfigIsMissing = isFalse(remarkRc.existsSync());
+  if (remarkConfigIsMissing) {
     _log.fine(&#39;Creating ${remarkRc.path} configuration&#39;);
     remarkRc.createSync();
     remarkRc.writeAsString(_remarkConfig);
@@ -92,13 +91,10 @@
   }
   try {
     _log.info(&#39;Running Remark&#39;);
-    await shell.run(&#39;npx remark . --output&#39;);
+    final String projectPath = shell.workingDirectory() + p.separator;
+    await remarkShell.run(&#39;npx remark $projectPath --output&#39;);
   } finally {
-    if (packageJsonExists) {
-      _log.fine(&#39;Reverting ${packageJson.path} rename&#39;);
-      File(&#39;package.json.tmp&#39;).renameSync(&#39;package.json&#39;);
-    }
-    if (remarcConfigIsMissing) {
+    if (remarkConfigIsMissing) {
       _log.fine(&#39;Cleaning Up ${remarkRc.path}&#39;);
       remarkRc.deleteSync();
     }
