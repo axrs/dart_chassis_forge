@@ -52,7 +52,7 @@ abstract class IShell {
   /// Returns the current working directory
   ///
   /// `since 0.0.1`
-  abstract String workingDirectory;
+  String workingDirectory();
 }
 
 /// A marker interface implemented by all Command Execution exceptions
@@ -171,16 +171,17 @@ extension ChassisMap<K, V> on Map<K, V?> {
 ///
 /// `since 0.0.1`
 class ProcessRunShell implements IShell {
-  bool verbose;
-  bool color;
-  @override
-  String workingDirectory;
+  final bool _verbose;
+  final bool _color;
+  final String _workingDirectory;
 
   ProcessRunShell({
-    this.verbose = false,
-    this.color = false,
+    verbose = false,
+    color = false,
     String? workingDirectory,
-  }) : workingDirectory = workingDirectory ?? Directory.current.path;
+  })  : _color = color,
+        _verbose = verbose,
+        _workingDirectory = workingDirectory ?? Directory.current.path;
 
   @override
   Future<ProcessResult> run(
@@ -191,9 +192,9 @@ class ProcessRunShell implements IShell {
     _log.info('Running: $script');
     var result = await pr.run(
       script,
-      verbose: verbose,
+      verbose: _verbose,
       environment: environment,
-      workingDirectory: workingDirectory,
+      workingDirectory: _workingDirectory,
     );
     return result.first;
   }
@@ -213,7 +214,7 @@ class ProcessRunShell implements IShell {
 
   @override
   bool supportsColorOutput() {
-    return color;
+    return _color;
   }
 
   @override
@@ -228,10 +229,15 @@ class ProcessRunShell implements IShell {
   @override
   IShell copyWith({bool? verbose, bool? color, String? workingDirectory}) {
     return ProcessRunShell(
-      verbose: verbose ?? this.verbose,
-      color: color ?? this.color,
-      workingDirectory: workingDirectory ?? this.workingDirectory,
+      verbose: verbose ?? _verbose,
+      color: color ?? _color,
+      workingDirectory: workingDirectory ?? _workingDirectory,
     );
+  }
+
+  @override
+  String workingDirectory() {
+    return _workingDirectory;
   }
 }
 
