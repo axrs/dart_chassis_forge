@@ -9,6 +9,21 @@ tasks. Built on the wonderful [Smart Arg](https://github.com/jcowgar/smart\_arg)
 
 ***
 
+## Foundation
+
+Chassis Forge is built on the solid work of [Smart Arg](https://github.com/jcowgar/smart\_arg). `Smart_Arg` does all the
+command line heavy lifting, argument parsing, and help doc generation.
+
+> Note: There is a parallel (compatible) fork of `Smart_Arg` available [here](https://github.com/axrs/smart\_arg). This fork
+> adds some additional functionality and helpers. It can be used by adding the following to your `pubspec.yaml`
+>
+> ```yaml
+> smart_arg:
+>   git:
+>     url: git://github.com/axrs/smart_arg.git
+>     ref: 2.1.0
+> ```
+
 ## Getting Started
 
 1. Make sure Dart is installed
@@ -209,7 +224,6 @@ Notes:
 
 There are soo many great framework tools out there:
 
-* [Smart Arg](https://github.com/jcowgar/smart\_arg)
 * [oclif](https://oclif.io)
 * [picocli](https://picocli.info)
 * [CommandDotNet](https://commanddotnet.bilal-fazlani.com)
