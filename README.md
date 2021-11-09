@@ -110,7 +110,8 @@ class DocCommand extends ChassisCommand with HelpOption {
 ### More Examples
 
 * [Chassis Forge Tools](https://github.com/axrs/dart\_chassis\_forge/tree/master/example)
-* [Rucksack](https://github.com/axrs/dart\_rucksack/tree/master/tool)
+* [Rucksack](https://github.com/axrs/dart\_rucksack/tree/master/forge)
+* [Anvil](https://github.com/axrs/anvil/tree/master/forge)
 
 ## About
 
