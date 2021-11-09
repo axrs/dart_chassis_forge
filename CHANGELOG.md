@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## \[unreleased]
+## \[0.2.0] - Unreleased
 
 * \[Feature] - Added `ChassisForge` class as a foundation class to reduce some boilerplate
 * \[Feature] - Added `HelpOption` abstract classes to remove lint warnings
@@ -15,6 +15,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 * \[Chore] - Added more example links
 * \[Chore] - Updated Readme
 * \[Chore] - Updated `reflectable` to version `3.0.4`
+* \[Chore] - Use official `smart_arg` 2.0.0 or compatible
+* \[Chore] - Remove generated documentation for pub publishing
 
 ## \[0.0.1] - 2021-10-22
 
