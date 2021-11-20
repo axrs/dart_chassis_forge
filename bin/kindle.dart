@@ -150,10 +150,10 @@ void createPs1Helper(
   String ps1 = '''
 If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
 {
-    & dart.exe pub get | Out-Null
+    & dart pub get | Out-Null
 }
-& dart.exe run chassis_forge:build --directory $directory --main $directory/$main --executable-target $executableTarget --verbose | Out-Null
-& dart.exe run $directory/$compiledMain @args
+& dart run chassis_forge:build --directory $directory --main $directory/$main --executable-target $executableTarget --verbose | Out-Null
+& dart run $directory/$compiledMain @args
 ''';
   createScript("ps1", ps1);
 }
