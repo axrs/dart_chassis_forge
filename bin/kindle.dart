@@ -172,7 +172,7 @@ if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
 fi
 dart run chassis_forge:build --directory $directory --main $directory/$main --executable-target $executableTarget --verbose >/dev/null
 # shellcheck disable=SC2068
-dart run $directory/$compiledMain \$@
+dart run $directory/$compiledMain "\$@"
 ''';
   createScript("sh", sh);
 }
