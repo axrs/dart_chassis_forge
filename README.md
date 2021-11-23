@@ -1,7 +1,7 @@
 # Chassis Forge
 
 Chassis Forge is a foundation for building modern CLI apps and tools to help with project automation and other various
-tasks. Built on the wonderful [Smart Arg](https://github.com/jcowgar/smart\_arg) package.
+tasks. Built on the wonderful [Smart Arg](https://github.com/jcowgar/smart_arg) package.
 
 > Chassis: is the load-bearing framework of an artificial object, which structurally supports the object in its construction and function.
 
@@ -11,10 +11,10 @@ tasks. Built on the wonderful [Smart Arg](https://github.com/jcowgar/smart\_arg)
 
 ## Foundation
 
-Chassis Forge is built on the solid work of [Smart Arg](https://github.com/jcowgar/smart\_arg). `Smart_Arg` does all the
+Chassis Forge is built on the solid work of [Smart Arg](https://github.com/jcowgar/smart_arg). `Smart_Arg` does all the
 command line heavy lifting, argument parsing, and help doc generation.
 
-> Note: There is a parallel (compatible) fork of `Smart_Arg` available [here](https://github.com/axrs/smart\_arg). This fork
+> Note: There is a parallel (compatible) fork of `Smart_Arg` available [here](https://github.com/axrs/smart_arg). This fork
 > adds some additional functionality and helpers. It can be used by adding the following to your `pubspec.yaml`
 >
 > ```yaml
@@ -124,8 +124,8 @@ class DocCommand extends ChassisCommand with HelpOption {
 
 ### More Examples
 
-* [Chassis Forge Tools](https://github.com/axrs/dart\_chassis\_forge/tree/master/example)
-* [Rucksack](https://github.com/axrs/dart\_rucksack/tree/master/forge)
+* [Chassis Forge Tools](https://github.com/axrs/dart_chassis_forge/tree/master/example)
+* [Rucksack](https://github.com/axrs/dart_rucksack/tree/master/forge)
 * [Anvil](https://github.com/axrs/anvil/tree/master/forge)
 
 ## About
