@@ -12,10 +12,9 @@ String _remarkConfig = '''
 module.exports = {
   frail: true,
   plugins: {
-    toc: {
-      tight: true
-    },
-    'remark-gfm': true
+    'remark-gfm': true,
+    'remark-preset-lint-consistent': true,
+    'remark-preset-lint-recommended': true
   },
   settings: {
     bullet: '*',
@@ -28,12 +27,12 @@ module.exports = {
 Future<void> _installRemark(IShell shell) async {
   _log.fine('Installing Remark');
   await shell.run('''
-npm install --silent --no-save --no-audit --no-fund \\
-  remark-cli \\
-  remark-toc \\
-  remark-gfm \\
-  ccount \\
-  mdast-util-find-and-replace
+npm install --silent --no-audit --no-fund \\
+  remark-cli@10.0.1 \\
+  remark-gfm@3.0.1 \\
+  remark-toc@8.0.1 \\
+  remark-preset-lint-consistent@5.1.0 \\
+  remark-preset-lint-recommended@6.1.1
 ''');
 }
 
@@ -52,8 +51,9 @@ Future<void> format(IShell shell) async {
       p.absolute(workingDirectory, ".chassis", "markdown");
   Directory(remarkPath).createSync(recursive: true);
   final remarkShell = shell.copyWith(workingDirectory: remarkPath);
+  final String remarkShellWorkingDir = remarkShell.workingDirectory();
   await _installRemark(remarkShell);
-  var remarkRc = File('.remarkrc.js');
+  var remarkRc = File(p.join(remarkShellWorkingDir, '.remarkrc.js'));
   var remarkConfigIsMissing = isFalse(remarkRc.existsSync());
   if (remarkConfigIsMissing) {
     _log.fine('Creating ${remarkRc.path} configuration');
@@ -65,7 +65,8 @@ Future<void> format(IShell shell) async {
   try {
     _log.info('Running Remark');
     final String projectPath = shell.workingDirectory() + p.separator;
-    await remarkShell.run('npx remark $projectPath --output');
+    await remarkShell.run(
+        'npx --prefix $remarkShellWorkingDir remark $projectPath --output');
   } finally {
     if (remarkConfigIsMissing) {
       _log.fine('Cleaning Up ${remarkRc.path}');
