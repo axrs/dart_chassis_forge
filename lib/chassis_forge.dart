@@ -89,11 +89,14 @@ extension ChassisShell on IShell {
 
 class ChassisForge extends SmartArg {
   late bool commandRun = false;
+  late bool loggingConfigured = false;
 
   @override
   void beforeCommandExecute(SmartArgCommand command) {
     final bool verbose = cast<VerboseOption>(this)?.verbose ?? false;
-    configureLogger(verbose);
+    if (!loggingConfigured) {
+      configureLogger(verbose);
+    }
     registerDefaultShell(verbose);
     super.beforeCommandExecute(command);
   }
@@ -102,6 +105,11 @@ class ChassisForge extends SmartArg {
   void afterCommandExecute(SmartArgCommand command) {
     super.afterCommandExecute(command);
     commandRun = true;
+  }
+
+  void setLogLevel(dynamic level) {
+    configureLogger(level);
+    loggingConfigured = true;
   }
 
   void runWith(List<String> arguments) {
