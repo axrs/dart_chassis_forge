@@ -5,7 +5,6 @@ import 'analyze.dart';
 import 'deps.dart';
 import 'docs.dart';
 import 'format.dart';
-
 // ignore: unused_import
 import 'main.reflectable.dart';
 
