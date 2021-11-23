@@ -148,6 +148,7 @@ void createPs1Helper(
   String compiledMain,
 ) {
   String ps1 = '''
+#!/usr/bin/env pwsh
 If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
 {
     & dart pub get | Out-Null
