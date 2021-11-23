@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:logging/logging.dart';
 import 'package:process_run/shell.dart' as pr;
-
 // ignore: implementation_imports
 import 'package:process_run/src/shell_utils.dart' show scriptToCommands;
 import 'package:rucksack/rucksack.dart';
@@ -189,7 +188,7 @@ class ProcessRunShell implements IShell {
     Map<String, String>? environment,
   }) async {
     _requireSingleCommand(script);
-    _log.info('Running: $script');
+    _log.fine('Running: $script');
     var result = await pr.run(
       script,
       verbose: _verbose,
