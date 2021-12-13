@@ -8,6 +8,7 @@ linter:
 
 analyzer:
   exclude:
+    - bin/*.reflectable.dart
     - example/*.reflectable.dart
     - forge/*.reflectable.dart
     - test/*.reflectable.dart
