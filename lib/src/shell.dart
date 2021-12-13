@@ -46,12 +46,22 @@ abstract class IShell {
   /// Clones the current [IShell] instance, overriding properties as specified
   ///
   /// `since 0.0.1`
-  IShell copyWith({bool? verbose, bool? color, String? workingDirectory});
+  IShell copyWith({
+    bool? verbose,
+    bool? color,
+    String? workingDirectory,
+    Map<String, String>? environment,
+  });
 
   /// Returns the current working directory
   ///
   /// `since 0.0.1`
   String workingDirectory();
+
+  /// Returns the current environment
+  ///
+  /// `since 0.3.0`
+  Map<String, String> environment();
 }
 
 /// A marker interface implemented by all Command Execution exceptions
@@ -173,14 +183,17 @@ class ProcessRunShell implements IShell {
   final bool _verbose;
   final bool _color;
   final String _workingDirectory;
+  final Map<String, String> _environment;
 
   ProcessRunShell({
     verbose = false,
     color = false,
     String? workingDirectory,
+    Map<String, String>? environment,
   })  : _color = color,
         _verbose = verbose,
-        _workingDirectory = workingDirectory ?? Directory.current.path;
+        _workingDirectory = workingDirectory ?? Directory.current.path,
+        _environment = environment ?? Platform.environment;
 
   @override
   Future<ProcessResult> run(
@@ -192,7 +205,7 @@ class ProcessRunShell implements IShell {
     var result = await pr.run(
       script,
       verbose: _verbose,
-      environment: environment,
+      environment: environment ?? _environment,
       workingDirectory: _workingDirectory,
     );
     return result.first;
@@ -226,17 +239,28 @@ class ProcessRunShell implements IShell {
   }
 
   @override
-  IShell copyWith({bool? verbose, bool? color, String? workingDirectory}) {
+  IShell copyWith({
+    bool? verbose,
+    bool? color,
+    String? workingDirectory,
+    Map<String, String>? environment,
+  }) {
     return ProcessRunShell(
       verbose: verbose ?? _verbose,
       color: color ?? _color,
       workingDirectory: workingDirectory ?? _workingDirectory,
+      environment: environment ?? _environment,
     );
   }
 
   @override
   String workingDirectory() {
     return _workingDirectory;
+  }
+
+  @override
+  Map<String, String> environment() {
+    return _environment;
   }
 }
 

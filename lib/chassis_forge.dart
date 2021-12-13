@@ -87,6 +87,13 @@ extension ChassisShell on IShell {
   IShell withWorkingDirectory(String newWorkingDirectory) {
     return copyWith(workingDirectory: newWorkingDirectory);
   }
+
+  /// Clones the current [IShell] instance, setting the [IShell.environment]
+  ///
+  /// `since 0.3.0`
+  IShell withEnvironment(Map<String, String> environment) {
+    return copyWith(environment: environment);
+  }
 }
 
 class ChassisForge extends SmartArg {
