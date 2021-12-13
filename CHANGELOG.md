@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[0.3.0] - 2021-12-13
+
+* \[Feature] - Add the ability to modify an IShell environment outside of a process run
+* \[Feature] - Generate analysis\_options.yaml when using kindle tool
+* \[Enhancement] - Use 'tool' instead of 'forge' as the default directory
+* \[Fix] - Markdown formatting with remark
+* \[Style] - Update Analyzer and lint rules
+
 ## \[0.2.0] - 2021-11-23
 
 * \[Feature] - Added `ChassisForge` class as a foundation class to reduce some boilerplate
