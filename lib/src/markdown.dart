@@ -13,8 +13,7 @@ module.exports = {
   frail: true,
   plugins: {
     'remark-gfm': true,
-    'remark-preset-lint-consistent': true,
-    'remark-preset-lint-recommended': true
+    'remark-preset-lint-consistent': true
   },
   settings: {
     bullet: '*',
@@ -31,9 +30,7 @@ Future<void> _installRemark(IShell shell) async {
 npm install --silent --no-audit --no-fund \\
   remark-cli@10.0.1 \\
   remark-gfm@3.0.1 \\
-  remark-toc@8.0.1 \\
-  remark-preset-lint-consistent@5.1.0 \\
-  remark-preset-lint-recommended@6.1.1
+  remark-preset-lint-consistent@5.1.0
 ''',
   );
 }
@@ -69,7 +66,7 @@ Future<void> format(IShell shell) async {
     _log.info('Running Remark');
     final String projectPath = shell.workingDirectory() + p.separator;
     await remarkShell.run(
-      'npx --prefix $remarkShellWorkingDir remark $projectPath --output',
+      "npx --prefix '$remarkShellWorkingDir' remark --rc-path '${remarkRc.absolute.path}' '$projectPath' --output",
     );
   } finally {
     if (remarkConfigIsMissing) {
