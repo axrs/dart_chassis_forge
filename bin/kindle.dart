@@ -130,6 +130,18 @@ void createBuildConfig(String directory, String mainEntryCommandPath) {
   }
 }
 
+void createAnalysisOptions(String directory) {
+  var analysisConfigFile = File('analysis_options.yaml');
+  if (analysisConfigFile.existsSync()) {
+    printWarning(
+      'Skipping Analysis Config generation as $analysisConfigFile already exists.',
+    );
+  } else {
+    print('Creating Analysis Config: $analysisConfigFile');
+    createAnalysisOptions(directory);
+  }
+}
+
 void createScript(String extension, String scriptContent) {
   var currentDir = p.basename(Directory.current.path);
   var scriptFile = File('$currentDir.$extension');
@@ -212,6 +224,7 @@ Future<void> main(List<String> arguments) async {
     print('\nLaying Kindling...');
     createMain(mainEntryCommandPath);
     createBuildConfig(directory, '$directory/$mainTool');
+    createAnalysisOptions(directory);
     String extension = 'dart';
     switch (executionTarget) {
       //TODO Support Exe
