@@ -23,12 +23,14 @@ void configureLogger(dynamic level) {
     }
   }
   Logger.root.level = l ?? Level.INFO;
-  Logger.root.onRecord.listen((rec) {
+  Logger.root.onRecord.listen((final LogRecord rec) {
     var level = rec.level.toString();
     level = level.padRight(7);
     var logger = rec.loggerName;
     logger = logger.substring(0, min(15, logger.length));
-    print('${rec.time} | $level | ${logger.padRight(15)}: ${rec.message}');
+    print(
+      '${rec.time.toString().padRight(26)} | $level | ${logger.padRight(15)}: ${rec.message}',
+    );
   });
 }
 
