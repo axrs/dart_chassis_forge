@@ -1,4 +1,13 @@
 include: package:lints/recommended.yaml
 
+linter:
+  rules:
+    - unawaited_futures
+    - prefer_single_quotes
+    - require_trailing_commas
+
 analyzer:
-  exclude: [example/**.reflectable.dart]
+  exclude:
+    - example/*.reflectable.dart
+    - forge/*.reflectable.dart
+    - test/*.reflectable.dart

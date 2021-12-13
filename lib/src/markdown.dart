@@ -26,14 +26,16 @@ module.exports = {
 
 Future<void> _installRemark(IShell shell) async {
   _log.fine('Installing Remark');
-  await shell.run('''
+  await shell.run(
+    '''
 npm install --silent --no-audit --no-fund \\
   remark-cli@10.0.1 \\
   remark-gfm@3.0.1 \\
   remark-toc@8.0.1 \\
   remark-preset-lint-consistent@5.1.0 \\
   remark-preset-lint-recommended@6.1.1
-''');
+''',
+  );
 }
 
 /// Formats all Markdown files using Remark
@@ -42,13 +44,14 @@ npm install --silent --no-audit --no-fund \\
 Future<void> format(IShell shell) async {
   if (node.isMissingNpm(shell) || node.isMissingNpx(shell)) {
     _log.warning(
-        'Skipping Formatting Markdown files. `npm` or `npx` not found.');
+      'Skipping Formatting Markdown files. `npm` or `npx` not found.',
+    );
     return;
   }
   _log.info('Formatting Markdown Files...');
   final String workingDirectory = shell.workingDirectory();
   final String remarkPath =
-      p.absolute(workingDirectory, ".chassis", "markdown");
+      p.absolute(workingDirectory, '.chassis', 'markdown');
   Directory(remarkPath).createSync(recursive: true);
   final remarkShell = shell.copyWith(workingDirectory: remarkPath);
   final String remarkShellWorkingDir = remarkShell.workingDirectory();
@@ -58,7 +61,7 @@ Future<void> format(IShell shell) async {
   if (remarkConfigIsMissing) {
     _log.fine('Creating ${remarkRc.path} configuration');
     remarkRc.createSync();
-    remarkRc.writeAsString(_remarkConfig);
+    await remarkRc.writeAsString(_remarkConfig);
   } else {
     _log.fine('Using existing ${remarkRc.path} configuration');
   }
@@ -66,7 +69,8 @@ Future<void> format(IShell shell) async {
     _log.info('Running Remark');
     final String projectPath = shell.workingDirectory() + p.separator;
     await remarkShell.run(
-        'npx --prefix $remarkShellWorkingDir remark $projectPath --output');
+      'npx --prefix $remarkShellWorkingDir remark $projectPath --output',
+    );
   } finally {
     if (remarkConfigIsMissing) {
       _log.fine('Cleaning Up ${remarkRc.path}');

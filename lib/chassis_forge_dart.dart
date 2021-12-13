@@ -28,8 +28,8 @@ extension ChassisDart on IShell {
   ///
   /// `since 0.0.1`
   Future<IShell> dartDoc({
-    String output = "doc",
-    String format = "html",
+    String output = 'doc',
+    String format = 'html',
   }) async {
     await d.doc(
       this,
@@ -80,13 +80,15 @@ extension ChassisDartFutureShell on Future<IShell> {
   ///
   /// `since 0.0.1`
   Future<IShell> dartDoc({
-    String output = "docs",
-    String format = "html",
+    String output = 'docs',
+    String format = 'html',
   }) async {
-    return then((shell) async => await shell.dartDoc(
-          output: output,
-          format: format,
-        ));
+    return then(
+      (shell) async => await shell.dartDoc(
+        output: output,
+        format: format,
+      ),
+    );
   }
 
   /// Runs the Dart formatter
@@ -132,7 +134,9 @@ extension ChassisDartFutureShell on Future<IShell> {
     String dartFile, [
     String executableType = 'kernel',
   ]) async {
-    return then((shell) async => //
-        await shell.dartCompile(dartFile, executableType));
+    return then(
+      (shell) async => //
+          await shell.dartCompile(dartFile, executableType),
+    );
   }
 }

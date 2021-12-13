@@ -22,7 +22,8 @@ void createChassisBuildYaml(final String folder, [final String? main]) {
   if (!config.existsSync()) {
     _log.info('Creating $config for build');
     final String mainCommandOrWildcard = main ?? '$folder/**_command.dart';
-    config.writeAsStringSync('''
+    config.writeAsStringSync(
+      '''
 targets:
   \$default:
     sources:
@@ -33,7 +34,8 @@ targets:
       reflectable:
         generate_for:
           - $mainCommandOrWildcard
-''');
+''',
+    );
   } else {
     _log.info('Using existing $config for build');
   }
@@ -76,13 +78,15 @@ void _compile(ArgResults args, IShell shell) {
 FileSystemEntity? _oldestReflectableFile(String chassisDir) {
   final List<FileSystemEntity> reflectables =
       Glob('$chassisDir/**.reflectable.dart').listSync();
-  reflectables.sort((left, right) =>
-      right.statSync().modified.compareTo(left.statSync().modified));
+  reflectables.sort(
+    (left, right) =>
+        right.statSync().modified.compareTo(left.statSync().modified),
+  );
   return reflectables.isEmpty ? null : reflectables.last;
 }
 
 bool _isReflectable(final FileSystemEntity fileSystemEntity) {
-  return fileSystemEntity.path.endsWith("reflectable.dart");
+  return fileSystemEntity.path.endsWith('reflectable.dart');
 }
 
 List<FileSystemEntity> _dartSourceFiles(String chassisDir) {

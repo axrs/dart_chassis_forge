@@ -28,7 +28,7 @@ void configureLogger(dynamic level) {
     level = level.padRight(7);
     var logger = rec.loggerName;
     logger = logger.substring(0, min(15, logger.length));
-    print("${rec.time} | $level | ${logger.padRight(15)}: ${rec.message}");
+    print('${rec.time} | $level | ${logger.padRight(15)}: ${rec.message}');
   });
 }
 

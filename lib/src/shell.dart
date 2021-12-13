@@ -248,7 +248,8 @@ bool hasCommand(IShell shell, String command) {
   var hasCommand = shell.hasCommand(command);
   if (isFalse(hasCommand)) {
     _log.warning(
-        '`$command` not found. Please check your \$PATH and environment');
+      '`$command` not found. Please check your \$PATH and environment',
+    );
   }
   return hasCommand;
 }

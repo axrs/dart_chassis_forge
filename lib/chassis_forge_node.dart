@@ -75,8 +75,10 @@ extension ChassisNodeFutureShell on Future<IShell> {
   ///
   /// `since 0.0.1`
   Future<IShell> npmInstallDependencies({bool upgrade = false}) async {
-    return then((shell) async => //
-        await shell.npmInstallDependencies(upgrade: upgrade));
+    return then(
+      (shell) async => //
+          await shell.npmInstallDependencies(upgrade: upgrade),
+    );
   }
 
   /// Runs the specified npx [command]

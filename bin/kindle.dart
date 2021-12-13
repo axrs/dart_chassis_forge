@@ -109,7 +109,8 @@ void createMain(String mainEntryCommandPath) {
   var mainFile = File(mainEntryCommandPath);
   if (mainFile.existsSync()) {
     printWarning(
-        'Skipping Main Entry Command creation at $mainFile as file already exists.');
+      'Skipping Main Entry Command creation at $mainFile as file already exists.',
+    );
   } else {
     print('Creating Main Entry Command: $mainFile');
     mainFile.createSync(recursive: true);
@@ -121,7 +122,8 @@ void createBuildConfig(String directory, String mainEntryCommandPath) {
   var buildConfigFile = File('build.chassis.yaml');
   if (buildConfigFile.existsSync()) {
     printWarning(
-        'Skipping Build Config generation as $buildConfigFile already exists.');
+      'Skipping Build Config generation as $buildConfigFile already exists.',
+    );
   } else {
     print('Creating Build Config: $buildConfigFile');
     createChassisBuildYaml(directory, mainEntryCommandPath);
@@ -133,7 +135,8 @@ void createScript(String extension, String scriptContent) {
   var scriptFile = File('$currentDir.$extension');
   if (scriptFile.existsSync()) {
     printWarning(
-        'Skipping Script helper generation as $scriptFile already exists.');
+      'Skipping Script helper generation as $scriptFile already exists.',
+    );
   } else {
     print('Creating Helper Script: $scriptFile');
     scriptFile.createSync(recursive: true);
@@ -156,7 +159,7 @@ If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType L
 & dart run chassis_forge:build --directory $directory --main $directory/$main --executable-target $executableTarget --verbose | Out-Null
 & dart run $directory/$compiledMain @args
 ''';
-  createScript("ps1", ps1);
+  createScript('ps1', ps1);
 }
 
 void createShHelper(
@@ -175,15 +178,16 @@ dart run chassis_forge:build --directory $directory --main $directory/$main --ex
 # shellcheck disable=SC2068
 dart run $directory/$compiledMain "\$@"
 ''';
-  createScript("sh", sh);
+  createScript('sh', sh);
 }
 
 Future<void> main(List<String> arguments) async {
-  print("Laying down kindling for Chassis Forge");
+  print('Laying down kindling for Chassis Forge');
   String directory = await promptUntilNotBlank(
-      'Where should the Chassis Forge tools be placed',
-      'A directory is required for Chassis Forge Tools',
-      'forge');
+    'Where should the Chassis Forge tools be placed',
+    'A directory is required for Chassis Forge Tools',
+    'forge',
+  );
   String mainTool = await promptUntilNotBlank(
     'What will the name of the entry command',
     'An entry command name is required',

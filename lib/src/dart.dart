@@ -96,12 +96,14 @@ Future<void> build(IShell shell, [String? config]) async {
   await _whenDartBuildable('Build', shell, () async {
     _log.info('Building $config'.trim());
     final String configFlag = config != null ? '--config $config' : '';
-    await shell.run('''
+    await shell.run(
+      '''
         dart run build_runner build \\
           --delete-conflicting-outputs \\
           $configFlag
         '''
-        .trim());
+          .trim(),
+    );
   });
 }
 
@@ -127,8 +129,8 @@ Future<void> compile(
 /// `since 0.0.1`
 Future<void> doc(
   IShell shell, {
-  String output = "doc",
-  String format = "html",
+  String output = 'doc',
+  String format = 'html',
 }) async {
   await _whenDartProject('Doc', shell, () async {
     _log.info('Building Documentation...');

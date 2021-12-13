@@ -130,7 +130,7 @@ Future<String?> nodeVersion(IShell shell) async {
   shell.requireCommand('node');
   final String? version =
       cast<String>((await shell.run('node --version')).stdout);
-  return version?.trim().replaceAll(RegExp(r"^v"), "");
+  return version?.trim().replaceAll(RegExp(r'^v'), '');
 }
 
 /// Runs the current npx version
