@@ -56,7 +56,7 @@ Future<String> promptUntilValueIn(
 
 String mainForgeTemplate = '''
 import 'package:chassis_forge/chassis_forge.dart';
-import 'package:smart_arg/smart_arg.dart';
+import 'package:chassis_forge/smart_arg.dart';
 
 // ignore: unused_import
 import 'main.reflectable.dart';

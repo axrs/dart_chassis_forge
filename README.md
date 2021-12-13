@@ -1,7 +1,7 @@
 # Chassis Forge
 
 Chassis Forge is a foundation for building modern CLI apps and tools to help with project automation and other various
-tasks. Built on the wonderful [Smart Arg](https://github.com/jcowgar/smart\_arg) package.
+tasks. Built on the wonderful [Smart Arg](https://github.com/jcowgar/smart_arg) package.
 
 > Chassis: is the load-bearing framework of an artificial object, which structurally supports the object in its construction and function.
 
@@ -11,24 +11,17 @@ tasks. Built on the wonderful [Smart Arg](https://github.com/jcowgar/smart\_arg)
 
 ## Foundation
 
-Chassis Forge is built on the solid work of [Smart Arg](https://github.com/jcowgar/smart\_arg). `Smart_Arg` does all the
+Chassis Forge is built on the solid work of [Smart Arg](https://github.com/jcowgar/smart_arg). `Smart Arg` does all the
 command line heavy lifting, argument parsing, and help doc generation.
 
-> Note: There is a parallel (compatible) fork of `Smart_Arg` available [here](https://github.com/axrs/smart\_arg). This fork
-> adds some additional functionality and helpers. It can be used by adding the following to your `pubspec.yaml`
->
-> ```yaml
-> smart_arg:
->   git:
->     url: git://github.com/axrs/smart_arg.git
->     ref: 2.1.0
-> ```
+> Note: Chassis Forge uses a parallel fork of `Smart Arg` available [here](https://github.com/axrs/smart_arg?tree=master-forked). This fork adds some additional functionality and helpers
+> not currently available in the base `Smart Arg`.
 
 ## Getting Started
 
 1. Make sure Dart is installed
 1. <https://dart.dev/get-dart>
-1. Create (or update) the `pubspec.yaml` file and add `dart_chassis_forge` under `dev_dependencies`
+1. Create (or update) the `pubspec.yaml` file and add `chassis_forge` under `dev_dependencies`
 
 ```yaml
 name: my_forge
@@ -39,10 +32,7 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dev_dependencies:
-  chassis_forge:
-    git:
-      url: https://github.com/axrs/dart_chassis_forge.git
-      ref: <set the ref to the latest tag release. Or master if you wish to be on the bleeding edge>
+  chassis_forge: "^1.0.0"
 ```
 
 1. Run `dart pub get` to download the dependency
@@ -50,19 +40,19 @@ dev_dependencies:
 
 ```text
 Laying down kindling for Chassis Forge
-Where should the Chassis Forge tools be placed <forge>:
+Where should the Chassis Forge tools be placed <tool>:
 What will the name of the entry command <main.dart>:
 How would you like the Forge to be welded? <kernel>:
 
 Do you wish to proceed laying kindling?
-        with a base directory of: forge
-        and a main tool path of: forge/main.dart
+        with a base directory of: tool
+        and a main tool path of: tool/main.dart
         and an execution target of: kernel
 Continue Y/N? Y
 ```
 
 1. Run `./<dir_name>.ps1` (for PowerShell) or `./<dir_name>.sh` (for Bash) to invoke your CLI
-1. Modify you commands within the specified directory (defaults to `forge`)
+1. Modify you commands within the specified directory (defaults to `tool`)
 
 ### Example Output
 
@@ -97,9 +87,9 @@ No issues found!
 ### Example Command
 
 ```dart
-import 'package:dart_chassis_forge/chassis_forge.dart';
-import 'package:dart_chassis_forge/chassis_forge_dart.dart' as chassis_dart;
-import 'package:smart_arg/smart_arg.dart';
+import 'package:chassis_forge/chassis_forge.dart';
+import 'package:chassis_forge/chassis_forge_dart.dart' as chassis_dart;
+import 'package:chassis_forge/smart_arg.dart';
 
 // ignore: unused_import
 import 'analyze_command.reflectable.dart';
@@ -124,9 +114,9 @@ class DocCommand extends ChassisCommand with HelpOption {
 
 ### More Examples
 
-* [Chassis Forge Tools](https://github.com/axrs/dart\_chassis\_forge/tree/master/example)
-* [Rucksack](https://github.com/axrs/dart\_rucksack/tree/master/forge)
-* [Anvil](https://github.com/axrs/anvil/tree/master/forge)
+* [Chassis Forge Tools](https://github.com/axrs/dart_chassis_forge/tree/master/example)
+* [Rucksack](https://github.com/axrs/dart_rucksack/tree/master/tool)
+* [Anvil](https://github.com/axrs/anvil/tree/master/tool)
 
 ## About
 

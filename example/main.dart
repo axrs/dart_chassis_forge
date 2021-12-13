@@ -1,5 +1,5 @@
 import 'package:chassis_forge/chassis_forge.dart';
-import 'package:smart_arg/smart_arg.dart';
+import 'package:chassis_forge/smart_arg.dart';
 
 import 'analyze.dart';
 import 'deps.dart';

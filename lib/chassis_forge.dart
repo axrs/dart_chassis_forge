@@ -7,7 +7,7 @@ import 'dart:math';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:rucksack/rucksack.dart';
-import 'package:smart_arg/smart_arg.dart';
+import 'package:smart_arg_fork/smart_arg_fork.dart';
 
 import 'src/shell.dart';
 

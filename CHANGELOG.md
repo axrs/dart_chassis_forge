@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[1.0.0] - 2021-12-13
+
+* \[Breaking] - Swap `smart_arg` for `smart_arg_fork` for easy access to added features
+* \[Feature] - Add `package:chassis_forge/smart_arg.dart` proxy export for easier access
+
 ## \[0.3.0] - 2021-12-13
 
 * \[Feature] - Add the ability to modify an IShell environment outside of a process run

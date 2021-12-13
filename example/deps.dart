@@ -1,6 +1,6 @@
 import 'package:chassis_forge/chassis_forge.dart';
 import 'package:chassis_forge/chassis_forge_dart.dart';
-import 'package:smart_arg/smart_arg.dart';
+import 'package:chassis_forge/smart_arg.dart';
 
 const String depsDescription = 'Generates HTML documentation for the project';
 
