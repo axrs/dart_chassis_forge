@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:process_run/shell.dart' as pr;
 import 'package:rucksack/rucksack.dart';
-
+import 'package:logging/logging.dart';
 import 'build.dart' show createChassisBuildYaml;
+
+final Logger _log = Logger('cf:kindle');
 
 void printError(String text) {
   print('\x1B[31m$text\x1B[0m');
@@ -130,6 +132,32 @@ void createBuildConfig(String directory, String mainEntryCommandPath) {
   }
 }
 
+void _writeAnalysisOptions(final String folder) {
+  final File config = File('analysis_options.yaml');
+  if (!config.existsSync()) {
+    _log.info('Creating $config for analysis');
+    config.writeAsStringSync(
+      '''
+include: package:lints/recommended.yaml
+
+linter:
+  rules:
+    - unawaited_futures
+    - prefer_single_quotes
+    - require_trailing_commas
+
+analyzer:
+  exclude:
+    - example/*.reflectable.dart
+    - $folder/*.reflectable.dart
+    - test/*.reflectable.dart
+''',
+    );
+  } else {
+    _log.info('Using existing $config for analysis');
+  }
+}
+
 void createAnalysisOptions(String directory) {
   var analysisConfigFile = File('analysis_options.yaml');
   if (analysisConfigFile.existsSync()) {
@@ -138,7 +166,7 @@ void createAnalysisOptions(String directory) {
     );
   } else {
     print('Creating Analysis Config: $analysisConfigFile');
-    createAnalysisOptions(directory);
+    _writeAnalysisOptions(directory);
   }
 }
 

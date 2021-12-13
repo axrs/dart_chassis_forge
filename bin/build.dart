@@ -41,32 +41,6 @@ targets:
   }
 }
 
-void createAnalysisOptions(final String folder) {
-  final File config = File('analysis_options.yaml');
-  if (!config.existsSync()) {
-    _log.info('Creating $config for analysis');
-    config.writeAsStringSync(
-      '''
-include: package:lints/recommended.yaml
-
-linter:
-  rules:
-    - unawaited_futures
-    - prefer_single_quotes
-    - require_trailing_commas
-
-analyzer:
-  exclude:
-    - example/*.reflectable.dart
-    - $folder/*.reflectable.dart
-    - test/*.reflectable.dart
-''',
-    );
-  } else {
-    _log.info('Using existing $config for analysis');
-  }
-}
-
 _requireDirectoryExist(String directory) {
   _log.info('Checking for existence of directory $directory');
   if (isFalse(Directory(directory).existsSync())) {
