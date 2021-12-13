@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[1.0.1] - 2021-12-13
+
+* \[Fix] - Kindle Build command recursive call generating analysis options
+
 ## \[1.0.0] - 2021-12-13
 
 * \[Breaking] - Swap `smart_arg` for `smart_arg_fork` for easy access to added features
