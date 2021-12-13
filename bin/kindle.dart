@@ -198,7 +198,7 @@ Future<void> main(List<String> arguments) async {
   String directory = await promptUntilNotBlank(
     'Where should the Chassis Forge tools be placed',
     'A directory is required for Chassis Forge Tools',
-    'forge',
+    'tool',
   );
   String mainTool = await promptUntilNotBlank(
     'What will the name of the entry command',
