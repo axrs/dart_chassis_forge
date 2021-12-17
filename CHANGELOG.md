@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[1.1.0] - 2021-12-17
+
+* \[Feature] - Support not throwing on exception
+* \[Feature] - Add `stdout` to exception string message for more useful information
+* \[Chore] - Update Smart Arg Fork to be '>=2.2.0 <3.0.0'
+* \[Chore] - Update example commands
+* \[Fix] - Add library tag to SmartArg export helper
+
 ## \[1.0.1] - 2021-12-13
 
 * \[Fix] - Kindle Build command recursive call generating analysis options
