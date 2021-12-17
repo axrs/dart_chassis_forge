@@ -176,6 +176,10 @@ extension ChassisMap<K, V> on Map<K, V?> {
   }
 }
 
+dynamic _tryTrimRight(dynamic v) {
+  return v is String ? v.trimRight() : v;
+}
+
 /// A Basic implementation of [IShell] using [package:process_run]
 ///
 /// `since 0.0.1`
@@ -208,7 +212,13 @@ class ProcessRunShell implements IShell {
       environment: environment ?? _environment,
       workingDirectory: _workingDirectory,
     );
-    return result.first;
+    final ProcessResult first = result.first;
+    return ProcessResult(
+      first.pid,
+      first.exitCode,
+      _tryTrimRight(first.stdout),
+      _tryTrimRight(first.stderr),
+    );
   }
 
   static final Map<String, String?> _whichCache = <String, String?>{};
