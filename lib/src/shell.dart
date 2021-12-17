@@ -50,6 +50,7 @@ abstract class IShell {
     bool? verbose,
     bool? color,
     String? workingDirectory,
+    bool? throwOnError,
     Map<String, String>? environment,
   });
 
@@ -84,6 +85,30 @@ class CommandNotFoundException implements CommandException {
   @override
   String toString() {
     return 'CommandNotFoundException: $command. Check your \$PATH or install the missing executable for your operating system.';
+  }
+}
+
+/// Exception thrown when a Command is not found within the $PATH
+///
+/// `since 1.1.0`
+class ChassisShellException extends pr.ShellException {
+  final String command;
+
+  ChassisShellException(String message, ProcessResult? result, this.command)
+      : super(message, result);
+
+  @override
+  String toString() {
+    return [
+      'ChassisShellException executing: $command',
+      message,
+      if (isNotNull(result))
+        [
+          '-----',
+          _tryTrimRight(result!.stderr),
+          '-----',
+        ].join('\n'),
+    ].join('\n');
   }
 }
 
@@ -186,6 +211,7 @@ dynamic _tryTrimRight(dynamic v) {
 class ProcessRunShell implements IShell {
   final bool _verbose;
   final bool _color;
+  final bool _throwOnError;
   final String _workingDirectory;
   final Map<String, String> _environment;
 
@@ -194,10 +220,12 @@ class ProcessRunShell implements IShell {
     color = false,
     String? workingDirectory,
     Map<String, String>? environment,
+    bool? throwOnError,
   })  : _color = color,
         _verbose = verbose,
         _workingDirectory = workingDirectory ?? Directory.current.path,
-        _environment = environment ?? Platform.environment;
+        _environment = environment ?? Platform.environment,
+        _throwOnError = throwOnError ?? true;
 
   @override
   Future<ProcessResult> run(
@@ -206,18 +234,27 @@ class ProcessRunShell implements IShell {
   }) async {
     _requireSingleCommand(script);
     _log.fine('Running: $script');
-    var result = await pr.run(
-      script,
-      verbose: _verbose,
-      environment: environment ?? _environment,
-      workingDirectory: _workingDirectory,
-    );
-    final ProcessResult first = result.first;
+    ProcessResult res;
+    try {
+      var result = await pr.run(
+        script,
+        verbose: _verbose,
+        environment: environment ?? _environment,
+        workingDirectory: _workingDirectory,
+      );
+      res = result.first;
+    } on pr.ShellException catch (ex) {
+      if (isFalse(_throwOnError) && isNotNull(ex.result)) {
+        res = ex.result!;
+      } else {
+        throw ChassisShellException(ex.message, ex.result, script);
+      }
+    }
     return ProcessResult(
-      first.pid,
-      first.exitCode,
-      _tryTrimRight(first.stdout),
-      _tryTrimRight(first.stderr),
+      res.pid,
+      res.exitCode,
+      _tryTrimRight(res.stdout),
+      _tryTrimRight(res.stderr),
     );
   }
 
@@ -254,12 +291,14 @@ class ProcessRunShell implements IShell {
     bool? color,
     String? workingDirectory,
     Map<String, String>? environment,
+    bool? throwOnError,
   }) {
     return ProcessRunShell(
       verbose: verbose ?? _verbose,
       color: color ?? _color,
       workingDirectory: workingDirectory ?? _workingDirectory,
       environment: environment ?? _environment,
+      throwOnError: throwOnError ?? _throwOnError,
     );
   }
 

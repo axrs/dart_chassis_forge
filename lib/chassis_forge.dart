@@ -94,6 +94,13 @@ extension ChassisShell on IShell {
   IShell withEnvironment(Map<String, String> environment) {
     return copyWith(environment: environment);
   }
+
+  /// Clones the current [IShell] instance, setting the throwOnError as required
+  ///
+  /// `since 1.1.0`
+  IShell withThrowOnError([bool throwOnError = true]) {
+    return copyWith(throwOnError: throwOnError);
+  }
 }
 
 class ChassisForge extends SmartArg {
