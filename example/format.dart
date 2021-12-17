@@ -1,7 +1,7 @@
 import 'package:chassis_forge/chassis_forge.dart';
 import 'package:chassis_forge/chassis_forge_dart.dart';
 import 'package:chassis_forge/chassis_forge_markdown.dart';
-import 'package:chassis_forge/smart_arg.dart';
+import 'package:smart_arg_fork/smart_arg_fork.dart';
 
 @SmartArg.reflectable
 @Parser(
