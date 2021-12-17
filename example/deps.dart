@@ -2,11 +2,9 @@ import 'package:chassis_forge/chassis_forge.dart';
 import 'package:chassis_forge/chassis_forge_dart.dart';
 import 'package:chassis_forge/smart_arg.dart';
 
-const String depsDescription = 'Generates HTML documentation for the project';
-
 @SmartArg.reflectable
 @Parser(
-  description: depsDescription,
+  description: 'Generates HTML documentation for the project',
 )
 class DepsCommand extends ChassisCommand with HelpOption {
   @override

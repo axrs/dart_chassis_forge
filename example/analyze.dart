@@ -2,12 +2,9 @@ import 'package:chassis_forge/chassis_forge.dart';
 import 'package:chassis_forge/chassis_forge_dart.dart';
 import 'package:chassis_forge/smart_arg.dart';
 
-const String analyzeDescription =
-    'Runs static code analysis across the code base';
-
 @SmartArg.reflectable
 @Parser(
-  description: analyzeDescription,
+  description: 'Runs static code analysis across the code base'
 )
 class AnalyzeCommand extends ChassisCommand with HelpOption {
   @override

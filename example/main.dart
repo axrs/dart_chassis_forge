@@ -24,16 +24,16 @@ class ExampleForge extends ChassisForge with HelpOption, VerboseOption {
   @HelpArgument()
   late bool help = false;
 
-  @Command(help: analyzeDescription)
+  @Command()
   late AnalyzeCommand analyze;
 
-  @Command(help: docsDescription)
+  @Command()
   late DocsCommand docs;
 
-  @Command(help: depsDescription)
+  @Command()
   late DepsCommand deps;
 
-  @Command(help: formatDescription)
+  @Command()
   late FormatCommand format;
 }
 

@@ -3,12 +3,9 @@ import 'package:chassis_forge/chassis_forge_dart.dart';
 import 'package:chassis_forge/chassis_forge_markdown.dart';
 import 'package:chassis_forge/smart_arg.dart';
 
-const String formatDescription =
-    'Runs the various source code formatting tools';
-
 @SmartArg.reflectable
 @Parser(
-  description: formatDescription,
+  description: 'Runs the various source code formatting tools',
 )
 class FormatCommand extends ChassisCommand with HelpOption {
   @override
