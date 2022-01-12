@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:process_run/shell.dart' as pr;
 import 'package:rucksack/rucksack.dart';
-import 'package:logging/logging.dart';
+
 import 'build.dart' show createChassisBuildYaml;
 
 final Logger _log = Logger('cf:kindle');
@@ -17,11 +18,11 @@ void printWarning(String text) {
 }
 
 Future<String> promptUntilNotBlank(
-  final String prompt,
-  final String whenBlank, [
+  String prompt,
+  String whenBlank, [
   String? defaultValue,
 ]) async {
-  final String promptExtra = isNotBlank(defaultValue) ? ' <$defaultValue>' : '';
+  var promptExtra = isNotBlank(defaultValue) ? ' <$defaultValue>' : '';
   String? result = await pr.prompt('$prompt$promptExtra');
   if (isBlank(result)) {
     if (isBlank(defaultValue)) {
@@ -35,12 +36,12 @@ Future<String> promptUntilNotBlank(
 }
 
 Future<String> promptUntilValueIn(
-  final String prompt,
-  final String whenInvalid,
-  final List<String> acceptableValues, [
+  String prompt,
+  String whenInvalid,
+  List<String> acceptableValues, [
   String? defaultValue,
 ]) async {
-  final String promptExtra = isNotBlank(defaultValue) ? ' <$defaultValue>' : '';
+  var promptExtra = isNotBlank(defaultValue) ? ' <$defaultValue>' : '';
   String? result = await pr.prompt('$prompt$promptExtra');
   if (isBlank(result)) {
     if (isBlank(defaultValue)) {
@@ -132,8 +133,8 @@ void createBuildConfig(String directory, String mainEntryCommandPath) {
   }
 }
 
-void _writeAnalysisOptions(final String folder) {
-  final File config = File('analysis_options.yaml');
+void _writeAnalysisOptions(String folder) {
+  var config = File('analysis_options.yaml');
   if (!config.existsSync()) {
     _log.info('Creating $config for analysis');
     config.writeAsStringSync(
@@ -190,7 +191,7 @@ void createPs1Helper(
   String main,
   String compiledMain,
 ) {
-  String ps1 = '''
+  var ps1 = '''
 #!/usr/bin/env pwsh
 If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
 {
@@ -208,7 +209,7 @@ void createShHelper(
   String main,
   String compiledMain,
 ) {
-  String sh = '''
+  var sh = '''
 #!/usr/bin/env bash
 set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
@@ -223,17 +224,17 @@ dart run $directory/$compiledMain "\$@"
 
 Future<void> main(List<String> arguments) async {
   print('Laying down kindling for Chassis Forge');
-  String directory = await promptUntilNotBlank(
+  var directory = await promptUntilNotBlank(
     'Where should the Chassis Forge tools be placed',
     'A directory is required for Chassis Forge Tools',
     'tool',
   );
-  String mainTool = await promptUntilNotBlank(
+  var mainTool = await promptUntilNotBlank(
     'What will the name of the entry command',
     'An entry command name is required',
     'main.dart',
   );
-  String executionTarget = await promptUntilValueIn(
+  var executionTarget = await promptUntilValueIn(
     'How would you like the Forge to be welded?',
     'A valid execution target is required',
     ['kernel', 'dart'],
@@ -246,22 +247,21 @@ Future<void> main(List<String> arguments) async {
   print('\twith a base directory of: $directory');
   print('\tand a main tool path of: $directory/$mainTool');
   print('\tand an execution target of: $executionTarget');
-  final bool proceed = await pr.promptConfirm('');
+  var proceed = await pr.promptConfirm('');
   if (isTrue(proceed)) {
-    final String mainEntryCommandPath = p.join(directory, mainTool);
+    var mainEntryCommandPath = p.join(directory, mainTool);
     print('\nLaying Kindling...');
     createMain(mainEntryCommandPath);
     createBuildConfig(directory, '$directory/$mainTool');
     createAnalysisOptions(directory);
-    String extension = 'dart';
+    var extension = 'dart';
     switch (executionTarget) {
       //TODO Support Exe
       case 'kernel':
         extension = 'dill';
         break;
     }
-    final String executionMain =
-        mainTool.replaceAll(RegExp(r'dart$'), extension);
+    var executionMain = mainTool.replaceAll(RegExp(r'dart$'), extension);
     createPs1Helper(directory, executionTarget, mainTool, executionMain);
     createShHelper(directory, executionTarget, mainTool, executionMain);
     exit(0);

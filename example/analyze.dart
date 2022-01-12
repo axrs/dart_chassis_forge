@@ -13,8 +13,8 @@ class AnalyzeCommand extends ChassisCommand with HelpOption {
 
   @override
   Future<void> run(
-    final IShell shell,
-    final SmartArg parentArguments,
+    IShell shell,
+    SmartArg parentArguments,
   ) async {
     await shell.verbose().dartAnalyze();
   }

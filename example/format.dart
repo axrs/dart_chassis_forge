@@ -13,7 +13,7 @@ class FormatCommand extends ChassisCommand with HelpOption {
   late bool help = false;
 
   @override
-  Future<void> run(final IShell shell, final SmartArg parentArguments) async {
+  Future<void> run(IShell shell, SmartArg parentArguments) async {
     await shell
         .dartFormat() //
         .markdownFormat();

@@ -15,15 +15,15 @@ export 'src/shell.dart';
 
 /// Configures Logging to the specified [level]
 void configureLogger(dynamic level) {
-  Level? l = cast<Level>(level);
+  var l = cast<Level>(level);
   if (isNull(l)) {
-    final bool? verbose = cast<bool>(level);
+    var verbose = cast<bool>(level);
     if (isTrue(verbose)) {
       l = Level.ALL;
     }
   }
   Logger.root.level = l ?? Level.INFO;
-  Logger.root.onRecord.listen((final LogRecord rec) {
+  Logger.root.onRecord.listen((LogRecord rec) {
     var level = rec.level.toString();
     level = level.padRight(7);
     var logger = rec.loggerName;
@@ -32,12 +32,6 @@ void configureLogger(dynamic level) {
       '${rec.time.toString().padRight(26)} | $level | ${logger.padRight(15)}: ${rec.message}',
     );
   });
-}
-
-/// Registers [ProcessRunShell] as the default [IShell] implementation with [GetIt]
-void registerDefaultShell(bool verbose) {
-  GetIt.instance
-      .registerLazySingleton<IShell>(() => ProcessRunShell(verbose: verbose));
 }
 
 abstract class HelpOption {
@@ -54,16 +48,16 @@ abstract class VerboseOption {
 abstract class ChassisCommand extends SmartArgCommand {
   @override
   Future<void> execute(SmartArg parentArguments) async {
-    final bool? showHelp = cast<HelpOption>(this)?.help;
+    var showHelp = cast<HelpOption>(this)?.help;
     if (isTrue(showHelp)) {
       print(usage());
       exit(1);
     }
-    final IShell shell = GetIt.instance<IShell>();
+    var shell = GetIt.instance<IShell>();
     await run(shell, parentArguments);
   }
 
-  Future<void> run(final IShell shell, final SmartArg parentArguments) async {}
+  Future<void> run(IShell shell, SmartArg parentArguments) async {}
 }
 
 extension ChassisShell on IShell {
@@ -107,9 +101,22 @@ class ChassisForge extends SmartArg {
   late bool commandRun = false;
   late bool loggingConfigured = false;
 
+  /// Registers [ProcessRunShell] as the default [IShell] implementation with [GetIt]
+  void registerDefaultShell(
+    bool verbose, {
+    String? workingDirectory,
+  }) {
+    GetIt.instance.registerLazySingleton<IShell>(
+      () => ProcessRunShell(
+        verbose: verbose,
+        workingDirectory: workingDirectory,
+      ),
+    );
+  }
+
   @override
   void beforeCommandExecute(SmartArgCommand command) {
-    final bool verbose = cast<VerboseOption>(this)?.verbose ?? false;
+    var verbose = cast<VerboseOption>(this)?.verbose ?? false;
     if (!loggingConfigured) {
       configureLogger(verbose);
     }
@@ -131,7 +138,7 @@ class ChassisForge extends SmartArg {
   void runWith(List<String> arguments) {
     parse(arguments);
 
-    final bool? help = cast<HelpOption>(this)?.help;
+    var help = cast<HelpOption>(this)?.help;
     if (isTrue(help) || isFalse(commandRun)) {
       print(usage());
       exit(1);

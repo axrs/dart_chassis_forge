@@ -46,12 +46,12 @@ Future<void> format(IShell shell) async {
     return;
   }
   _log.info('Formatting Markdown Files...');
-  final String workingDirectory = shell.workingDirectory();
-  final String remarkPath =
+  var workingDirectory = shell.workingDirectory();
+  var remarkPath =
       p.absolute(workingDirectory, '.chassis', 'markdown');
   Directory(remarkPath).createSync(recursive: true);
-  final remarkShell = shell.copyWith(workingDirectory: remarkPath);
-  final String remarkShellWorkingDir = remarkShell.workingDirectory();
+  var remarkShell = shell.copyWith(workingDirectory: remarkPath);
+  var remarkShellWorkingDir = remarkShell.workingDirectory();
   await _installRemark(remarkShell);
   var remarkRc = File(p.join(remarkShellWorkingDir, '.remarkrc.js'));
   var remarkConfigIsMissing = isFalse(remarkRc.existsSync());
@@ -64,7 +64,7 @@ Future<void> format(IShell shell) async {
   }
   try {
     _log.info('Running Remark');
-    final String projectPath = shell.workingDirectory() + p.separator;
+    var projectPath = shell.workingDirectory() + p.separator;
     await remarkShell.run(
       "npx --prefix '$remarkShellWorkingDir' remark --rc-path '${remarkRc.absolute.path}' '$projectPath' --output",
     );
