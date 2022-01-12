@@ -53,7 +53,7 @@ abstract class ChassisCommand extends SmartArgCommand {
       print(usage());
       exit(1);
     }
-    var shell = GetIt.instance<IShell>();
+    var shell = getShell(this);
     await run(shell, parentArguments);
   }
 
@@ -97,30 +97,34 @@ extension ChassisShell on IShell {
   }
 }
 
+/// Gets the Shell instance for the current context
+IShell getShell(SmartArg context) {
+  if (context is ChassisForge) {
+    return context._shell;
+  }
+  if (context.parent != null) {
+    return getShell(context.parent!);
+  } else {
+    throw Exception('Unable to find IShell instance in Command hierarchy');
+  }
+}
+
 class ChassisForge extends SmartArg {
   late bool commandRun = false;
   late bool loggingConfigured = false;
-
-  /// Registers [ProcessRunShell] as the default [IShell] implementation with [GetIt]
-  void registerDefaultShell(
-    bool verbose, {
-    String? workingDirectory,
-  }) {
-    GetIt.instance.registerLazySingleton<IShell>(
-      () => ProcessRunShell(
-        verbose: verbose,
-        workingDirectory: workingDirectory,
-      ),
-    );
-  }
+  late bool _verbose = false;
+  String? _workingDirectory;
+  late final IShell _shell = ProcessRunShell(
+    verbose: _verbose,
+    workingDirectory: _workingDirectory,
+  );
 
   @override
   void beforeCommandExecute(SmartArgCommand command) {
-    var verbose = cast<VerboseOption>(this)?.verbose ?? false;
+    _verbose = cast<VerboseOption>(this)?.verbose ?? false;
     if (!loggingConfigured) {
-      configureLogger(verbose);
+      configureLogger(_verbose);
     }
-    registerDefaultShell(verbose);
     super.beforeCommandExecute(command);
   }
 
@@ -133,6 +137,10 @@ class ChassisForge extends SmartArg {
   void setLogLevel(dynamic level) {
     configureLogger(level);
     loggingConfigured = true;
+  }
+
+  void setWorkingDirectory(String workingDirectory) {
+    _workingDirectory = workingDirectory;
   }
 
   void runWith(List<String> arguments) {
