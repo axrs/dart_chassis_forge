@@ -118,8 +118,7 @@ IShell getShell(SmartArg context) {
 /// `since 0.0.1`
 @SmartArg.reflectable
 class ChassisForge extends SmartArg {
-  late bool commandRun = false;
-  late bool loggingConfigured = false;
+  static late bool loggingConfigured = false;
   late bool _verbose = false;
   String? _workingDirectory;
   late final IShell _shell = ProcessRunShell(
