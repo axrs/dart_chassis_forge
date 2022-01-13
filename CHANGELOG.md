@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[1.2.2] - 2022-01-13
+
+* \[Refactor] - Simpler loggingConfigured flag that can be adjusted at a global level
+* \[Refactor] - Capture `ChassisForge.runWith` arguments
+
 ## \[1.2.1] - 2022-01-13
 
 * \[Fix] - Configure verbosity and logging after command parse, instead of beforeExecute
