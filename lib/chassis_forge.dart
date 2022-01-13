@@ -127,9 +127,18 @@ IShell getShell(SmartArg context) {
 /// `since 0.0.1`
 @SmartArg.reflectable
 class ChassisForge extends SmartArg {
-  late bool _verbose = false;
+  /// List of arguments supplied during [runWith]. Only initialized on invocation
+  /// of [runWith]
+  ///
+  /// `since 1.2.2`
+  late List<String> arguments;
+
+  /// True if a [Command] has been run
   late bool commandRun = false;
+
+  late bool _verbose = false;
   String? _workingDirectory;
+
   late final IShell _shell = ProcessRunShell(
     verbose: _verbose,
     workingDirectory: _workingDirectory,
@@ -176,6 +185,7 @@ class ChassisForge extends SmartArg {
   ///
   /// `since 0.0.1`
   void runWith(List<String> arguments) {
+    this.arguments = arguments;
     parse(arguments);
   }
 }
