@@ -35,6 +35,9 @@ class ExampleForge extends ChassisForge with HelpOption, VerboseOption {
 
   @Command()
   late FormatCommand format;
+
+  @Command()
+  late ExampleForge nested;
 }
 
 void main(List<String> arguments) {
