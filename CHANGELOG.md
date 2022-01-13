@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[1.2.1] - 2022-01-13
+
+* \[Fix] - Configure verbosity and logging after command parse, instead of beforeExecute
+* \[Fix] - Static logging configuration flag to prevent configuration of multiple log watchers
+
 ## \[1.2.0] - 2022-01-13
 
 * \[Feature] - Support Nesting `ChassisForge` as a `@Command`
