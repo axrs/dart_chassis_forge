@@ -116,8 +116,7 @@ Future<void> node(IShell shell, String command) async {
 /// `since 0.0.1`
 Future<String?> npmVersion(IShell shell) async {
   shell.requireCommand('npm');
-  var version =
-      cast<String>((await shell.run('npm --version')).stdout);
+  var version = cast<String>((await shell.run('npm --version')).stdout);
   return version?.trim();
 }
 
@@ -128,8 +127,7 @@ Future<String?> npmVersion(IShell shell) async {
 /// `since 0.0.1`
 Future<String?> nodeVersion(IShell shell) async {
   shell.requireCommand('node');
-  var version =
-      cast<String>((await shell.run('node --version')).stdout);
+  var version = cast<String>((await shell.run('node --version')).stdout);
   return version?.trim().replaceAll(RegExp(r'^v'), '');
 }
 
@@ -140,7 +138,6 @@ Future<String?> nodeVersion(IShell shell) async {
 /// `since 0.0.1`
 Future<String?> npxVersion(IShell shell) async {
   shell.requireCommand('npx');
-  var version =
-      cast<String>((await shell.run('npx --version')).stdout);
+  var version = cast<String>((await shell.run('npx --version')).stdout);
   return version?.trim();
 }

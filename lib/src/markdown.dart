@@ -47,8 +47,7 @@ Future<void> format(IShell shell) async {
   }
   _log.info('Formatting Markdown Files...');
   var workingDirectory = shell.workingDirectory();
-  var remarkPath =
-      p.absolute(workingDirectory, '.chassis', 'markdown');
+  var remarkPath = p.absolute(workingDirectory, '.chassis', 'markdown');
   Directory(remarkPath).createSync(recursive: true);
   var remarkShell = shell.copyWith(workingDirectory: remarkPath);
   var remarkShellWorkingDir = remarkShell.workingDirectory();
