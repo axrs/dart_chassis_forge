@@ -128,6 +128,15 @@ class ChassisForge extends SmartArg {
   );
 
   @override
+  void afterCommandParse(SmartArg command, List<String> arguments) {
+    super.afterCommandParse(command, arguments);
+    if (command is SmartArgCommand) {
+      return;
+    }
+    commandRun = true;
+  }
+
+  @override
   void beforeCommandExecute(SmartArgCommand command) {
     _verbose = cast<VerboseOption>(this)?.verbose ?? false;
     if (!loggingConfigured) {
