@@ -99,7 +99,11 @@ extension ChassisShell on IShell {
   }
 }
 
-/// Gets the Shell instance for the current context
+/// Gets the [IShell] instance for the current [SmartArg] context. If not found,
+/// the [SmartArg.parent] will be recursively searched until a [ChassisForge]
+/// instance is found.
+///
+/// `since 1.2.0`
 IShell getShell(SmartArg context) {
   if (context is ChassisForge) {
     return context._shell;
@@ -111,6 +115,8 @@ IShell getShell(SmartArg context) {
   }
 }
 
+/// `since 0.0.1`
+@SmartArg.reflectable
 class ChassisForge extends SmartArg {
   late bool commandRun = false;
   late bool loggingConfigured = false;

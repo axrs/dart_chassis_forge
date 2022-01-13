@@ -91,7 +91,7 @@ extension ChassisDartFutureShell on Future<IShell> {
     );
   }
 
-  /// Runs the Dart formatter
+  /// Analyzes the Dart source files for the current dart project
   ///
   /// `since 0.0.1`
   Future<IShell> dartAnalyze() async {
