@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[1.2.0] - 2022-01-13
+
+* \[Feature] - Support Nesting `ChassisForge` as a `@Command`
+* \[Feature] - Scoped IShell Instances
+* \[Fix] - Exit with code `0` if `--help` was requested
+* \[Chore] - Update analysis and linting rules
+* \[Chore] - Update `process_run` to version `0.12.3+1`
+* \[Chore] - Update `smart_arg_fork` to minimum version `2.4.0`
+* \[Chore] - Remove `get_it` as a dependency
+
 ## \[1.1.0] - 2021-12-17
 
 * \[Feature] - Support not throwing on exception
