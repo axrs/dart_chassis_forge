@@ -145,13 +145,21 @@ class ChassisForge extends SmartArg {
     _workingDirectory = workingDirectory;
   }
 
-  void runWith(List<String> arguments) {
-    parse(arguments);
+  @override
+  void parse(List<String> arguments) {
+    super.parse(arguments);
 
     var help = cast<HelpOption>(this)?.help;
     if (isTrue(help) || isFalse(commandRun)) {
       print(usage());
       exit(isTrue(help) ? 0 : 1);
     }
+  }
+
+  /// Runs the [ChassisForge] with the supplied arguments.
+  ///
+  /// `since 0.0.1`
+  void runWith(List<String> arguments) {
+    parse(arguments);
   }
 }
