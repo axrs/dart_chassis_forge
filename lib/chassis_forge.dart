@@ -12,9 +12,17 @@ import 'src/shell.dart';
 
 export 'src/shell.dart';
 
+/// True if an [Logger.root.onRecord] listener has been attached
+///
+/// `since 1.2.2`
+late bool loggingConfigured = false;
+
 /// Configures Logging to the specified [level]
 /// `since 0.0.1`
 void configureLogger(dynamic level) {
+  if (isTrue(loggingConfigured)) {
+    return;
+  }
   var l = cast<Level>(level);
   if (isNull(l)) {
     var verbose = cast<bool>(level);
@@ -32,6 +40,7 @@ void configureLogger(dynamic level) {
       '${rec.time.toString().padRight(26)} | $level | ${logger.padRight(15)}: ${rec.message}',
     );
   });
+  loggingConfigured = true;
 }
 
 abstract class HelpOption {
@@ -118,7 +127,6 @@ IShell getShell(SmartArg context) {
 /// `since 0.0.1`
 @SmartArg.reflectable
 class ChassisForge extends SmartArg {
-  static late bool loggingConfigured = false;
   late bool _verbose = false;
   late bool commandRun = false;
   String? _workingDirectory;
@@ -130,11 +138,8 @@ class ChassisForge extends SmartArg {
   @override
   void afterCommandParse(SmartArg command, List<String> arguments) {
     super.afterCommandParse(command, arguments);
-
     _verbose = cast<VerboseOption>(this)?.verbose ?? false;
-    if (isFalse(loggingConfigured)) {
-      configureLogger(_verbose);
-    }
+    configureLogger(_verbose);
 
     if (command is SmartArgCommand) {
       return;
@@ -150,7 +155,6 @@ class ChassisForge extends SmartArg {
 
   void setLogLevel(dynamic level) {
     configureLogger(level);
-    loggingConfigured = true;
   }
 
   void setWorkingDirectory(String workingDirectory) {
