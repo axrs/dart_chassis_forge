@@ -120,6 +120,7 @@ IShell getShell(SmartArg context) {
 class ChassisForge extends SmartArg {
   static late bool loggingConfigured = false;
   late bool _verbose = false;
+  late bool commandRun = false;
   String? _workingDirectory;
   late final IShell _shell = ProcessRunShell(
     verbose: _verbose,
@@ -129,19 +130,16 @@ class ChassisForge extends SmartArg {
   @override
   void afterCommandParse(SmartArg command, List<String> arguments) {
     super.afterCommandParse(command, arguments);
+
+    _verbose = cast<VerboseOption>(this)?.verbose ?? false;
+    if (isFalse(loggingConfigured)) {
+      configureLogger(_verbose);
+    }
+
     if (command is SmartArgCommand) {
       return;
     }
     commandRun = true;
-  }
-
-  @override
-  void beforeCommandExecute(SmartArgCommand command) {
-    _verbose = cast<VerboseOption>(this)?.verbose ?? false;
-    if (!loggingConfigured) {
-      configureLogger(_verbose);
-    }
-    super.beforeCommandExecute(command);
   }
 
   @override
