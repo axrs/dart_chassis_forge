@@ -4,16 +4,16 @@ library chassis_forge;
 import 'dart:io';
 import 'dart:math';
 
-import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 import 'package:rucksack/rucksack.dart';
-import 'package:smart_arg_fork/smart_arg_fork.dart';
 
+import 'smart_arg.dart';
 import 'src/shell.dart';
 
 export 'src/shell.dart';
 
 /// Configures Logging to the specified [level]
+/// `since 0.0.1`
 void configureLogger(dynamic level) {
   var l = cast<Level>(level);
   if (isNull(l)) {
@@ -45,13 +45,15 @@ abstract class VerboseOption {
 /// Chassis Command Boilerplate extends [SmartArgCommand] to print usage if
 /// requested. Otherwise, invokes [run] with [IShell] obtained from the global
 /// [GetIt] instance and parent [SmartArg] arguments.
+///
+/// `since 0.0.1`
 abstract class ChassisCommand extends SmartArgCommand {
   @override
   Future<void> execute(SmartArg parentArguments) async {
     var showHelp = cast<HelpOption>(this)?.help;
     if (isTrue(showHelp)) {
       print(usage());
-      exit(1);
+      exit(0);
     }
     var shell = getShell(this);
     await run(shell, parentArguments);
@@ -149,7 +151,7 @@ class ChassisForge extends SmartArg {
     var help = cast<HelpOption>(this)?.help;
     if (isTrue(help) || isFalse(commandRun)) {
       print(usage());
-      exit(1);
+      exit(isTrue(help) ? 0 : 1);
     }
   }
 }
