@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[2.0.0] - 2022-01-14
+
+* \[Breaking] - `ChassisForge.runWith` is now Async
+* \[Breaking] - Removed default Markdown, Dart, and Node.js helpers/wrappers
+* \[Enhancement] - Added `ChassisForge.onHelp`
+* \[Enhancement] - Added `ChassisForge.onUnknownCommand`
+* \[Enhancement] - Added `IShell.isVerbose`
+
 ## \[1.2.2] - 2022-01-13
 
 * \[Refactor] - Simpler loggingConfigured flag that can be adjusted at a global level
