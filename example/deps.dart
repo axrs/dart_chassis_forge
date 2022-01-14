@@ -1,5 +1,4 @@
 import 'package:chassis_forge/chassis_forge.dart';
-import 'package:chassis_forge/chassis_forge_dart.dart';
 import 'package:smart_arg_fork/smart_arg_fork.dart';
 
 @SmartArg.reflectable
@@ -16,6 +15,6 @@ class DepsCommand extends ChassisCommand with HelpOption {
 
   @override
   Future<void> run(IShell shell, SmartArg parentArguments) async {
-    await shell.dartInstallDependencies(upgrade: upgrade);
+    await shell.run('dart pub ${upgrade ? 'upgrade' : 'get'}');
   }
 }

@@ -1,5 +1,4 @@
 import 'package:chassis_forge/chassis_forge.dart';
-import 'package:chassis_forge/chassis_forge_dart.dart';
 import 'package:smart_arg_fork/smart_arg_fork.dart';
 
 @SmartArg.reflectable
@@ -13,6 +12,6 @@ class DocsCommand extends ChassisCommand with HelpOption {
 
   @override
   Future<void> run(IShell shell, SmartArg parentArguments) async {
-    await shell.dartDoc();
+    await shell.run('dartdoc --output doc --format html');
   }
 }

@@ -40,7 +40,8 @@ class ExampleForge extends ChassisForge with HelpOption, VerboseOption {
   late ExampleForge nested;
 }
 
-void main(List<String> arguments) {
+Future<void> main(List<String> arguments) async {
   initializeReflectable();
-  ExampleForge().runWith(arguments);
+  var forge = ExampleForge();
+  await forge.runWith(arguments);
 }

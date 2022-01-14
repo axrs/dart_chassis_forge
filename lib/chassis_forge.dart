@@ -188,8 +188,8 @@ class ChassisForge extends SmartArg {
   }
 
   @override
-  void parse(List<String> arguments) {
-    super.parse(arguments);
+  Future<void> parse(List<String> arguments) async {
+    await super.parse(arguments);
 
     var help = cast<HelpOption>(this)?.help;
     if (isTrue(help)) {
@@ -202,8 +202,8 @@ class ChassisForge extends SmartArg {
   /// Runs the [ChassisForge] with the supplied arguments.
   ///
   /// `since 0.0.1`
-  void runWith(List<String> arguments) {
+  Future<void> runWith(List<String> arguments) async {
     this.arguments = arguments;
-    parse(arguments);
+    await parse(arguments);
   }
 }

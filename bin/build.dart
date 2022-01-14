@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:chassis_forge/chassis_forge.dart';
-import 'package:chassis_forge/chassis_forge_dart.dart' as dart;
 import 'package:glob/glob.dart';
 import 'package:glob/list_local_fs.dart';
 import 'package:logging/logging.dart';
@@ -64,14 +63,14 @@ _configureLogger(bool verbose) {
   });
 }
 
-void _compile(ArgResults args, IShell shell) {
+Future<void> _compile(ArgResults args, IShell shell) async {
   String? executableTarget = args['executable-target'];
   String? mainScript = args['main'];
   if (isNotBlank(executableTarget) &&
       isNotBlank(mainScript) &&
       executableTarget != 'dart') {
     _requireFileExist(mainScript!);
-    dart.compile(shell, mainScript, executableTarget!);
+    await shell.run('dart compile $executableTarget $mainScript');
   }
 }
 
@@ -131,7 +130,7 @@ ArgParser _buildParser() {
   return parser;
 }
 
-void main(List<String> arguments) {
+Future<void> main(List<String> arguments) async {
   var parser = _buildParser();
   var args = parser.parse(arguments);
   if (args['help']) {
@@ -152,5 +151,10 @@ void main(List<String> arguments) {
     return;
   }
   var shell = ProcessRunShell(verbose: args['verbose']);
-  dart.build(shell, 'chassis').then((value) => _compile(args, shell));
+  await shell.run(
+    'dart run build_runner build '
+    '--delete-conflicting-outputs '
+    '--config chassis',
+  );
+  await _compile(args, shell);
 }
