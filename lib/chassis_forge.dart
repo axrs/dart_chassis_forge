@@ -170,14 +170,32 @@ class ChassisForge extends SmartArg {
     _workingDirectory = workingDirectory;
   }
 
+  /// Prints Forge usage and cleanly exits the program
+  ///
+  /// `since 2.0.0`
+  void onHelp() {
+    print(usage());
+    exit(0);
+  }
+
+  /// Prints Forge usage and cleanly exits the program with code 1
+  ///
+  /// `since 2.0.0`
+  void onUnknownCommand(List<String> argument) {
+    print('ERROR: Unknown command `${arguments.join(' ')}`');
+    print(usage());
+    exit(1);
+  }
+
   @override
   void parse(List<String> arguments) {
     super.parse(arguments);
 
     var help = cast<HelpOption>(this)?.help;
-    if (isTrue(help) || isFalse(commandRun)) {
-      print(usage());
-      exit(isTrue(help) ? 0 : 1);
+    if (isTrue(help)) {
+      onHelp();
+    } else if (isFalse(commandRun)) {
+      onUnknownCommand(arguments);
     }
   }
 
