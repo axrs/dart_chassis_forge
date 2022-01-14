@@ -63,6 +63,11 @@ abstract class IShell {
   ///
   /// `since 0.3.0`
   Map<String, String> environment();
+
+  /// Returns true if the current instance is verbose
+  ///
+  /// `since 2.0.0`
+  bool isVerbose();
 }
 
 /// A marker interface implemented by all Command Execution exceptions
@@ -310,6 +315,11 @@ class ProcessRunShell implements IShell {
   @override
   Map<String, String> environment() {
     return _environment;
+  }
+
+  @override
+  bool isVerbose() {
+    return _verbose;
   }
 }
 
