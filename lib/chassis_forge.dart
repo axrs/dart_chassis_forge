@@ -181,7 +181,7 @@ class ChassisForge extends SmartArg {
   /// Prints Forge usage and cleanly exits the program with code 1
   ///
   /// `since 2.0.0`
-  void onUnknownCommand(List<String> argument) {
+  void onUnknownCommand(List<String> arguments) {
     print('ERROR: Unknown command `${arguments.join(' ')}`');
     print(usage());
     exit(1);
