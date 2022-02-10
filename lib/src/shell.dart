@@ -107,12 +107,12 @@ class ChassisShellException extends pr.ShellException {
     return [
       'ChassisShellException executing: $command',
       message,
-      if (isNotNull(result))
-        [
-          '-----',
-          _tryTrimRight(result!.stderr),
-          '-----',
-        ].join('\n'),
+      if (isNotNull(result)) ...[
+        _tryTrimRight(result!.stdout),
+        '-----',
+        _tryTrimRight(result!.stderr),
+        '-----',
+      ],
     ].join('\n');
   }
 }
