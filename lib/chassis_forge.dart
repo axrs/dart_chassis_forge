@@ -1,6 +1,7 @@
 /// A collection of CLI helpers for assisting with Project focused task automation
 library chassis_forge;
 
+import 'dart:core';
 import 'dart:io';
 import 'dart:math';
 
@@ -43,12 +44,37 @@ void configureLogger(dynamic level) {
   loggingConfigured = true;
 }
 
+/// Adds a basic Help Option to [SmartArgCommand]s to
+@Deprecated('Use [HelpArg] mixin instead')
 abstract class HelpOption {
   abstract bool help;
 }
 
+/// Adds a basic Verbose Option to [SmartArgCommand]s to
+@Deprecated('Use [VerboseArg] mixin instead')
 abstract class VerboseOption {
   abstract bool verbose;
+}
+
+/// A basic mixin for adding a the help argument to each [SmartArg] extension
+///
+/// `since 2.2.0`
+@SmartArg.reflectable
+mixin HelpArg {
+  @HelpArgument()
+  bool? help;
+}
+
+/// A basic mixin for adding a the help argument to each [SmartArg] extension
+///
+/// `since 2.2.0`
+@SmartArg.reflectable
+mixin VerboseArg {
+  @BooleanArgument(
+    short: 'v',
+    help: 'Enable Command Verbose Mode',
+  )
+  late bool verbose = false;
 }
 
 /// Chassis Command Boilerplate extends [SmartArgCommand] to print usage if
@@ -59,7 +85,9 @@ abstract class VerboseOption {
 abstract class ChassisCommand extends SmartArgCommand {
   @override
   Future<void> execute(SmartArg parentArguments) async {
-    var showHelp = cast<HelpOption>(this)?.help;
+    var showHelp = cast<HelpArg>(this)?.help ?? //
+        cast<HelpOption>(this)?.help ??
+        false;
     if (isTrue(showHelp)) {
       print(usage());
       exit(0);
@@ -147,7 +175,9 @@ class ChassisForge extends SmartArg {
   @override
   void afterCommandParse(SmartArg command, List<String> arguments) {
     super.afterCommandParse(command, arguments);
-    _verbose = cast<VerboseOption>(this)?.verbose ?? false;
+    _verbose = cast<VerboseArg>(this)?.verbose ??
+        cast<VerboseOption>(this)?.verbose ??
+        false;
     configureLogger(_verbose);
 
     if (command is SmartArgCommand) {
