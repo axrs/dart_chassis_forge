@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## \[2.1.0] - Unreleased
 
+* \[Feature] - Export `shellArgument` and `shellArguments` for escaping args
 * \[Feature] - Added `HelpArg` and `VerboseArg` mixin
 * \[Feature] - Added `IShell.throwsOnError()`
 * \[Test] - `ProcessRunShell` Tests

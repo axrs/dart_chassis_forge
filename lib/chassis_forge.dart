@@ -11,6 +11,8 @@ import 'package:rucksack/rucksack.dart';
 import 'smart_arg.dart';
 import 'src/shell.dart';
 
+export 'package:process_run/shell.dart' show shellArgument, shellArguments;
+
 export 'src/shell.dart';
 
 /// True if an [Logger.root.onRecord] listener has been attached
