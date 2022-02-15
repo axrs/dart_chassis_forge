@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[2.1.0] - 2022-02-15
+
+* \[Feature] export for `shellArgument`, `shellArguments`;
+
 ## \[2.0.2] - 2022-02-10
 
 * \[Fix] - `ChassisShellException` now include `stdout`
