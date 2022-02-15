@@ -17,6 +17,11 @@ abstract class IShell {
   /// `since 0.0.1`
   bool supportsColorOutput();
 
+  /// True if the shell implementation throws an exception on error
+  ///
+  /// `since 2.1.0`
+  bool throwsOnError();
+
   /// Runs a command within a IShell environment. Returning the commands
   /// result.
   /// May throw [CommandException]s.
@@ -320,6 +325,11 @@ class ProcessRunShell implements IShell {
   @override
   bool isVerbose() {
     return _verbose;
+  }
+
+  @override
+  bool throwsOnError() {
+    return _throwOnError;
   }
 }
 
