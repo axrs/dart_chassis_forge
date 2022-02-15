@@ -5,11 +5,7 @@ import 'package:smart_arg_fork/smart_arg_fork.dart';
 @Parser(
   description: 'Runs the various source code formatting tools',
 )
-class FormatCommand extends ChassisCommand with HelpOption {
-  @override
-  @HelpArgument()
-  late bool help = false;
-
+class FormatCommand extends ChassisCommand with HelpArg {
   @override
   Future<void> run(IShell shell, SmartArg parentArguments) async {
     await shell.run('dart format --fix .');

@@ -5,11 +5,7 @@ import 'package:smart_arg_fork/smart_arg_fork.dart';
 @Parser(
   description: 'Runs static code analysis across the code base',
 )
-class AnalyzeCommand extends ChassisCommand with HelpOption {
-  @override
-  @HelpArgument()
-  late bool help = false;
-
+class AnalyzeCommand extends ChassisCommand with HelpArg {
   @override
   Future<void> run(
     IShell shell,

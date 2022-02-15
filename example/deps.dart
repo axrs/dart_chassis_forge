@@ -5,11 +5,7 @@ import 'package:smart_arg_fork/smart_arg_fork.dart';
 @Parser(
   description: 'Generates HTML documentation for the project',
 )
-class DepsCommand extends ChassisCommand with HelpOption {
-  @override
-  @HelpArgument()
-  late bool help = false;
-
+class DepsCommand extends ChassisCommand with HelpArg {
   @BooleanArgument(help: 'Upgrade with compatible versions?')
   late bool upgrade = false;
 
