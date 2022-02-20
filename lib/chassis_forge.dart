@@ -9,11 +9,13 @@ import 'package:logging/logging.dart';
 import 'package:rucksack/rucksack.dart';
 
 import 'smart_arg.dart';
+import 'src/process_run_shell.dart';
 import 'src/shell.dart';
 
 export 'package:process_run/shell.dart' show shellArgument, shellArguments;
 
 export 'src/exceptions.dart';
+export 'src/process_run_shell.dart';
 export 'src/shell.dart';
 
 /// True if an [Logger.root.onRecord] listener has been attached
