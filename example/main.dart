@@ -1,11 +1,13 @@
 import 'package:chassis_forge/chassis_forge.dart';
 import 'package:smart_arg_fork/smart_arg_fork.dart';
 
+import 'ag_jq_pipe.dart';
 import 'analyze.dart';
 import 'deps.dart';
 import 'docs.dart';
 import 'format.dart'; // ignore: unused_import
 import 'main.reflectable.dart';
+import 'pipe.dart';
 
 @SmartArg.reflectable
 @Parser(
@@ -26,6 +28,12 @@ class ExampleForge extends ChassisForge with HelpArg, VerboseArg {
 
   @Command()
   late ExampleForge nested;
+
+  @Command()
+  late PipeCommand pipe;
+
+  @Command()
+  late AgJqPipeCommand agJq;
 }
 
 Future<void> main(List<String> arguments) async {

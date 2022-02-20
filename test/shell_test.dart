@@ -11,6 +11,134 @@ void main() {
       shell = ProcessRunShell();
     });
 
+    group('pipe commands', () {
+      test('single command', () async {
+        var cmd = Platform.isWindows ? 'more' : 'cat';
+        var res = await shell.cmd('$cmd ${shellArgument('README.md')}').run();
+        expect(res.stdout, startsWith('# Chassis Forge'));
+      });
+
+      test('multi-piping', () async {
+        IShellCommandBuilder pipe;
+        if (Platform.isWindows) {
+          pipe = shell
+              .cmd('more README.md')
+              .pipe('sort') //
+              .pipe('findstr ${shellArgument("chassis")}') //
+              .pipe('find /C ${shellArgument(" ")}');
+        } else {
+          pipe = shell
+              .cmd('cat README.md')
+              .pipe('sort') //
+              .pipe('grep ${shellArgument("chassis")}') //
+              .pipe('wc -l');
+        }
+        var res = await pipe.run();
+        expect(res.stdout, equals('12'));
+      });
+
+      test('exceptions not thrown if not requested (start)', () async {
+        var res = shell
+            .withThrowOnError(false)
+            .cmd('dart-not-found README.md')
+            .pipe('sort')
+            .pipe('sort');
+
+        var actual = await res.run() as PipedProcessResult;
+
+        expect(actual.exitCode, equals(0));
+        expect(actual.stdout, equals(''));
+        expect(actual.stderr, equals(''));
+        expect(actual.pipeResults.length, equals(3));
+        expect(actual.pipeResults.first.exitCode, greaterThan(0));
+        expect(actual.pipeResults.first.stderr, contains('dart-not-found'));
+      });
+
+      test('exceptions not thrown if not requested (mid)', () async {
+        var cmd = Platform.isWindows ? 'more' : 'cat';
+        var res = shell
+            .withThrowOnError(false)
+            .cmd('$cmd README.md')
+            .pipe('dart-not-found')
+            .pipe('sort');
+
+        var actual = await res.run() as PipedProcessResult;
+
+        expect(actual.exitCode, equals(0));
+        expect(actual.stdout, equals(''));
+        expect(actual.stderr, equals(''));
+        expect(actual.pipeResults[1].exitCode, greaterThan(0));
+        expect(actual.pipeResults[1].stderr, contains('dart-not-found'));
+      });
+
+      test('exceptions not thrown if not requested (tail)', () async {
+        var cmd = Platform.isWindows ? 'more' : 'cat';
+        var res = shell
+            .withThrowOnError(false)
+            .cmd('$cmd README.md')
+            .pipe('sort')
+            .pipe('dart-not-found');
+
+        var actual = await res.run() as PipedProcessResult;
+
+        expect(actual.exitCode, greaterThan(0));
+        expect(actual.stdout, equals(''));
+        expect(actual.stderr, contains('dart-not-found'));
+      });
+
+      test('exceptions thrown if requested (start)', () async {
+        var res = shell
+            .withThrowOnError(true)
+            .cmd('dart-not-found README.md')
+            .pipe('sort')
+            .pipe('sort');
+
+        expect(
+          () async => await res.run(),
+          throwsA(TypeMatcher<PipedCommandResultException>()),
+        );
+
+        try {
+          await res.run();
+          expect(true, isFalse);
+        } on PipedCommandResultException catch (ex) {
+          expect(ex.message, equals(''));
+          expect(ex.command, equals('dart-not-found README.md | sort | sort'));
+          expect(ex.results.exitCode, greaterThan(0));
+          expect(ex.results.pipeResults[0].exitCode, greaterThan(0));
+          expect(ex.results.pipeResults[1].exitCode, equals(0));
+          expect(ex.results.pipeResults[2].exitCode, equals(0));
+        }
+      });
+
+      test('exceptions thrown if requested (mid)', () async {
+        var cmd = Platform.isWindows ? 'more' : 'cat';
+        var res = shell
+            .withThrowOnError(true)
+            .cmd('$cmd README.md')
+            .pipe('dart-not-found')
+            .pipe('sort');
+
+        expect(
+          () async => await res.run(),
+          throwsA(TypeMatcher<PipedCommandResultException>()),
+        );
+      });
+
+      test('exceptions thrown if requested (tail)', () async {
+        var cmd = Platform.isWindows ? 'more' : 'cat';
+        var res = shell
+            .withThrowOnError(true)
+            .cmd('$cmd README.md')
+            .pipe('dart-not-found');
+
+        expect(
+          () async => await res.run(),
+          throwsA(TypeMatcher<PipedCommandResultException>()),
+        );
+      });
+    });
+
     group('which', () {
       test(
           'throws MultipleScriptCommandException if multiple commands are found',

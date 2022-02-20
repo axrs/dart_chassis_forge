@@ -1,6 +1,6 @@
 name: chassis_forge
 description: Chassis Forge is a foundation for building modern CLI apps and tools to help with project automation and other various tasks.
-version: 2.1.0
+version: 2.2.0-dev.1
 homepage: https://github.com/axrs/dart_chassis_forge
 repository: https://github.com/axrs/dart_chassis_forge.git
 issue_tracker: https://github.com/axrs/dart_chassis_forge/issues

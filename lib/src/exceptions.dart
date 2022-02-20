@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:process_run/shell.dart' as pr;
 import 'package:rucksack/rucksack.dart';
 
+import 'ishell.dart';
 import 'util.dart';
 
 /// A marker interface implemented by all Command Execution exceptions
@@ -33,9 +34,14 @@ class CommandNotFoundException implements CommandException {
 /// `since 1.1.0`
 class ChassisShellException extends pr.ShellException {
   final String command;
+  final Exception? reason;
 
   ChassisShellException(String message, ProcessResult? result, this.command)
-      : super(message, result);
+      : reason = null,
+        super(message, result);
+
+  ChassisShellException.wrap(String message, this.command, this.reason)
+      : super(message, null);
 
   @override
   String toString() {
@@ -76,5 +82,32 @@ class BlankCommandException implements CommandException {
   @override
   String toString() {
     return 'BlankCommandException: Empty, or blank command script provided';
+  }
+}
+
+/// Exception thrown when any piped process exists with a non-zero exit code
+///
+/// `since 2.2.0`
+class PipedCommandResultException extends ChassisShellException {
+  final PipedProcessResult results;
+
+  PipedCommandResultException(
+    String message,
+    this.results,
+    String command,
+  ) : super(message, results.pipeResults.last, command);
+
+  @override
+  String toString() {
+    return [
+      'PipedCommandResultException executing: $command',
+      message,
+      if (isNotNull(result)) ...[
+        tryTrimRight(result!.stdout),
+        '-----',
+        tryTrimRight(result!.stderr),
+        '-----',
+      ],
+    ].join('\n');
   }
 }
