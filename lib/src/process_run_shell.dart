@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:chassis_forge/src/exceptions.dart';
@@ -55,6 +56,8 @@ class ProcessRunShell implements IShell {
   Future<ProcessResult> run(
     String script, {
     Map<String, String>? environment,
+    Stream<List<int>>? stdin,
+    StreamSink<List<int>>? stdout,
   }) async {
     _requireSingleCommand(script);
     _log.fine('Running: $script');
@@ -65,6 +68,8 @@ class ProcessRunShell implements IShell {
         verbose: _verbose,
         environment: environment ?? _environment,
         workingDirectory: _workingDirectory,
+        stdout: stdout,
+        stdin: stdin,
       );
       res = result.first;
     } on pr.ShellException catch (ex) {

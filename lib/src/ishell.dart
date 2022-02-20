@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'exceptions.dart';
@@ -24,6 +25,8 @@ abstract class IShell {
   Future<ProcessResult> run(
     String command, {
     Map<String, String>? environment,
+    Stream<List<int>>? stdin,
+    StreamSink<List<int>>? stdout,
   });
 
   /// Returns the full path location (and name) for a supplied command.
