@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 * \[Feature] - Added `IShell.throwsOnError()`
 * \[Test] - `ProcessRunShell` Tests
 * \[Deprecated] - `HelpOption` and `VerboseOption`
+* \[Miscellaneous] - Refactored and broke up internals
 
 ## \[2.0.2] - 2022-02-10
 
