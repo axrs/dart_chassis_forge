@@ -7,7 +7,7 @@ import 'package:process_run/shell.dart' as pr;
 import 'package:process_run/src/shell_utils.dart' show scriptToCommands;
 import 'package:rucksack/rucksack.dart';
 
-import 'shell.dart';
+import 'ishell.dart';
 import 'util.dart';
 
 final _log = Logger('cf:Shell');
