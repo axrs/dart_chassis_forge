@@ -13,6 +13,7 @@ import 'src/shell.dart';
 
 export 'package:process_run/shell.dart' show shellArgument, shellArguments;
 
+export 'src/exceptions.dart';
 export 'src/shell.dart';
 
 /// True if an [Logger.root.onRecord] listener has been attached
