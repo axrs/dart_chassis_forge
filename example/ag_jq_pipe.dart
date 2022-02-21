@@ -1,4 +1,4 @@
-import 'dart:io' show Platform, stdout;
+import 'dart:io' show stdout;
 
 import 'package:chassis_forge/chassis_forge.dart';
 import 'package:smart_arg_fork/smart_arg_fork.dart';
