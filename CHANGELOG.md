@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[2.2.0-dev.2] - Unreleased
+
+* \[Feature] - Allow specifying an optional List<String> args to run and pipe
+
 ## \[2.2.0-dev.1] - Unreleased
 
 * \[Feature] - Pipe commands, chaining stdout -> stdin until end
