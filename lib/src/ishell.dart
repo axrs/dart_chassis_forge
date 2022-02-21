@@ -9,7 +9,7 @@ abstract class IShellCommandBuilder {
   /// May throw [CommandException]s.
   ///
   /// `since 2.2.0`
-  IShellCommandBuilder pipe(String cmd);
+  IShellCommandBuilder pipe(String cmd, [List<String>? args]);
 
   /// Runs a command within a IShell environment. Returning the piped commands
   /// result.
@@ -43,6 +43,7 @@ abstract class IShell {
     Map<String, String>? environment,
     Stream<List<int>>? stdin,
     StreamSink<List<int>>? stdout,
+    List<String>? args,
   });
 
   /// Prepares a command to be run within an IShell environment.

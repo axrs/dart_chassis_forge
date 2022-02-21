@@ -65,12 +65,12 @@ Future<List<ProcessResult>> _prRun(
 
 Future<List<ProcessResult>> __prRun(
   IShell shell,
-  String script, {
+  String cmd, {
   Stream<List<int>>? stdin,
   StreamSink<List<int>>? stdout,
 }) {
   return _prRun(
-    script,
+    cmd,
     verbose: shell.isVerbose(),
     environment: shell.environment(),
     workingDirectory: shell.workingDirectory(),
@@ -100,8 +100,14 @@ class ShellCommandBuilder extends IShellCommandBuilder {
         _commands = commands;
 
   @override
-  IShellCommandBuilder pipe(String cmd) {
-    return ShellCommandBuilder.__(_shell, [..._commands, cmd]);
+  IShellCommandBuilder pipe(
+    String cmd, [
+    List<String>? args,
+  ]) {
+    return ShellCommandBuilder.__(_shell, [
+      ..._commands,
+      buildCmdWithArgs(cmd, args),
+    ]);
   }
 
   @override
@@ -193,13 +199,15 @@ class ProcessRunShell implements IShell {
     Map<String, String>? environment,
     Stream<List<int>>? stdin,
     StreamSink<List<int>>? stdout,
+    List<String>? args,
   }) async {
     _requireSingleCommand(script);
-    _log.fine('Running: $script');
+    var cmd = buildCmdWithArgs(script, args);
+    _log.fine('Running: $cmd');
     ProcessResult res;
     try {
       var result = await _prRun(
-        script,
+        cmd,
         verbose: _verbose,
         environment: environment ?? _environment,
         workingDirectory: _workingDirectory,
@@ -211,7 +219,7 @@ class ProcessRunShell implements IShell {
       if (isFalse(_throwOnError) && isNotNull(ex.result)) {
         res = ex.result!;
       } else {
-        throw ChassisShellException(ex.message, ex.result, script);
+        throw ChassisShellException(ex.message, ex.result, cmd);
       }
     }
     return ProcessResult(

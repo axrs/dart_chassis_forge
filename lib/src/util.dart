@@ -1,3 +1,4 @@
+import 'package:process_run/shell.dart' as pr;
 import 'package:rucksack/rucksack.dart';
 
 typedef MapComputer<K, V> = V? Function(K key);
@@ -47,4 +48,10 @@ extension ChassisMap<K, V> on Map<K, V?> {
 
 dynamic tryTrimRight(dynamic v) {
   return v is String ? v.trimRight() : v;
+}
+
+String buildCmdWithArgs(String cmd, List<String>? args) {
+  // ignore: omit_local_variable_types
+  List<String> a = [...args ?? []]..removeWhere(isBlank);
+  return cmd + (isNotEmpty(a) ? ' ' + pr.shellArguments(a) : '');
 }

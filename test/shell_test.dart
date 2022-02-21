@@ -315,6 +315,55 @@ void main() {
         );
         expect(actual.stdout, isNot(endsWith('\n')));
       });
+
+      test('can supply a list of arguments', () async {
+        var actual = await shell.run('dart', args: ['--help']);
+
+        expect(actual, isNotNull);
+        expect(actual.exitCode, isZero);
+        expect(actual.stderr, isEmpty);
+        expect(
+          actual.stdout,
+          startsWith('A command-line utility for Dart development.\n'),
+        );
+        expect(actual.stdout, isNot(endsWith('\n')));
+      });
+
+      test('can supply a list of arguments [multi]', () async {
+        var actual = await shell.run(
+          'dart',
+          args: [
+            'run',
+            'build_runner',
+            'build',
+            '--config',
+            'chassis',
+            '--delete-conflicting-outputs'
+          ],
+        );
+
+        expect(actual, isNotNull);
+        expect(actual.exitCode, isZero);
+        expect(actual.stderr, isEmpty);
+        expect(
+          actual.stdout,
+          startsWith('[INFO] Generating build script...'),
+        );
+        expect(actual.stdout, isNot(endsWith('\n')));
+      });
+
+      test('can supply a list of arguments with basic quoting', () async {
+        var actual = await shell.verbose().run('echo', args: ['hello world']);
+
+        expect(actual, isNotNull);
+        expect(actual.exitCode, isZero);
+        expect(actual.stderr, isEmpty);
+        expect(
+          actual.stdout,
+          startsWith('"hello world"'),
+        );
+        expect(actual.stdout, isNot(endsWith('\n')));
+      });
     });
   });
 }
