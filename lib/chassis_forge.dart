@@ -184,17 +184,15 @@ class ChassisForge extends SmartArg {
         cast<VerboseOption>(this)?.verbose ??
         false;
     configureLogger(_verbose);
-
-    if (command is SmartArgCommand) {
-      return;
-    }
-    commandRun = true;
   }
 
   @override
   void afterCommandExecute(SmartArgCommand command) {
     super.afterCommandExecute(command);
     commandRun = true;
+    if (parent is ChassisForge) {
+      parent!.afterCommandExecute(command);
+    }
   }
 
   void setLogLevel(dynamic level) {
