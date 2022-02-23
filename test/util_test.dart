@@ -13,14 +13,14 @@ void main() {
         expect(actual, equals('echo alpha "bravo foxtrot" --delta=gamma'));
       });
 
-      test('blank args are omitted', () async {
+      test('empty args are omitted, but blank are preserved', () async {
         var actual = buildCmdWithArgs('echo', [
           '',
           'bravo foxtrot',
-          '',
+          ' ',
           '--delta=gamma',
         ]);
-        expect(actual, equals('echo "bravo foxtrot" --delta=gamma'));
+        expect(actual, equals('echo "bravo foxtrot" " " --delta=gamma'));
       });
 
       test('no args', () async {
