@@ -40,7 +40,7 @@ void main() {
       test('exceptions not thrown if not requested (start)', () async {
         var res = shell
             .withThrowOnError(false)
-            .cmd('dart-not-found README.md')
+            .cmd('dart run-a-command-that-doesnt-exist')
             .pipe('sort')
             .pipe('sort');
 
@@ -51,7 +51,10 @@ void main() {
         expect(actual.stderr, equals(''));
         expect(actual.pipeResults.length, equals(3));
         expect(actual.pipeResults.first.exitCode, greaterThan(0));
-        expect(actual.pipeResults.first.stderr, contains('dart-not-found'));
+        expect(
+          actual.pipeResults.first.stderr,
+          startsWith('Could not find a command named'),
+        );
       });
 
       test('exceptions not thrown if not requested (mid)', () async {
@@ -59,7 +62,7 @@ void main() {
         var res = shell
             .withThrowOnError(false)
             .cmd('$cmd README.md')
-            .pipe('dart-not-found')
+            .pipe('dart this-doesnt-exist')
             .pipe('sort');
 
         var actual = await res.run() as PipedProcessResult;
@@ -68,7 +71,10 @@ void main() {
         expect(actual.stdout, equals(''));
         expect(actual.stderr, equals(''));
         expect(actual.pipeResults[1].exitCode, greaterThan(0));
-        expect(actual.pipeResults[1].stderr, contains('dart-not-found'));
+        expect(
+          actual.pipeResults[1].stderr,
+          startsWith('Could not find a command named'),
+        );
       });
 
       test('exceptions not thrown if not requested (tail)', () async {
@@ -77,19 +83,22 @@ void main() {
             .withThrowOnError(false)
             .cmd('$cmd README.md')
             .pipe('sort')
-            .pipe('dart-not-found');
+            .pipe('dart this-doesnt-exist');
 
         var actual = await res.run() as PipedProcessResult;
 
         expect(actual.exitCode, greaterThan(0));
         expect(actual.stdout, equals(''));
-        expect(actual.stderr, contains('dart-not-found'));
+        expect(
+          actual.stderr,
+          startsWith('Could not find a command named'),
+        );
       });
 
       test('exceptions thrown if requested (start)', () async {
         var res = shell
             .withThrowOnError(true)
-            .cmd('dart-not-found README.md')
+            .cmd('dart this-doesnt-exist')
             .pipe('sort')
             .pipe('sort');
 
@@ -103,7 +112,7 @@ void main() {
           expect(true, isFalse);
         } on PipedCommandResultException catch (ex) {
           expect(ex.message, equals(''));
-          expect(ex.command, equals('dart-not-found README.md | sort | sort'));
+          expect(ex.command, equals('dart this-doesnt-exist | sort | sort'));
           expect(ex.results.exitCode, greaterThan(0));
           expect(ex.results.pipeResults[0].exitCode, greaterThan(0));
           expect(ex.results.pipeResults[1].exitCode, equals(0));
@@ -116,7 +125,7 @@ void main() {
         var res = shell
             .withThrowOnError(true)
             .cmd('$cmd README.md')
-            .pipe('dart-not-found')
+            .pipe('dart this-doesnt-exist')
             .pipe('sort');
 
         expect(
@@ -130,7 +139,7 @@ void main() {
         var res = shell
             .withThrowOnError(true)
             .cmd('$cmd README.md')
-            .pipe('dart-not-found');
+            .pipe('dart this-doesnt-exist');
 
         expect(
           () async => await res.run(),
@@ -281,23 +290,28 @@ void main() {
 
       test('does not throw an exception unless requested', () async {
         expect(
-          () async => await shell.withThrowOnError().run('exit 1'),
+          () async =>
+              await shell.withThrowOnError().run('dart this-doesnt-exist'),
           throwsA(TypeMatcher<ChassisShellException>()),
         );
 
-        var actual = await shell.withThrowOnError(false).run('exit 1');
-        expect(actual.exitCode, equals(1));
+        var actual = await shell
+            .withThrowOnError(false) //
+            .run('dart this-doesnt-exist');
+        expect(actual.exitCode, greaterThan(0));
       });
 
       test('runs with the supplied environment', () async {
-        var param = Platform.isWindows ? '%findThisValue%' : '\$findThisValue';
-        var env = {'findThisValue': '12345'};
+        var cmd = Platform.isWindows
+            ? 'echo %FINDTHISVALUE%'
+            : 'bash -c "echo \$FINDTHISVALUE"';
+        var env = {'FINDTHISVALUE': '12345'};
         var withEnvironment = shell.withEnvironment(env);
 
-        var actualWithEnvironment = await withEnvironment.run('echo $param');
+        var actualWithEnvironment = await withEnvironment.run(cmd);
 
         var actualWithParam = await withEnvironment
-            .run('echo $param', environment: {'findThisValue': '6789'});
+            .run(cmd, environment: {'FINDTHISVALUE': '6789'});
 
         expect(actualWithEnvironment.stdout, equals('12345'));
         expect(actualWithParam.stdout, equals('6789'));
@@ -353,14 +367,14 @@ void main() {
       });
 
       test('can supply a list of arguments with basic quoting', () async {
-        var actual = await shell.verbose().run('echo', args: ['hello world']);
+        var actual = await shell.run('echo', args: ['hello world']);
 
         expect(actual, isNotNull);
         expect(actual.exitCode, isZero);
         expect(actual.stderr, isEmpty);
         expect(
           actual.stdout,
-          startsWith('"hello world"'),
+          contains('hello world'),
         );
         expect(actual.stdout, isNot(endsWith('\n')));
       });
