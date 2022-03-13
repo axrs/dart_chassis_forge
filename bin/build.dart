@@ -130,6 +130,16 @@ ArgParser _buildParser() {
   return parser;
 }
 
+String extension(String kernelTarget) {
+  if (kernelTarget == 'kernel') {
+    return 'dill';
+  } else if (kernelTarget == 'dart') {
+    return 'dart';
+  } else {
+    return 'exe';
+  }
+}
+
 Future<void> main(List<String> arguments) async {
   var parser = _buildParser();
   var args = parser.parse(arguments);
@@ -140,9 +150,16 @@ Future<void> main(List<String> arguments) async {
   _configureLogger(args['verbose']);
   String chassisDir = args['directory'];
   _requireDirectoryExist(chassisDir);
-  createChassisBuildYaml(chassisDir, args['main']);
+  String mainTool = args['main'];
+  createChassisBuildYaml(chassisDir, mainTool);
+
+  var executionMain = mainTool.replaceAll(
+    RegExp(r'dart$'),
+    extension(args['executable-target']),
+  );
   var oldestReflectable = _oldestReflectableFile(chassisDir);
-  var rebuildIsRequired = isNull(oldestReflectable);
+  var rebuildIsRequired =
+      isNull(oldestReflectable) || isFalse(File(executionMain).existsSync());
   if (isFalse(rebuildIsRequired)) {
     rebuildIsRequired = _dartSourceFiles(chassisDir)
         .any((element) => _isModifiedAfter(oldestReflectable!, element));
