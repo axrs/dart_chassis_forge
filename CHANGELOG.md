@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[2.2.0]
+
+* \[Feature] - Allow specifying an optional List<String> args to run and pipe
+* \[Feature] - Pipe commands, chaining stdout -> stdin until end
+* \[Fix] - cmd and run arg array preserves blank spaces
+* \[Fix] - commandRun when nested forge
+* \[Fix] - kindle generated Powershell to exit correctly if any dart command fails
+* \[Fix] - `bin/build.dart` to compile main if missing
+
 ## \[2.1.0] - 2022-02-20
 
 * \[Feature] - Export `shellArgument` and `shellArguments` for escaping args

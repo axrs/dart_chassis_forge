@@ -3,6 +3,22 @@ import 'dart:io';
 
 import 'exceptions.dart';
 
+abstract class IShellCommandBuilder {
+  /// Registers a command to pipe the previous commands result into.
+  ///
+  /// May throw [CommandException]s.
+  ///
+  /// `since 2.2.0`
+  IShellCommandBuilder pipe(String cmd, [List<String>? args]);
+
+  /// Runs a command within a IShell environment. Returning the piped commands
+  /// result.
+  /// May throw [CommandException]s.
+  ///
+  /// `since 2.2.0`
+  Future<ProcessResult> run([Stdout? stdout]);
+}
+
 /// A marker interface representing a basic Shell to run and evaluate commands
 ///
 /// `since 0.0.1`
@@ -27,7 +43,13 @@ abstract class IShell {
     Map<String, String>? environment,
     Stream<List<int>>? stdin,
     StreamSink<List<int>>? stdout,
+    List<String>? args,
   });
+
+  /// Prepares a command to be run within an IShell environment.
+  ///
+  /// `since 2.2.0`
+  IShellCommandBuilder cmd(String command);
 
   /// Returns the full path location (and name) for a supplied command.
   /// Null if the command was not found.
@@ -70,4 +92,22 @@ abstract class IShell {
   ///
   /// `since 2.0.0`
   bool isVerbose();
+}
+
+/// The result of running a non-interactive, piped
+/// process started with [Process.run] or [Process.runSync].
+///
+/// `since 2.2.0`
+class PipedProcessResult extends ProcessResult {
+  final List<ProcessResult> pipeResults;
+
+  PipedProcessResult(
+    this.pipeResults,
+    ProcessResult lastOrFirstErrored,
+  ) : super(
+          lastOrFirstErrored.pid,
+          lastOrFirstErrored.exitCode,
+          lastOrFirstErrored.stdout,
+          lastOrFirstErrored.stderr,
+        );
 }

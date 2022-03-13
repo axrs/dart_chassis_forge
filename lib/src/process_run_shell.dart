@@ -30,6 +30,147 @@ void _requireSingleCommand(String command) {
   }
 }
 
+Future<List<ProcessResult>> _prRun(
+  String script, {
+  bool verbose = false,
+  Map<String, String>? environment,
+  String? workingDirectory,
+  bool throwOnError = true,
+  Stream<List<int>>? stdin,
+  StreamSink<List<int>>? stdout,
+}) {
+  return pr.run(
+    script,
+    verbose: verbose,
+    environment: environment,
+    workingDirectory: workingDirectory,
+    throwOnError: throwOnError,
+    stdin: stdin,
+    stdout: stdout,
+    onProcess: (proc) {
+      if (isNotNull(stdin)) {
+        proc.stdin.done.catchError((err) {
+          if (throwOnError) {
+            throw ChassisShellException.wrap(
+              'Error writing to STDIN stream',
+              script,
+              err,
+            );
+          }
+        });
+      }
+    },
+  );
+}
+
+Future<List<ProcessResult>> __prRun(
+  IShell shell,
+  String cmd, {
+  Stream<List<int>>? stdin,
+  StreamSink<List<int>>? stdout,
+}) {
+  return _prRun(
+    cmd,
+    verbose: shell.isVerbose(),
+    environment: shell.environment(),
+    workingDirectory: shell.workingDirectory(),
+    throwOnError: shell.throwsOnError(),
+    stdin: stdin,
+    stdout: stdout,
+  );
+}
+
+class _PreviousPipe {
+  final StreamController<List<int>>? controller;
+  final Future<List<ProcessResult>> process;
+
+  _PreviousPipe(this.process, this.controller);
+}
+
+class ShellCommandBuilder extends IShellCommandBuilder {
+  final IShell _shell;
+  final List<String> _commands;
+
+  ShellCommandBuilder._(IShell shell, String cmd)
+      : _shell = shell,
+        _commands = [cmd];
+
+  ShellCommandBuilder.__(IShell shell, List<String> commands)
+      : _shell = shell,
+        _commands = commands;
+
+  @override
+  IShellCommandBuilder pipe(
+    String cmd, [
+    List<String>? args,
+  ]) {
+    return ShellCommandBuilder.__(_shell, [
+      ..._commands,
+      buildCmdWithArgs(cmd, args),
+    ]);
+  }
+
+  @override
+  Future<ProcessResult> run([Stdout? stdout]) async {
+    _commands.forEach(_requireSingleCommand);
+    if (1 == _commands.length) {
+      return _shell.run(_commands.first, stdout: stdout);
+    } else {
+      // TODO There is an issue at the moment catching a stream closing error.
+      // this occurs when a previous processes stdout is fed to the next stdin
+      // but the next is shutting down or is closed.
+      var shell = _shell.copyWith(throwOnError: false);
+      // ignore: omit_local_variable_types
+      List<_PreviousPipe> pipes = _commands.fold([], (procs, command) {
+        var prev = isNotEmpty(procs) ? procs.last : null;
+        var controller = (procs.length == _commands.length - 1)
+            ? null
+            : StreamController<List<int>>();
+        var process = __prRun(
+          shell,
+          command,
+          stdin: prev?.controller?.stream,
+          stdout: controller?.sink ?? stdout,
+        )..whenComplete(() async {
+            await controller?.close();
+          });
+        return procs..add(_PreviousPipe(process, controller));
+      });
+
+      var results = (await Future.wait(
+        pipes.map((e) async {
+          return (await e.process).first;
+        }).toList(),
+      ))
+          .map<ProcessResult>(
+        (v) {
+          return ProcessResult(
+            v.pid,
+            v.exitCode,
+            tryTrimRight(v.stdout),
+            tryTrimRight(v.stderr),
+          );
+        },
+      ).toList();
+      if (_shell.throwsOnError() && results.any(_nonZeroExitCode)) {
+        var firstError = results.firstWhere(_nonZeroExitCode);
+        var res = PipedProcessResult(results, firstError);
+        throw PipedCommandResultException(
+          firstError.stdout,
+          res,
+          _commands.join(' | '),
+        );
+      } else {
+        return PipedProcessResult(results, results.last);
+      }
+    }
+  }
+}
+
+bool _nonZeroExitCode(ProcessResult p) {
+  return p.exitCode != 0;
+}
+
 /// A Basic implementation of [IShell] using [package:process_run]
 ///
 /// `since 0.0.1`
@@ -58,13 +199,15 @@ class ProcessRunShell implements IShell {
     Map<String, String>? environment,
     Stream<List<int>>? stdin,
     StreamSink<List<int>>? stdout,
+    List<String>? args,
   }) async {
     _requireSingleCommand(script);
-    _log.fine('Running: $script');
+    var cmd = buildCmdWithArgs(script, args);
+    _log.fine('Running: $cmd');
     ProcessResult res;
     try {
-      var result = await pr.run(
-        script,
+      var result = await _prRun(
+        cmd,
         verbose: _verbose,
         environment: environment ?? _environment,
         workingDirectory: _workingDirectory,
@@ -76,7 +219,7 @@ class ProcessRunShell implements IShell {
       if (isFalse(_throwOnError) && isNotNull(ex.result)) {
         res = ex.result!;
       } else {
-        throw ChassisShellException(ex.message, ex.result, script);
+        throw ChassisShellException(ex.message, ex.result, cmd);
       }
     }
     return ProcessResult(
@@ -85,6 +228,11 @@ class ProcessRunShell implements IShell {
       tryTrimRight(res.stdout),
       tryTrimRight(res.stderr),
     );
+  }
+
+  @override
+  ShellCommandBuilder cmd(String script) {
+    return ShellCommandBuilder._(this, script);
   }
 
   static final Map<String, String?> _whichCache = <String, String?>{};
