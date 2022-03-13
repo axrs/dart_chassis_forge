@@ -193,12 +193,22 @@ void createPs1Helper(
 ) {
   var ps1 = '''
 #!/usr/bin/env pwsh
+function Require-Clean-Exit
+{
+    if (\$LastExitCode -ne 0)
+    {
+        throw "Command failed with exit code \$LastExitCode."
+    }
+}
 If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType Leaf))
 {
     & dart pub get | Out-Null
+    Require-Clean-Exit
 }
 & dart run chassis_forge:build --directory $directory --main $directory/$main --executable-target $executableTarget --verbose | Out-Null
+Require-Clean-Exit
 & dart run $directory/$compiledMain @args
+Require-Clean-Exit
 ''';
   createScript('ps1', ps1);
 }
