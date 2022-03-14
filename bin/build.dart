@@ -115,13 +115,13 @@ ArgParser _buildParser() {
     )
     ..addOption(
       'main',
-      help: 'Optional Main Command Entry File to Compile',
+      help: 'Main Command Entry File to Compile',
     )
     ..addOption(
       'executable-target',
       allowed: ['kernel', 'exe', 'dart'],
       defaultsTo: 'dart',
-      help: 'Optional Compilation Target',
+      help: 'Optional Compilation Target. Defaults to \'dart\'',
     )
     ..addOption(
       'directory',
