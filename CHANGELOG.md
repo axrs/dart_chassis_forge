@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## \[2.2.1]
 
 * \[Fix] - Optional `executable-target` when running build
+* \[Doc] - Improved doc string
 
 ## \[2.2.0]
 
