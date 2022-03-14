@@ -120,6 +120,7 @@ ArgParser _buildParser() {
     ..addOption(
       'executable-target',
       allowed: ['kernel', 'exe', 'dart'],
+      defaultsTo: 'dart',
       help: 'Optional Compilation Target',
     )
     ..addOption(
