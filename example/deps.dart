@@ -3,7 +3,7 @@ import 'package:smart_arg_fork/smart_arg_fork.dart';
 
 @SmartArg.reflectable
 @Parser(
-  description: 'Generates HTML documentation for the project',
+  description: 'Installs Dependencies for the project',
 )
 class DepsCommand extends ChassisCommand with HelpArg {
   @BooleanArgument(help: 'Upgrade with compatible versions?')
