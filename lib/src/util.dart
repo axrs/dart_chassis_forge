@@ -51,6 +51,9 @@ dynamic tryTrimRight(dynamic v) {
 
 String buildCmdWithArgs(String cmd, List<String>? args) {
   // ignore: omit_local_variable_types
-  List<String> a = [...args ?? []]..removeWhere((s) => s.isEmpty);
-  return cmd + (a.isNotEmpty ? ' ' + pr.shellArguments(a) : '');
+  var buffer = StringBuffer(cmd);
+  if (args != null && args.isNotEmpty) {
+    buffer.write(' ${pr.shellArguments(args)}');
+  }
+  return buffer.toString();
 }
