@@ -165,18 +165,18 @@ class ChassisForge extends SmartArg {
   );
 
   @override
-  void afterCommandParse(SmartArg command, List<String> arguments) {
-    super.afterCommandParse(command, arguments);
+  Future<void> preCommandParse(SmartArg command, List<String> arguments) async {
+    await super.preCommandParse(command, arguments);
     _isVerbose = _cast<VerboseArg>(this)?.verbose ?? false;
     configureLogger(_isVerbose);
   }
 
   @override
-  void afterCommandExecute(SmartArgCommand command) {
-    super.afterCommandExecute(command);
+  Future<void> postCommandExecute(SmartArgCommand command) async {
+    await super.postCommandExecute(command);
     commandRun = true;
     if (parent is ChassisForge) {
-      parent!.afterCommandExecute(command);
+      await parent!.postCommandExecute(command);
     }
   }
 
