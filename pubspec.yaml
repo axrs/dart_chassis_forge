@@ -16,8 +16,8 @@ dependencies:
   logging: ^1.0.2
   path: ^1.8.0
   process_run: ^0.12.3+2
-  reflectable: ^3.0.4
-  smart_arg_fork: '>=3.0.0 <4.0.0'
+  reflectable: ^3.0.7
+  smart_arg_fork: '>=3.1.0 <4.0.0'
 
 dev_dependencies:
   lints: ^1.0.1
