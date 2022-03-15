@@ -17,7 +17,7 @@ export 'src/exceptions.dart';
 export 'src/ishell.dart';
 export 'src/process_run_shell.dart';
 
-T? cast<T>(Object? x) => x is T ? x : null;
+T? _cast<T>(Object? x) => x is T ? x : null;
 
 /// True if an [Logger.root.onRecord] listener has been attached
 ///
@@ -30,9 +30,9 @@ void configureLogger(dynamic level) {
   if (loggingConfigured) {
     return;
   }
-  var l = cast<Level>(level);
+  var l = _cast<Level>(level);
   if (l == null) {
-    var isVerbose = cast<bool>(level) ?? false;
+    var isVerbose = _cast<bool>(level) ?? false;
     if (isVerbose) {
       l = Level.ALL;
     }
@@ -79,7 +79,7 @@ mixin VerboseArg {
 abstract class ChassisCommand extends SmartArgCommand {
   @override
   Future<void> execute(SmartArg parentArguments) async {
-    var showHelp = cast<HelpArg>(this)?.help ?? false;
+    var showHelp = _cast<HelpArg>(this)?.help ?? false;
     if (showHelp) {
       print(usage());
       exit(0);
@@ -167,7 +167,7 @@ class ChassisForge extends SmartArg {
   @override
   void afterCommandParse(SmartArg command, List<String> arguments) {
     super.afterCommandParse(command, arguments);
-    _isVerbose = cast<VerboseArg>(this)?.verbose ?? false;
+    _isVerbose = _cast<VerboseArg>(this)?.verbose ?? false;
     configureLogger(_isVerbose);
   }
 
@@ -209,7 +209,7 @@ class ChassisForge extends SmartArg {
   Future<void> parse(List<String> arguments) async {
     await super.parse(arguments);
 
-    var help = cast<HelpArg>(this)?.help ?? false;
+    var help = _cast<HelpArg>(this)?.help ?? false;
     if (help) {
       onHelp();
     } else if (!commandRun) {
