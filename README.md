@@ -100,11 +100,7 @@ const String docDescription = 'Generates HTML documentation for the project';
 @Parser(
   description: docDescription,
 )
-class DocCommand extends ChassisCommand with HelpOption {
-  @override
-  @HelpArgument()
-  late bool help = false;
-
+class DocCommand extends ChassisCommand with HelpArg {
   @override
   Future<void> run(final IShell shell, final SmartArg parentArguments) async {
     await chassis_dart.doc(shell);

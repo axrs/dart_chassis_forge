@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:process_run/shell.dart' as pr;
-import 'package:rucksack/rucksack.dart';
 
 import 'ishell.dart';
 import 'util.dart';
@@ -48,7 +47,7 @@ class ChassisShellException extends pr.ShellException {
     return [
       'ChassisShellException executing: $command',
       message,
-      if (isNotNull(result)) ...[
+      if (result != null) ...[
         tryTrimRight(result!.stdout),
         '-----',
         tryTrimRight(result!.stderr),
@@ -102,7 +101,7 @@ class PipedCommandResultException extends ChassisShellException {
     return [
       'PipedCommandResultException executing: $command',
       message,
-      if (isNotNull(result)) ...[
+      if (result != null) ...[
         tryTrimRight(result!.stdout),
         '-----',
         tryTrimRight(result!.stderr),

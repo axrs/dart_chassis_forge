@@ -6,7 +6,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:logging/logging.dart';
-import 'package:rucksack/rucksack.dart';
 
 import 'smart_arg.dart';
 import 'src/ishell.dart';
@@ -18,6 +17,8 @@ export 'src/exceptions.dart';
 export 'src/ishell.dart';
 export 'src/process_run_shell.dart';
 
+T? cast<T>(Object? x) => x is T ? x : null;
+
 /// True if an [Logger.root.onRecord] listener has been attached
 ///
 /// `since 1.2.2`
@@ -26,13 +27,13 @@ late bool loggingConfigured = false;
 /// Configures Logging to the specified [level]
 /// `since 0.0.1`
 void configureLogger(dynamic level) {
-  if (isTrue(loggingConfigured)) {
+  if (loggingConfigured) {
     return;
   }
   var l = cast<Level>(level);
-  if (isNull(l)) {
-    var verbose = cast<bool>(level);
-    if (isTrue(verbose)) {
+  if (l == null) {
+    var isVerbose = cast<bool>(level) ?? false;
+    if (isVerbose) {
       l = Level.ALL;
     }
   }
@@ -47,18 +48,6 @@ void configureLogger(dynamic level) {
     );
   });
   loggingConfigured = true;
-}
-
-/// Adds a basic Help Option to [SmartArgCommand]s to
-@Deprecated('Use [HelpArg] mixin instead')
-abstract class HelpOption {
-  abstract bool help;
-}
-
-/// Adds a basic Verbose Option to [SmartArgCommand]s to
-@Deprecated('Use [VerboseArg] mixin instead')
-abstract class VerboseOption {
-  abstract bool verbose;
 }
 
 /// A basic mixin for adding a the help argument to each [SmartArg] extension
@@ -90,10 +79,8 @@ mixin VerboseArg {
 abstract class ChassisCommand extends SmartArgCommand {
   @override
   Future<void> execute(SmartArg parentArguments) async {
-    var showHelp = cast<HelpArg>(this)?.help ?? //
-        cast<HelpOption>(this)?.help ??
-        false;
-    if (isTrue(showHelp)) {
+    var showHelp = cast<HelpArg>(this)?.help ?? false;
+    if (showHelp) {
       print(usage());
       exit(0);
     }
@@ -169,21 +156,19 @@ class ChassisForge extends SmartArg {
   /// True if a [Command] has been run
   late bool commandRun = false;
 
-  late bool _verbose = false;
+  late bool _isVerbose = false;
   String? _workingDirectory;
 
   late final IShell _shell = ProcessRunShell(
-    verbose: _verbose,
+    verbose: _isVerbose,
     workingDirectory: _workingDirectory,
   );
 
   @override
   void afterCommandParse(SmartArg command, List<String> arguments) {
     super.afterCommandParse(command, arguments);
-    _verbose = cast<VerboseArg>(this)?.verbose ??
-        cast<VerboseOption>(this)?.verbose ??
-        false;
-    configureLogger(_verbose);
+    _isVerbose = cast<VerboseArg>(this)?.verbose ?? false;
+    configureLogger(_isVerbose);
   }
 
   @override
@@ -224,10 +209,10 @@ class ChassisForge extends SmartArg {
   Future<void> parse(List<String> arguments) async {
     await super.parse(arguments);
 
-    var help = cast<HelpOption>(this)?.help;
-    if (isTrue(help)) {
+    var help = cast<HelpArg>(this)?.help ?? false;
+    if (help) {
       onHelp();
-    } else if (isFalse(commandRun)) {
+    } else if (!commandRun) {
       onUnknownCommand(arguments);
     }
   }

@@ -6,15 +6,18 @@ import 'package:logging/logging.dart';
 import 'package:process_run/shell.dart' as pr;
 // ignore: implementation_imports
 import 'package:process_run/src/shell_utils.dart' show scriptToCommands;
-import 'package:rucksack/rucksack.dart';
 
 import 'ishell.dart';
 import 'util.dart';
 
 final _log = Logger('cf:Shell');
 
+bool _isBlank(String? v) {
+  return v == null || v.trim().isEmpty;
+}
+
 void _requireCommand(String command) {
-  if (isBlank(command)) {
+  if (_isBlank(command)) {
     throw BlankCommandException();
   }
 }
@@ -48,7 +51,7 @@ Future<List<ProcessResult>> _prRun(
     stdin: stdin,
     stdout: stdout,
     onProcess: (proc) {
-      if (isNotNull(stdin)) {
+      if (stdin != null) {
         proc.stdin.done.catchError((err) {
           if (throwOnError) {
             throw ChassisShellException.wrap(
@@ -122,7 +125,7 @@ class ShellCommandBuilder extends IShellCommandBuilder {
       var shell = _shell.copyWith(throwOnError: false);
       // ignore: omit_local_variable_types
       List<_PreviousPipe> pipes = _commands.fold([], (procs, command) {
-        var prev = isNotEmpty(procs) ? procs.last : null;
+        var prev = procs.isNotEmpty ? procs.last : null;
         var controller = (procs.length == _commands.length - 1)
             ? null
             : StreamController<List<int>>();
@@ -216,7 +219,7 @@ class ProcessRunShell implements IShell {
       );
       res = result.first;
     } on pr.ShellException catch (ex) {
-      if (isFalse(_throwOnError) && isNotNull(ex.result)) {
+      if (!_throwOnError && ex.result != null) {
         res = ex.result!;
       } else {
         throw ChassisShellException(ex.message, ex.result, cmd);
@@ -245,7 +248,7 @@ class ProcessRunShell implements IShell {
 
   @override
   bool hasCommand(String command) {
-    return isNotNull(which(command));
+    return which(command) != null;
   }
 
   @override
@@ -257,7 +260,7 @@ class ProcessRunShell implements IShell {
   void requireCommand(String command) {
     _log.fine('Validating command exists: $command');
     _requireSingleCommand(command);
-    if (isFalse(hasCommand(command))) {
+    if (!hasCommand(command)) {
       throw CommandNotFoundException(command);
     }
   }
@@ -306,7 +309,7 @@ class ProcessRunShell implements IShell {
 /// `since 0.0.1`
 bool hasCommand(IShell shell, String command) {
   var hasCommand = shell.hasCommand(command);
-  if (isFalse(hasCommand)) {
+  if (!hasCommand) {
     _log.warning(
       '`$command` not found. Please check your \$PATH and environment',
     );

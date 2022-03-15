@@ -5,9 +5,12 @@ import 'package:chassis_forge/chassis_forge.dart';
 import 'package:glob/glob.dart';
 import 'package:glob/list_local_fs.dart';
 import 'package:logging/logging.dart';
-import 'package:rucksack/rucksack.dart';
 
 final Logger _log = Logger('cf:build');
+
+bool _isNotBlank(String? v) {
+  return v != null && v.trim().isNotEmpty;
+}
 
 bool _isModifiedAfter(
   FileSystemEntity left,
@@ -42,7 +45,7 @@ targets:
 
 _requireDirectoryExist(String directory) {
   _log.info('Checking for existence of directory $directory');
-  if (isFalse(Directory(directory).existsSync())) {
+  if (!Directory(directory).existsSync()) {
     print('Directory $directory does not exist');
     exit(1);
   }
@@ -50,7 +53,7 @@ _requireDirectoryExist(String directory) {
 
 _requireFileExist(String file) {
   _log.info('Checking for existence of file $file');
-  if (isFalse(File(file).existsSync())) {
+  if (!File(file).existsSync()) {
     print('File $file does not exist');
     exit(1);
   }
@@ -66,8 +69,8 @@ _configureLogger(bool verbose) {
 Future<void> _compile(ArgResults args, IShell shell) async {
   String? executableTarget = args['executable-target'];
   String? mainScript = args['main'];
-  if (isNotBlank(executableTarget) &&
-      isNotBlank(mainScript) &&
+  if (_isNotBlank(executableTarget) &&
+      _isNotBlank(mainScript) &&
       executableTarget != 'dart') {
     _requireFileExist(mainScript!);
     await shell.run('dart compile $executableTarget $mainScript');
@@ -160,12 +163,12 @@ Future<void> main(List<String> arguments) async {
   );
   var oldestReflectable = _oldestReflectableFile(chassisDir);
   var rebuildIsRequired =
-      isNull(oldestReflectable) || isFalse(File(executionMain).existsSync());
-  if (isFalse(rebuildIsRequired)) {
+      oldestReflectable == null || !File(executionMain).existsSync();
+  if (!rebuildIsRequired) {
     rebuildIsRequired = _dartSourceFiles(chassisDir)
         .any((element) => _isModifiedAfter(oldestReflectable!, element));
   }
-  if (isFalse(rebuildIsRequired) && isFalse(args['force'])) {
+  if (!rebuildIsRequired && !args['force']) {
     return;
   }
   var shell = ProcessRunShell(verbose: args['verbose']);

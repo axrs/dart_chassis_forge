@@ -3,11 +3,16 @@ import 'dart:io';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as p;
 import 'package:process_run/shell.dart' as pr;
-import 'package:rucksack/rucksack.dart';
 
 import 'build.dart' show createChassisBuildYaml;
 
 final Logger _log = Logger('cf:kindle');
+
+bool _isNotBlank(String? v) {
+  return v != null && v.trim().isNotEmpty;
+}
+
+bool _isBlank(String? v) => _isNotBlank(v);
 
 void printError(String text) {
   print('\x1B[31m$text\x1B[0m');
@@ -22,10 +27,10 @@ Future<String> promptUntilNotBlank(
   String whenBlank, [
   String? defaultValue,
 ]) async {
-  var promptExtra = isNotBlank(defaultValue) ? ' <$defaultValue>' : '';
+  var promptExtra = _isNotBlank(defaultValue) ? ' <$defaultValue>' : '';
   String? result = await pr.prompt('$prompt$promptExtra');
-  if (isBlank(result)) {
-    if (isBlank(defaultValue)) {
+  if (_isBlank(result)) {
+    if (_isBlank(defaultValue)) {
       printError('$whenBlank\n');
       return promptUntilNotBlank(prompt, whenBlank);
     } else {
@@ -41,10 +46,10 @@ Future<String> promptUntilValueIn(
   List<String> acceptableValues, [
   String? defaultValue,
 ]) async {
-  var promptExtra = isNotBlank(defaultValue) ? ' <$defaultValue>' : '';
+  var promptExtra = _isNotBlank(defaultValue) ? ' <$defaultValue>' : '';
   String? result = await pr.prompt('$prompt$promptExtra');
-  if (isBlank(result)) {
-    if (isBlank(defaultValue)) {
+  if (_isBlank(result)) {
+    if (_isBlank(defaultValue)) {
       printError('$whenInvalid\n');
       return promptUntilValueIn(prompt, whenInvalid, acceptableValues);
     } else {
@@ -68,11 +73,7 @@ import 'main.reflectable.dart';
 @Parser(
   description: 'Says Hello to a name',
 )
-class HelloCommand extends ChassisCommand with HelpOption {
-  @override
-  @HelpArgument()
-  late bool help = false;
-
+class HelloCommand extends ChassisCommand with HelpArg {
   @StringArgument(help: 'Say hello to')
   late String name = 'world';
 
@@ -86,18 +87,7 @@ class HelloCommand extends ChassisCommand with HelpOption {
 @Parser(
   description: 'A CLI Application',
 )
-class Forge extends ChassisForge with HelpOption, VerboseOption {
-  @override
-  @BooleanArgument(
-    short: 'v',
-    help: 'Enable Verbose Output',
-  )
-  late bool verbose = false;
-
-  @override
-  @HelpArgument()
-  late bool help = false;
-
+class Forge extends ChassisForge with HelpArg, VerboseArg {
   @Command(help: 'Say Hello')
   late HelloCommand hello;
 }
@@ -250,15 +240,14 @@ Future<void> main(List<String> arguments) async {
     ['kernel', 'dart'],
     'kernel',
   );
-  if (isFalse(mainTool.endsWith('.dart'))) {
+  if (!mainTool.endsWith('.dart')) {
     mainTool = '$mainTool.dart';
   }
   print('\nDo you wish to proceed laying kindling?');
   print('\twith a base directory of: $directory');
   print('\tand a main tool path of: $directory/$mainTool');
   print('\tand an execution target of: $executionTarget');
-  var proceed = await pr.promptConfirm('');
-  if (isTrue(proceed)) {
+  if (await pr.promptConfirm('')) {
     var mainEntryCommandPath = p.join(directory, mainTool);
     print('\nLaying Kindling...');
     createMain(mainEntryCommandPath);
