@@ -43,14 +43,6 @@ targets:
   }
 }
 
-_requireDirectoryExist(String directory) {
-  _log.info('Checking for existence of directory $directory');
-  if (!Directory(directory).existsSync()) {
-    print('Directory $directory does not exist');
-    exit(1);
-  }
-}
-
 _requireFileExist(String file) {
   _log.info('Checking for existence of file $file');
   if (!File(file).existsSync()) {
@@ -129,7 +121,8 @@ ArgParser _buildParser() {
     ..addOption(
       'directory',
       defaultsTo: 'tool',
-      help: 'Directory Command Source codes to check for re-compilation',
+      help: '[Ignored] '
+          'Directory Command Source codes to check for re-compilation.',
     );
   return parser;
 }
@@ -152,9 +145,12 @@ Future<void> main(List<String> arguments) async {
     exit(0);
   }
   _configureLogger(args['verbose']);
-  String chassisDir = args['directory'];
-  _requireDirectoryExist(chassisDir);
-  String mainTool = args['main'];
+  var mainTool = args['main'];
+  _requireFileExist(mainTool);
+  var chassisDir = File(mainTool).parent.path.toString();
+  if (chassisDir.startsWith('./')) {
+    chassisDir = chassisDir.substring(1, chassisDir.length);
+  }
   createChassisBuildYaml(chassisDir, mainTool);
 
   var executionMain = mainTool.replaceAll(

@@ -12,7 +12,7 @@ bool _isNotBlank(String? v) {
   return v != null && v.trim().isNotEmpty;
 }
 
-bool _isBlank(String? v) => _isNotBlank(v);
+bool _isBlank(String? v) => !_isNotBlank(v);
 
 void printError(String text) {
   print('\x1B[31m$text\x1B[0m');
@@ -32,7 +32,7 @@ Future<String> promptUntilNotBlank(
   if (_isBlank(result)) {
     if (_isBlank(defaultValue)) {
       printError('$whenBlank\n');
-      return promptUntilNotBlank(prompt, whenBlank);
+      return await promptUntilNotBlank(prompt, whenBlank);
     } else {
       result = defaultValue;
     }
@@ -195,7 +195,7 @@ If(!(test-path '.dart_tool') -Or -not(Test-Path -Path 'pubspec.lock' -PathType L
     & dart pub get | Out-Null
     Require-Clean-Exit
 }
-& dart run chassis_forge:build --directory $directory --main $directory/$main --executable-target $executableTarget --verbose | Out-Null
+& dart run chassis_forge:build --main $directory/$main --executable-target $executableTarget --verbose | Out-Null
 Require-Clean-Exit
 & dart run $directory/$compiledMain @args
 Require-Clean-Exit
@@ -215,7 +215,7 @@ set -euo pipefail
 if [ ! -d '.dart_tool' ] || [ ! -f 'pubspec.lock' ];then
   dart pub get >/dev/null
 fi
-dart run chassis_forge:build --directory $directory --main $directory/$main --executable-target $executableTarget --verbose >/dev/null
+dart run chassis_forge:build --main $directory/$main --executable-target $executableTarget --verbose >/dev/null
 # shellcheck disable=SC2068
 dart run $directory/$compiledMain "\$@"
 ''';
