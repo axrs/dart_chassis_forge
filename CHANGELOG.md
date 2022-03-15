@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[3.0.0]
+
+* \[Breaking] - Minimum SDK version to 2.14.0
+* \[Breaking] - Empty and blank strings are preserved in `args` during shell execution
+* \[Breaking] - Removed `HelpOption` and `VerboseOption`
+* \[Refactor] - Swapped `ChassisForge.afterCommandParse` and `ChassisForge.afterCommandExecute` for async counterparts
+* \[Refactor] - Remove the need for specifying `--directory` in helper scripts
+* \[Chore] - Bumped minimum `SmartArg` and `Reflectable` versions
+* \[Chore] - Removed `rucksack` dependency
+
 ## \[2.2.1]
 
 * \[Fix] - Optional `executable-target` when running build
